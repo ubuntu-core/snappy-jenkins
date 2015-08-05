@@ -8,7 +8,8 @@ fi
 
 OPENSTACK_CREDENTIALS_PATH=$1
 JENKINS_HOME=/home/ubuntu/jenkins
-CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t fgimenez/snappy-jenkins > /dev/null 2>&1 &"
+CONTAINER_NAME=fgimenez/snappy-jenkins
+CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t $CONTAINER_NAME > /dev/null 2>&1 &"
 NAME=snappy-jenkins
 SECGROUP=$NAME
 FLAVOR=m1.large
@@ -71,6 +72,7 @@ EOT"
 }
 
 remote_launch_container(){
+    execute_remote_command "sudo docker pull $CONTAINER_NAME"
     execute_remote_command $CONTAINER_INIT_COMMAND
 }
 
