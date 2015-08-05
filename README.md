@@ -1,8 +1,8 @@
 # Snappy Jenkins Docker container
 
-This Docker file creates a container with a jenkins instance with jobs for executing the Snappy integration tests suite [1] in cloud instances.
+This Docker file creates a container with a jenkins instance with jobs for executing the Snappy integration tests suite [1] in cloud instances. The testing jenkins jobs use use the binary from this project [2] for launching the tests, it takes care of determining the most recent image for a given channel and release (see below for the required name patterns), instantiating an instance of that image and getting its ip, executing the integration suite in the instance and shutting it down when finished or in case of errors.
 
-In order to use it properly you need to have set up an openstack environment, with at least the $OS_USERNAME and $OS_REGION variables set. There's also some required packages:
+You can use this container locally or in a cloud instance, there are provision script for either case (see below). In order to use the container properly you need to have set up an openstack environment, with at least the $OS_USERNAME and $OS_REGION variables set. There's also some required packages:
 
     $ sudo apt-get install cloud-utils python-novaclient
 

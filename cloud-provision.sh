@@ -37,7 +37,9 @@ remote_install_docker(){
 }
 
 remote_setup_init_script(){
-    execute_remote_command "sudo chmod a+w /etc/rc.local && sudo echo $CONTAINER_INIT_COMMAND >> /etc/rc.local && sudo chmod 0700 /etc/rc.local"
+    execute_remote_command "sudo chmod a+w /etc/rc.local"
+    execute_remote_command "sudo echo $CONTAINER_INIT_COMMAND >> /etc/rc.local"
+    execute_remote_command "sudo chmod 0700 /etc/rc.local"
 }
 
 remote_setup_jenkins_home() {

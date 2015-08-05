@@ -38,4 +38,5 @@ Host *.cloudapp.net
 EOT
 
 # instance provision: launch container
+sudo docker pull fgimenez/snappy-jenkins
 sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t fgimenez/snappy-jenkins > /dev/null 2>&1 &
