@@ -18,7 +18,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.canonistack/novarc
+. $HOME/.canonistack/novarc_lcy02
 
 snappy-tests-job -release rolling -channel edge</command>
     </hudson.tasks.Shell>

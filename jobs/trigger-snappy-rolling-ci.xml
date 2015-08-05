@@ -6,7 +6,7 @@
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
-  <disabled>false</disabled>
+  <disabled>true</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
@@ -17,7 +17,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>launchpadTrigger --job=snappy-rolling-ci --branch=lp:snappy-tests-job --trigger-ci || exit 0</command>
+      <command>launchpadTrigger --job=snappy-rolling-ci --branch=lp:snappy --trigger-ci || exit 0</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
