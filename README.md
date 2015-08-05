@@ -25,3 +25,4 @@ They can be executed like this:
 In order to spin up the jenkins host an image with a name of the form "wily-daily-amd64" should be accessible for the current user. For the jobs to be able to run your openstack user should be able to access snappy images with a name of the form "*rolling-snappy-core-amd64-edge*" for the rolling tests and "*1504-snappy-core-amd64-edge*" for the 1504 tests. The configuration can be changed with the release and channel switches in the respective jobs.
 
 [1] https://launchpad.net/snappy
+[2] https://launchpad.net/snappy-tests-job
