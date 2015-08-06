@@ -9,8 +9,8 @@ RUN add-apt-repository -y ppa:fgimenez/snappy-tests-job && add-apt-repository -y
 # install dependencies
 RUN apt-get update && apt-get install -yq bzr cloud-utils python-novaclient snappy-tests-job golang-go autopkgtest mercurial golang-check.v1-dev jenkins-launchpad-plugin && rm -rf /var/lib/apt/lists/*
 
-# copy jobs installation script
-COPY scripts/jobs.groovy /usr/share/jenkins/ref/init.groovy.d/jobs.groovy
+# copy scripts
+COPY scripts/*.groovy /usr/share/jenkins/ref/init.groovy.d/
 
 USER jenkins
 
