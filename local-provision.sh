@@ -8,6 +8,7 @@ fi
 
 OPENSTACK_CREDENTIALS_PATH=$1
 JENKINS_HOME=/tmp/jenkins
+CONTAINER_NAME=fgimenez/snappy-jenkins
 
 # instance provision: create JENKINS_HOME
 rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
@@ -38,5 +39,5 @@ Host *.cloudapp.net
 EOT
 
 # instance provision: launch container
-sudo docker pull fgimenez/snappy-jenkins
-sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t fgimenez/snappy-jenkins > /dev/null 2>&1 &
+sudo docker pull $CONTAINER_NAME
+sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t $CONTAINER_NAME > /dev/null 2>&1 &
