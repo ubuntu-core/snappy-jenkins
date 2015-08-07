@@ -9,7 +9,7 @@ fi
 OPENSTACK_CREDENTIALS_PATH=$1
 JENKINS_HOME=/home/ubuntu/jenkins
 CONTAINER_NAME=fgimenez/snappy-jenkins
-CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t $CONTAINER_NAME > /dev/null 2>&1 &"
+CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME > /dev/null 2>&1 &"
 NAME=snappy-jenkins
 SECGROUP=$NAME
 FLAVOR=m1.large

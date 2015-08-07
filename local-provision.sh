@@ -39,5 +39,5 @@ Host *.cloudapp.net
 EOT
 
 # instance provision: launch container
-sudo docker pull $CONTAINER_NAME
-sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home -t $CONTAINER_NAME > /dev/null 2>&1 &
+sudo docker build --no-cache -t $CONTAINER_NAME .
+sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME > /dev/null 2>&1 &
