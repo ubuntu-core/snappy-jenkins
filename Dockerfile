@@ -23,5 +23,5 @@ RUN mkdir /usr/share/jenkins/ref/jobs
 COPY jobs/* /usr/share/jenkins/ref/jobs/
 
 # copy jenkins-launchpad-plugin config
-RUN mkdir /var/jenkins_home/.jlp
-COPY jlp.config /var/jenkins_home/.jlp
+RUN mkdir /usr/share/jenkins/ref/.jlp
+COPY jlp.config /usr/share/jenkins/ref/.jlp/
