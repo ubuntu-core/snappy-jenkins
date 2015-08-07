@@ -21,3 +21,7 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 # copy job definitions
 RUN mkdir /usr/share/jenkins/ref/jobs
 COPY jobs/* /usr/share/jenkins/ref/jobs/
+
+# copy jenkins-launchpad-plugin config
+RUN mkdir /usr/share/jenkins/ref/.jlp
+COPY jlp.config /usr/share/jenkins/ref/.jlp/

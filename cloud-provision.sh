@@ -5,8 +5,14 @@ then
     echo "No Openstack credentials path given as first argument, exiting"
     exit 1
 fi
+if [ -z "$2" ]
+then
+    echo "No launchpad credentials path given as second argument, exiting"
+    exit 1
+fi
 
 OPENSTACK_CREDENTIALS_PATH=$1
+LAUNCHPAD_CREDENTIALS_PATH=$2
 JENKINS_HOME=/home/ubuntu/jenkins
 CONTAINER_NAME=fgimenez/snappy-jenkins
 CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME > /dev/null 2>&1 &"
@@ -78,6 +84,10 @@ remote_launch_container(){
     execute_remote_command $CONTAINER_INIT_COMMAND
 }
 
+remote_copy_launchpad_credentials() {
+    scp $LAUNCHPAD_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.launchpad.credentials
+}
+
 create_security_group
 
 launch_instance
@@ -96,5 +106,7 @@ remote_copy_openstack_credentials
 remote_setup_ssh
 
 remote_launch_container
+
+remote_copy_launchpad_credentials
 
 exit 0
