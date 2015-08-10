@@ -3,11 +3,24 @@ FROM fgimenez/jenkins-ubuntu
 USER root
 
 # install ppas
-RUN apt-get update && apt-get install -qy software-properties-common python-software-properties
-RUN add-apt-repository -y ppa:fgimenez/snappy-tests-job && add-apt-repository -y ppa:fgimenez/jenkins-launchpad-plugin
+RUN apt-get update && apt-get install -qy \
+  python-software-properties \
+  software-properties-common
+RUN add-apt-repository -y ppa:fgimenez/snappy-tests-job && \
+  add-apt-repository -y ppa:fgimenez/jenkins-launchpad-plugin
 
 # install dependencies
-RUN apt-get update && apt-get install -yq bzr cloud-utils python-novaclient snappy-tests-job golang-go autopkgtest mercurial golang-check.v1-dev jenkins-launchpad-plugin && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -qy \
+  autopkgtest \
+  bzr \
+  cloud-utils \
+  golang-check.v1-dev \
+  golang-go \
+  jenkins-launchpad-plugin \
+  mercurial \
+  python-novaclient \
+  snappy-tests-job && \
+  rm -rf /var/lib/apt/lists/*
 
 # copy scripts
 COPY scripts/*.groovy /usr/share/jenkins/ref/init.groovy.d/

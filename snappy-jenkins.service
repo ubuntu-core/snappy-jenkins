@@ -1,0 +1,12 @@
+[Unit]
+Description=Snappy Jenkins
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a snappy-jenkins
+ExecStop=/usr/bin/docker stop -t 2 snappy-jenkins
+
+[Install]
+WantedBy=local.target
