@@ -11,18 +11,14 @@ then
     exit 1
 fi
 
+. ./cloud-common.sh
+
 OPENSTACK_CREDENTIALS_PATH=$1
 LAUNCHPAD_CREDENTIALS_PATH=$2
-JENKINS_HOME=/home/ubuntu/jenkins
 CONTAINER_NAME=fgimenez/snappy-jenkins
 CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME"
-NAME=snappy-jenkins
 SECGROUP=$NAME
 FLAVOR=m1.large
-
-execute_remote_command(){
-    ssh ubuntu@$INSTANCE_IP "$@"
-}
 
 create_security_group() {
     nova secgroup-delete $SECGROUP
@@ -45,7 +41,6 @@ remote_install_docker(){
 remote_setup_init_script(){
     scp -r ./snappy-jenkins.service ubuntu@$INSTANCE_IP:/home/ubuntu
     execute_remote_command "sudo cp /home/ubuntu/snappy-jenkins.service /lib/systemd/system/snappy-jenkins.service"
-    execute_remote_command "sudo ln -s /lib/systemd/system/snappy-jenkins.service /etc/systemd/system/snappy-jenkins.service"
     execute_remote_command "sudo systemctl daemon-reload"
     execute_remote_command "sudo systemctl enable snappy-jenkins"
 }
