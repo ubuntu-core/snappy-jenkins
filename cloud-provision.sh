@@ -15,7 +15,6 @@ fi
 
 OPENSTACK_CREDENTIALS_PATH=$1
 LAUNCHPAD_CREDENTIALS_PATH=$2
-CONTAINER_NAME=fgimenez/snappy-jenkins
 CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME"
 SECGROUP=$NAME
 FLAVOR=m1.large
