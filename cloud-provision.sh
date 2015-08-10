@@ -30,7 +30,21 @@ launch_instance(){
     IMAGE_ID=$(nova image-list | grep wily-daily-amd64 | head -1 | awk '{print $4}')
 
     INSTANCE_ID=$(nova boot --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-groups $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --poll | grep '| id ' | awk '{print $4}')
+
     INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+
+    if [ -z "$INSTANCE_IP" ]
+    then
+        echo "Couldn't get instance IP, retrying"
+        sleep 5
+        INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+        if [ -z "$INSTANCE_IP" ]
+        then
+            echo "Couldn't get instance IP, exiting"
+            exit 1
+        fi
+    fi
+
 }
 
 remote_install_docker(){
