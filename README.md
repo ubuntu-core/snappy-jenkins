@@ -10,15 +10,15 @@ You can use this container locally or in a cloud instance, there are provision s
 
 There are two provision scripts. Both assume that you have openstack credentials loaded, for instance having sourced a novarc file.
 
-local-provision.sh creates the container locally and shares jenkins home in /tmp/jenkins. Once it finish the app should be accesible from http://localhost:8080.
+bin/local-provision.sh creates the container locally and shares jenkins home in /tmp/jenkins. Once it finish the app should be accesible from http://localhost:8080.
 
-cloud-provision.sh uses the credentials of the current user to set up a cloud instance that will host the jenkins container.
+bin/cloud-provision.sh uses the credentials of the current user to set up a cloud instance that will host the jenkins container.
 
 Both scripts require as a parameter the path to the directory where the openstack credentials are stored. This credentials are used by jenkins to spin up the instances where the tests are run. In the case of cloud provision you can use different credentials for launching the jenkins host (this would be the credentials loaded for the user executing the script) and for jenkins to use while executing the snappy tests.
 
 They can be executed like this:
 
-    $ ./cloud-provision.sh ~/.openstack
+    $ ./bin/cloud-provision.sh ~/.openstack
 
 ## Required images
 
