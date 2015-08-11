@@ -23,7 +23,9 @@ RUN apt-get update && apt-get install -qy \
   rm -rf /var/lib/apt/lists/*
 
 # copy scripts
-COPY scripts/*.groovy /usr/share/jenkins/ref/init.groovy.d/
+COPY scripts/authentication.groovy \
+  scripts/jobs.groovy \
+  /usr/share/jenkins/ref/init.groovy.d/
 
 USER jenkins
 
@@ -33,7 +35,14 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 
 # copy job definitions
 RUN mkdir /usr/share/jenkins/ref/jobs
-COPY jobs/* /usr/share/jenkins/ref/jobs/
+COPY jobs/daily-1504.xml \
+  jobs/daily-rolling.xml \
+  jobs/generic-update_mp.xml \
+  jobs/snappy-1504-ci.xml \
+  jobs/snappy-rolling-ci.xml \
+  jobs/trigger-snappy-1504-ci.xml \
+  jobs/trigger-snappy-rolling-ci.xml \
+  /usr/share/jenkins/ref/jobs/
 
 # copy jenkins-launchpad-plugin config
 RUN mkdir /usr/share/jenkins/ref/.jlp
