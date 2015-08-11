@@ -4,7 +4,12 @@ set -x
 BACKUP_FOLDER="/home/ubuntu/jenkins_backup"
 
 stop_service(){
-    sudo systemctl stop snappy-jenkins
+    sudo systemctl stop $NAME
+}
+
+remove_container(){
+    sudo docker stop $NAME
+    sudo docker rm -f $NAME
 }
 
 remove_backup(){
@@ -16,7 +21,7 @@ create_backup(){
 }
 
 erase_jenkins_home(){
-    rm -rf $JENKINS_HOME/*
+    rm -rf $JENKINS_HOME && mkdir $JENKINS_HOME && chmod a+w $JENKINS_HOME
 }
 
 copy_credentials(){
@@ -34,10 +39,12 @@ pull_container(){
 }
 
 start_service(){
-    sudo systemctl start snappy-jenkins
+    $CONTAINER_INIT_COMMAND
 }
 
 stop_service
+
+remove_container
 
 remove_backup
 
