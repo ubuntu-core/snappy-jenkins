@@ -34,7 +34,7 @@ COPY plugins/active.txt /usr/share/jenkins/ref/
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 
 # copy job definitions
-RUN mkdir /usr/share/jenkins/ref/jobs
+RUN mkdir /usr/share/jenkins/ref/job-definitions
 COPY jobs/daily-1504.xml \
   jobs/daily-rolling.xml \
   jobs/generic-update_mp.xml \
@@ -42,7 +42,7 @@ COPY jobs/daily-1504.xml \
   jobs/snappy-rolling-ci.xml \
   jobs/trigger-snappy-1504-ci.xml \
   jobs/trigger-snappy-rolling-ci.xml \
-  /usr/share/jenkins/ref/jobs/
+  /usr/share/jenkins/ref/job-definitions/
 
 # copy jenkins-launchpad-plugin config
 RUN mkdir /usr/share/jenkins/ref/.jlp

@@ -1,7 +1,7 @@
 import jenkins.model.*
 import groovy.io.FileType
 
-def dir = new File("/usr/share/jenkins/ref/jobs")
+def dir = new File("/usr/share/jenkins/ref/job-definitions")
 def jobName = ""
 def xmlConfig = ""
 

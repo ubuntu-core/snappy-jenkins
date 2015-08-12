@@ -7,6 +7,10 @@ stop_service(){
     sudo systemctl stop $NAME
 }
 
+start_service(){
+    sudo systemctl start $NAME
+}
+
 remove_container(){
     sudo docker stop $NAME
     sudo docker rm -f $NAME
@@ -25,9 +29,7 @@ erase_jenkins_home(){
 }
 
 copy_credentials(){
-    CREDENTIALS[0]=".canonistack"
-    CREDENTIALS[1]=".ssh"
-    CREDENTIALS[2]=".launchpad.credentials"
+    CREDENTIALS=( ".canonistack" ".ssh" ".launchpad.credentials" )
     for i in "${CREDENTIALS[@]}"
     do
         cp -r $BACKUP_FOLDER/$i $JENKINS_HOME
@@ -38,8 +40,33 @@ pull_container(){
     sudo docker pull $CONTAINER_NAME
 }
 
-start_service(){
+run_container(){
     $CONTAINER_INIT_COMMAND
+}
+
+copy_jobs_history(){
+    # wait until the container is deployed
+    retry=10
+    while [ ! -e "$JENKINS_HOME/jobs" ]; do
+        retry=$(( retry - 1 ))
+        if [ $retry -le 0 ]; then
+            echo "Timed out waiting for container. Aborting!"
+            exit 1
+        fi
+        sleep 5
+    done
+
+    HISTORY_ELEMENTS=( "builds" "lastStable" "lastSuccessful" "nextBuildNumber" "workspace" )
+    for job in $BACKUP_FOLDER/jobs/*/
+    do
+        current_job=$(basename $job)
+        if [ -d "$JENKINS_HOME/jobs/$current_job" ]; then
+            for element in "${HISTORY_ELEMENTS[@]}"
+            do
+                cp -r "$BACKUP_FOLDER/jobs/$current_job/$element" "$JENKINS_HOME/jobs/$current_job"
+            done
+        fi
+    done
 }
 
 stop_service
@@ -55,5 +82,11 @@ erase_jenkins_home
 copy_credentials
 
 pull_container
+
+run_container
+
+stop_service
+
+copy_jobs_history
 
 start_service

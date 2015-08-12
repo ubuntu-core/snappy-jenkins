@@ -14,8 +14,7 @@ wait_for_ssh(){
     while ! execute_remote_command true; do
         retry=$(( retry - 1 ))
         if [ $retry -le 0 ]; then
-            error "Timed out waiting for ssh. Aborting!"
-            cleanup
+            echo "Timed out waiting for ssh. Aborting!"
             exit 1
         fi
         sleep 5
