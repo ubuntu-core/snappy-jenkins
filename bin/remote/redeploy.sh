@@ -4,15 +4,14 @@ set -x
 BACKUP_FOLDER="/home/ubuntu/jenkins_backup"
 
 stop_service(){
-    sudo systemctl stop $NAME
+    sudo service $NAME stop
 }
 
 start_service(){
-    sudo systemctl start $NAME
+    sudo service $NAME start
 }
 
 remove_container(){
-    sudo docker stop $NAME
     sudo docker rm -f $NAME
 }
 
@@ -44,10 +43,14 @@ run_container(){
     $CONTAINER_INIT_COMMAND
 }
 
-copy_jobs_history(){
-    # wait until the container is deployed
+stop_container(){
+    sudo docker stop $NAME
+}
+
+wait_for_folder(){
+    folder="$1"
     retry=10
-    while [ ! -e "$JENKINS_HOME/jobs" ]; do
+    while [ ! -e "$folder" ]; do
         retry=$(( retry - 1 ))
         if [ $retry -le 0 ]; then
             echo "Timed out waiting for container. Aborting!"
@@ -55,17 +58,23 @@ copy_jobs_history(){
         fi
         sleep 5
     done
+}
 
+copy_jobs_history(){
     HISTORY_ELEMENTS=( "builds" "lastStable" "lastSuccessful" "nextBuildNumber" "workspace" )
     for job in $BACKUP_FOLDER/jobs/*/
     do
         current_job=$(basename $job)
-        if [ -d "$JENKINS_HOME/jobs/$current_job" ]; then
-            for element in "${HISTORY_ELEMENTS[@]}"
-            do
-                cp -r "$BACKUP_FOLDER/jobs/$current_job/$element" "$JENKINS_HOME/jobs/$current_job"
-            done
-        fi
+        current_folder="$JENKINS_HOME/jobs/$current_job"
+        wait_for_folder $current_folder
+
+        for element in "${HISTORY_ELEMENTS[@]}"
+        do
+            orig_element="$BACKUP_FOLDER/jobs/$current_job/$element"
+            if [ -e $orig_element ]; then
+                cp -r $orig_element $current_folder
+            fi
+        done
     done
 }
 
@@ -85,8 +94,8 @@ pull_container
 
 run_container
 
-stop_service
-
 copy_jobs_history
+
+stop_container
 
 start_service
