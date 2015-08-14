@@ -11,14 +11,7 @@ RUN add-apt-repository -y ppa:fgimenez/snappy-tests-job && \
 
 # install dependencies
 RUN apt-get update && apt-get install -qy \
-  autopkgtest \
-  bzr \
-  cloud-utils \
-  golang-check.v1-dev \
-  golang-go \
   jenkins-launchpad-plugin \
-  mercurial \
-  python-novaclient \
   snappy-tests-job && \
   rm -rf /var/lib/apt/lists/*
 

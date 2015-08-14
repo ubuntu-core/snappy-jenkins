@@ -49,4 +49,5 @@ cp $LAUNCHPAD_CREDENTIALS_PATH $JENKINS_HOME/.launchpad.credentials
 
 # instance provision: launch container
 sudo docker build --no-cache -t $CONTAINER_NAME .
+sudo docker rm -f snappy-jenkins
 sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME
