@@ -6,7 +6,7 @@ USER root
 RUN apt-get update && apt-get install -qy \
   python-software-properties \
   software-properties-common
-RUN add-apt-repository -y ppa:fgimenez/snappy-tests-job && \
+RUN add-apt-repository -y ppa:snappy-dev/tools-proposed && \
   add-apt-repository -y ppa:fgimenez/jenkins-launchpad-plugin
 
 # install dependencies
