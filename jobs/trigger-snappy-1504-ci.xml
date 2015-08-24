@@ -17,7 +17,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>launchpadTrigger --job=snappy-1504-ci-canonistack --branch=lp:snappy/1504 --trigger-ci || exit 0</command>
+      <command>launchpadTrigger --job=snappy-1504-ci-canonistack --branch=lp:snappy/15.04 --trigger-ci || exit 0</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
