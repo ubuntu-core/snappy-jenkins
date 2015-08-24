@@ -12,7 +12,8 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed && \
 # install dependencies
 RUN apt-get update && apt-get install -qy \
   jenkins-launchpad-plugin \
-  snappy-tests-job && \
+  snappy-tests-job \
+  jq && \
   rm -rf /var/lib/apt/lists/*
 
 # copy scripts
