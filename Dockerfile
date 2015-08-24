@@ -28,11 +28,11 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 
 # copy job definitions
 RUN mkdir /usr/share/jenkins/ref/job-definitions
-COPY jobs/daily-1504.xml \
-  jobs/daily-rolling.xml \
+COPY jobs/snappy-daily-1504-canonistack.xml \
+  jobs/snappy-daily-rolling-canonistack.xml \
   jobs/generic-update_mp.xml \
-  jobs/snappy-1504-ci.xml \
-  jobs/snappy-rolling-ci.xml \
+  jobs/snappy-1504-ci-canonistack.xml \
+  jobs/snappy-rolling-ci-canonistack.xml \
   jobs/trigger-snappy-1504-ci.xml \
   jobs/trigger-snappy-rolling-ci.xml \
   /usr/share/jenkins/ref/job-definitions/
