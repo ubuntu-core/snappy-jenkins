@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H H * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+curl http://spec-manager.spi.canonical.com/orgs/canonical/images -H "Content-Type: application/json" --data "{'image_name': 'snappy_1504_daily', 'image_reference': {'udf-params': 'core 15.04 --channel edge --oem beagleblack --developer-mode'}, 'image_unique_id': ${BUILD_TAG}, 'upgrade_snaps': []}"</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>$HOME/poll ${BUILD_TAG}</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
