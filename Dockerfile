@@ -12,13 +12,15 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed && \
 # install dependencies
 RUN apt-get update && apt-get install -qy \
   jenkins-launchpad-plugin \
-  snappy-tests-job && \
+  snappy-tests-job \
+  jq && \
   rm -rf /var/lib/apt/lists/*
 
 # copy scripts
 COPY scripts/authentication.groovy \
   scripts/jobs.groovy \
-  /usr/share/jenkins/ref/init.groovy.d/
+  /usr/share/jenkins/ref/init.groovy.d/ \
+  scripts/poll_spi_result
 
 USER jenkins
 
@@ -30,6 +32,8 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 RUN mkdir /usr/share/jenkins/ref/job-definitions
 COPY jobs/snappy-daily-1504-canonistack.xml \
   jobs/snappy-daily-rolling-canonistack.xml \
+  jobs/snappy-daily-rolling-bbb.xml \
+  jobs/snappy-daily-1504-bbb.xml \
   jobs/generic-update_mp.xml \
   jobs/snappy-1504-ci-canonistack.xml \
   jobs/snappy-rolling-ci-canonistack.xml \
