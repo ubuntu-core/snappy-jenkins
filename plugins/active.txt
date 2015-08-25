@@ -1,3 +1,2 @@
 parameterized-trigger:2.27:not-pinned
 rebuild:1.25:not-pinned
-naginator:1.15:not-pinned
