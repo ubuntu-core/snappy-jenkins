@@ -22,6 +22,7 @@ RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 # copy scripts
 COPY scripts/authentication.groovy \
   scripts/jobs.groovy \
+  scripts/executors.groovy \
   /usr/share/jenkins/ref/init.groovy.d/
 
 USER jenkins
