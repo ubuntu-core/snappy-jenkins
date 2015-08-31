@@ -12,8 +12,12 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed && \
 # install dependencies
 RUN apt-get update && apt-get install -qy \
   jenkins-launchpad-plugin \
-  snappy-tests-job && \
+  snappy-tests-job \
+  sudo && \
   rm -rf /var/lib/apt/lists/*
+
+# make jenkins sudoer
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 # copy scripts
 COPY scripts/authentication.groovy \
