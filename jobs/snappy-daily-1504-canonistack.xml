@@ -21,7 +21,7 @@
       <command>#!/bin/bash
 . $HOME/.canonistack/novarc_lcy02
 
-snappy-tests-job -release 1504 -channel edge
+snappy-tests-job -release 1504 -channel edge -output-dir /tmp/${BUILD_TAG}
 </command>
     </hudson.tasks.Shell>
   </builders>

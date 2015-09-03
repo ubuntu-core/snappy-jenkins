@@ -36,7 +36,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 . $HOME/.canonistack/novarc_lcy02
-snappy-tests-job -release rolling -channel edge -src $landing_candidate -target lp:snappy -snappy-from-branch</command>
+snappy-tests-job -release rolling -channel edge -src $landing_candidate -target lp:snappy -snappy-from-branch -output-dir /tmp/${BUILD_TAG}</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
