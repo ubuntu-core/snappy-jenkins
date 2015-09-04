@@ -35,7 +35,7 @@ launch_instance(){
     if [ -z "$INSTANCE_IP" ]
     then
         echo "Couldn't get instance IP, retrying"
-        sleep 5
+        sleep 10
         INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
         if [ -z "$INSTANCE_IP" ]
         then
