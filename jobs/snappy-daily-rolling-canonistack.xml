@@ -20,7 +20,7 @@
       <command>#!/bin/bash
 . $HOME/.canonistack/novarc_lcy02
 
-snappy-tests-job -release rolling -channel edge -output-dir /tmp/${BUILD_TAG}</command>
+snappy-tests-job -release rolling -channel edge -output-dir /tmp/$BUILD_TAG</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
