@@ -21,10 +21,19 @@
       <command>#!/bin/bash
 . $HOME/.canonistack/novarc_lcy02
 
-snappy-tests-job -release 1504 -channel edge -output-dir /tmp/$BUILD_TAG
+snappy-tests-job -release 1504 -channel edge -output-dir $PWD/$BUILD_TAG
+
+subunit-1to2 $PWD/$BUILD_TAG/output/artifacts/results.subunit | subunit2junitxml -o $PWD/$BUILD_TAG/output/artifacts/results.xml
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers/>
+  <publishers>
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.2-beta-4">
+      <testResults>$BUILD_TAG/output/artifacts/results.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+      <healthScaleFactor>1.0</healthScaleFactor>
+    </hudson.tasks.junit.JUnitResultArchiver>
+  </publishers>
   <buildWrappers/>
 </project>
