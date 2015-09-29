@@ -10,9 +10,15 @@ then
     echo "No launchpad credentials path given as second argument, exiting"
     exit 1
 fi
+if [ -z "$3" ]
+then
+    echo "No snappy product integration credentials path given as third argument, exiting"
+    exit 1
+fi
 
 OPENSTACK_CREDENTIALS_PATH=$1
 LAUNCHPAD_CREDENTIALS_PATH=$2
+SPI_CREDENTIALS_PATH=$3
 JENKINS_HOME=/tmp/jenkins
 CONTAINER_NAME=fgimenez/snappy-jenkins
 
@@ -46,6 +52,8 @@ EOT
 
 # instance provision: copy the launchpad credentials
 cp $LAUNCHPAD_CREDENTIALS_PATH $JENKINS_HOME/.launchpad.credentials
+# instance provision: copy the spi credentials
+cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
 
 # instance provision: launch container
 sudo docker build --no-cache -t $CONTAINER_NAME .
