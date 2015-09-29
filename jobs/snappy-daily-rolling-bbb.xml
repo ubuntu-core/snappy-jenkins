@@ -65,7 +65,7 @@ elapsed = 0
 def get_results():
     print('Checking for results.')
     res = session.get(
-        'http://result-enumerator.spi.canonical.com/orgs/canonical/results?image_unique_id=' +
+        'https://spi.canonical.com/orgs/canonical/results?image_unique_id=' +
         os.environ.get('BUILD_TAG'))
     return res.json()['test_results']
 
