@@ -89,5 +89,6 @@ else:
     sys.exit(1)</command>
     </hudson.tasks.Shell>
   </builders>
+  <publishers/>
   <buildWrappers/>
 </project>
