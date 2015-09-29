@@ -22,7 +22,7 @@
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/usr/bin/env python3
+      <command><![CDATA[#!/usr/bin/env python3
 
 import configparser
 import json
@@ -86,7 +86,7 @@ status = results[0]['test_status']
 if status == 'PASSED':
     sys.exit(0)
 else:
-    sys.exit(1)</command>
+    sys.exit(1)]]></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
