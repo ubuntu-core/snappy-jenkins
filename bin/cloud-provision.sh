@@ -10,11 +10,17 @@ then
     echo "No launchpad credentials path given as second argument, exiting"
     exit 1
 fi
+if [ -z "$3" ]
+then
+    echo "No snappy product integration credentials path given as third argument, exiting"
+    exit 1
+fi
 
 . ./bin/cloud-common.sh
 
 OPENSTACK_CREDENTIALS_PATH=$1
 LAUNCHPAD_CREDENTIALS_PATH=$2
+SPI_CREDENTIALS_PATH=$3
 SECGROUP=$NAME
 FLAVOR=m1.large
 
@@ -58,6 +64,7 @@ send_and_execute(){
 copy_credentials() {
     scp -r $OPENSTACK_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME
     scp $LAUNCHPAD_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.launchpad.credentials
+    scp $SPI_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.spi.ini
 }
 
 create_security_group

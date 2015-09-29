@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H H * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command><![CDATA[#!/usr/bin/env python3
+
+import configparser
+import json
+import os
+import sys
+import time
+
+import requests_oauthlib
+
+
+config = configparser.ConfigParser()
+config.read(os.path.join(os.environ.get('HOME'), '.spi.ini'))
+session = requests_oauthlib.OAuth1Session(
+    config.get('auth', 'consumer_key'),
+    client_secret=config.get('auth', 'consumer_secret'),
+    resource_owner_key=config.get('auth', 'token_key'),
+    resource_owner_secret=config.get('auth', 'token_secret'),
+)
+
+res = session.post(
+    'https://spi.canonical.com/orgs/canonical/images',
+    json={
+        'image_name': 'snappy_rolling_daily',
+        'image_reference': {
+            'udf-params': 'core rolling --channel edge --oem beagleblack --developer-mode'
+        },
+        'image_unique_id': os.environ.get('BUILD_TAG'),
+        'upgrade_snaps': []
+    }
+)
+print('HTTP', res.status_code)
+print(json.dumps(res.json(), indent=2))
+
+
+TIMEOUT = 7200  # 2 hours.
+WAIT = 900  # 15 minutes.
+elapsed = 0
+
+
+def get_results():
+    print('Checking for results.')
+    res = session.get(
+        'https://spi.canonical.com/orgs/canonical/results?image_unique_id=' +
+        os.environ.get('BUILD_TAG'))
+    return res.json()['test_results']
+
+
+results = get_results()
+while results == []:
+    if elapsed < TIMEOUT:
+        print('Results not found. Sleeping to try again later.')
+        time.sleep(WAIT)
+        elapsed += WAIT
+        results = get_results()
+    else:
+        print('Timed out waiting for results.')
+        sys.exit(2)
+
+print(results)
+status = results[0]['test_status']
+if status == 'PASSED':
+    sys.exit(0)
+else:
+    sys.exit(1)]]></command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
