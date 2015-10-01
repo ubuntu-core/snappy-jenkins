@@ -28,7 +28,7 @@ erase_jenkins_home(){
 }
 
 copy_credentials(){
-    CREDENTIALS=( ".canonistack" ".ssh" ".launchpad.credentials" )
+    CREDENTIALS=( ".openstack" ".ssh" ".launchpad.credentials" )
     for i in "${CREDENTIALS[@]}"
     do
         cp -r $BACKUP_FOLDER/$i $JENKINS_HOME
