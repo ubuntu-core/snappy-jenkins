@@ -23,6 +23,7 @@ LAUNCHPAD_CREDENTIALS_PATH=$2
 SPI_CREDENTIALS_PATH=$3
 SECGROUP=$NAME
 FLAVOR=m1.large
+STACK_NAME=canonistack
 
 create_security_group() {
     nova secgroup-delete $SECGROUP
@@ -36,13 +37,13 @@ launch_instance(){
 
     INSTANCE_ID=$(nova boot --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-groups $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --poll | grep '| id ' | awk '{print $4}')
 
-    INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+    INSTANCE_IP=$(nova show $INSTANCE_ID | grep "$STACK_NAME network" | awk '{print $5}')
 
     if [ -z "$INSTANCE_IP" ]
     then
         echo "Couldn't get instance IP, retrying"
         sleep 10
-        INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+        INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'openstack network' | awk '{print $5}')
         if [ -z "$INSTANCE_IP" ]
         then
             echo "Couldn't get instance IP, exiting"
@@ -62,7 +63,7 @@ send_and_execute(){
 }
 
 copy_credentials() {
-    scp -r $OPENSTACK_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp -r $OPENSTACK_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.openstack
     scp $LAUNCHPAD_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.launchpad.credentials
     scp $SPI_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.spi.ini
 }
