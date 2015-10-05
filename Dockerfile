@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -qy \
   jenkins-launchpad-plugin \
   snappy-tests-job \
   python3-requests-oauthlib \
-  sudo && \
+  sudo subunit && \
   rm -rf /var/lib/apt/lists/*
 
 # make jenkins sudoer
