@@ -12,7 +12,7 @@ setup_service(){
 }
 
 setup_jenkins_home(){
-    rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME/.openstack && chmod a+w $JENKINS_HOME
+    rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
 }
 
 setup_ssh(){
