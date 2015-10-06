@@ -23,7 +23,7 @@ JENKINS_HOME=/tmp/jenkins
 CONTAINER_NAME=fgimenez/snappy-jenkins
 
 # instance provision: create JENKINS_HOME
-rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
+sudo rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
 
 # instance provision: copy canonistack credentials
 cp -r $OPENSTACK_CREDENTIALS_PATH $JENKINS_HOME
