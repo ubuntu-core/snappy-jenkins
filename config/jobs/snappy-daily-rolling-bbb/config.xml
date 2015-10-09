@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>H H * * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+sudo apt-get update
+sudo apt-get install -qy jq
+      </command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+curl http://spec-manager.spi.canonical.com/orgs/canonical/images -H "Content-Type: application/json" --data "{'image_name': 'snappy_rolling_daily', 'image_reference': {'udf-params': 'core rolling --channel edge --oem beagleblack --developer-mode'}, 'image_unique_id': ${BUILD_TAG}, 'upgrade_snaps': []}"</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+#
+# Wait for the results of an SPI execution.
+# Receives the image_unique_id of the execution.
+# Exits with:
+# - 0 if the test passed.
+# - 1 if the test failed.
+# - 2 if it timed out checking for results.
+
+readonly TIMEOUT=7200  # 2 hours.
+readonly WAIT=900  # 15 minutes.
+results="[]"
+
+function get_results() {
+  echo "Checking for results."
+  url="http://result-enumerator.spi.canonical.com/orgs/canonical/results?image_unique_id="$@""
+  results="$(curl --silent "${url}" | jq '.test_results')"
+}
+
+time=0
+get_results ${BUILD_TAG}
+while [[ "${results}" = "[]" ]]; do
+  if [[ "${time}" -lt "${TIMEOUT}" ]]; then
+    echo "Results not found. Sleeping to try again later."
+    sleep ${WAIT}
+    time+="${WAIT}"
+    get_results ${BUILD_TAG}
+  else
+    echo "Timed out waiting for results."
+    exit 2
+  fi
+done
+
+status="$(echo "${results}" | jq ".[0].test_status")"
+echo "${status}"
+if [[ "${status}" = "\"PASSED\"" ]]; then
+  exit 0
+else
+  exit 1
+fi</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
