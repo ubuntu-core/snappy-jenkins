@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -qy \
   jenkins-launchpad-plugin \
   snappy-tests-job \
   python3-requests-oauthlib \
-  sudo && \
+  sudo subunit && \
   rm -rf /var/lib/apt/lists/*
 
 # make jenkins sudoer
@@ -34,15 +34,22 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 
 # copy job definitions
 RUN mkdir /usr/share/jenkins/ref/job-definitions
-COPY jobs/snappy-daily-1504-canonistack.xml \
-  jobs/snappy-daily-rolling-canonistack.xml \
-  jobs/snappy-daily-rolling-bbb.xml \
-  jobs/generic-update_mp.xml \
-  jobs/snappy-1504-ci-canonistack.xml \
-  jobs/snappy-rolling-ci-canonistack.xml \
-  jobs/trigger-snappy-1504-ci.xml \
-  jobs/trigger-snappy-rolling-ci.xml \
-  /usr/share/jenkins/ref/job-definitions/
+COPY config/jobs/snappy-daily-1504-canonistack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-1504-canonistack.xml
+COPY config/jobs/snappy-daily-rolling-canonistack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-canonistack.xml
+COPY config/jobs/snappy-daily-rolling-bbb/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-bbb.xml
+COPY config/jobs/generic-update_mp/config.xml \
+  /usr/share/jenkins/ref/job-definitions/generic-update_mp.xml
+COPY config/jobs/snappy-1504-ci-canonistack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-1504-ci-canonistack.xml
+COPY config/jobs/snappy-rolling-ci-canonistack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-rolling-ci-canonistack.xml
+COPY config/jobs/trigger-snappy-1504-ci/config.xml \
+  /usr/share/jenkins/ref/job-definitions/trigger-snappy-1504-ci.xml
+COPY config/jobs/trigger-snappy-rolling-ci/config.xml \
+  /usr/share/jenkins/ref/job-definitions/trigger-snappy-rolling-ci.xml
 
 # copy jenkins-launchpad-plugin config
 RUN mkdir /usr/share/jenkins/ref/.jlp
