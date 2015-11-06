@@ -20,7 +20,7 @@ OPENSTACK_CREDENTIALS_PATH=$1
 LAUNCHPAD_CREDENTIALS_PATH=$2
 SPI_CREDENTIALS_PATH=$3
 JENKINS_HOME=/tmp/jenkins
-CONTAINER_NAME=fgimenez/snappy-jenkins
+JENKINS_CONTAINER_NAME=fgimenez/snappy-jenkins
 
 # instance provision: create JENKINS_HOME
 sudo rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
@@ -56,6 +56,6 @@ cp $LAUNCHPAD_CREDENTIALS_PATH $JENKINS_HOME/.launchpad.credentials
 cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
 
 # instance provision: launch container
-sudo docker build --no-cache -t $CONTAINER_NAME .
+sudo docker build --no-cache -t $JENKINS_CONTAINER_NAME .
 sudo docker rm -f snappy-jenkins
-sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME
+sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $JENKINS_CONTAINER_NAME

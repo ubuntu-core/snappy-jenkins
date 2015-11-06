@@ -28,7 +28,7 @@ erase_jenkins_home(){
 }
 
 copy_credentials(){
-    CREDENTIALS=( ".canonistack" ".ssh" ".launchpad.credentials" )
+    CREDENTIALS=( ".canonistack" ".ssh" )
     for i in "${CREDENTIALS[@]}"
     do
         cp -r $BACKUP_FOLDER/$i $JENKINS_HOME
@@ -36,11 +36,11 @@ copy_credentials(){
 }
 
 pull_container(){
-    sudo docker pull $CONTAINER_NAME
+    sudo docker pull $JENKINS_CONTAINER_NAME
 }
 
 run_container(){
-    $CONTAINER_INIT_COMMAND
+    $JENKINS_CONTAINER_INIT_COMMAND
 }
 
 stop_container(){

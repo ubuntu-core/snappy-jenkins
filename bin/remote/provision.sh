@@ -6,9 +6,10 @@ install_docker(){
 }
 
 setup_service(){
-    sudo cp /home/ubuntu/snappy-jenkins.service /lib/systemd/system/snappy-jenkins.service
+    service=$1
+    sudo cp /home/ubuntu/$service.service /lib/systemd/system/$service.service
     sudo systemctl daemon-reload
-    sudo systemctl enable snappy-jenkins
+    sudo systemctl enable $service
 }
 
 setup_jenkins_home(){
@@ -39,13 +40,14 @@ EOT
 }
 
 launch_container(){
-    sudo docker pull $CONTAINER_NAME
-    $CONTAINER_INIT_COMMAND
+    sudo docker pull $JENKINS_CONTAINER_NAME
+    $JENKINS_CONTAINER_INIT_COMMAND
 }
 
 install_docker
 
-setup_service
+setup_service snappy-jenkins
+setup_service snappy-proxy
 
 setup_jenkins_home
 

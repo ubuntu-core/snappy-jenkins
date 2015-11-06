@@ -27,8 +27,11 @@ FLAVOR=m1.large
 create_security_group() {
     nova secgroup-delete $SECGROUP
     nova secgroup-create $SECGROUP "snappy-jenkins secgroup"
-    nova secgroup-add-rule $SECGROUP tcp 22 22 0.0.0.0/0
-    nova secgroup-add-rule $SECGROUP tcp 8080 8080 0.0.0.0/0
+    # ports 22 and 8080 only accessible from the vpn, port 8081
+    # (jenkins reverse proxy) open to all
+    nova secgroup-add-rule $SECGROUP tcp 22 22 10.0.0.0/8
+    nova secgroup-add-rule $SECGROUP tcp 8080 8080 10.0.0.0/8
+    nova secgroup-add-rule $SECGROUP tcp 8081 8080 0.0.0.0/0
 }
 
 launch_instance(){
@@ -54,6 +57,7 @@ launch_instance(){
 
 copy_service_definition(){
     scp ./snappy-jenkins.service ubuntu@$INSTANCE_IP:/home/ubuntu
+    scp ./snappy-proxy.service ubuntu@$INSTANCE_IP:/home/ubuntu
 }
 
 send_and_execute(){
