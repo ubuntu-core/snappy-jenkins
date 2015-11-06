@@ -6,14 +6,11 @@ USER root
 RUN apt-get update && apt-get install -qy \
   python-software-properties \
   software-properties-common
-RUN add-apt-repository -y ppa:snappy-dev/tools-proposed && \
-  add-apt-repository -y ppa:fgimenez/jenkins-launchpad-plugin
+RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 
 # install dependencies
 RUN apt-get update && apt-get install -qy \
-  jenkins-launchpad-plugin \
   snappy-tests-job \
-  python3-requests-oauthlib \
   sudo subunit && \
   rm -rf /var/lib/apt/lists/*
 
@@ -40,16 +37,10 @@ COPY config/jobs/snappy-daily-rolling-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-canonistack.xml
 COPY config/jobs/snappy-daily-rolling-bbb/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-bbb.xml
-COPY config/jobs/generic-update_mp/config.xml \
-  /usr/share/jenkins/ref/job-definitions/generic-update_mp.xml
 COPY config/jobs/snappy-1504-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-1504-ci-canonistack.xml
 COPY config/jobs/snappy-rolling-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-rolling-ci-canonistack.xml
-COPY config/jobs/trigger-snappy-1504-ci/config.xml \
-  /usr/share/jenkins/ref/job-definitions/trigger-snappy-1504-ci.xml
-COPY config/jobs/trigger-snappy-rolling-ci/config.xml \
-  /usr/share/jenkins/ref/job-definitions/trigger-snappy-rolling-ci.xml
 
 # copy jenkins-launchpad-plugin config
 RUN mkdir /usr/share/jenkins/ref/.jlp

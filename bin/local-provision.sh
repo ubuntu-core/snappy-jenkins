@@ -7,18 +7,12 @@ then
 fi
 if [ -z "$2" ]
 then
-    echo "No launchpad credentials path given as second argument, exiting"
-    exit 1
-fi
-if [ -z "$3" ]
-then
-    echo "No snappy product integration credentials path given as third argument, exiting"
+    echo "No snappy product integration credentials path given as second argument, SPI won't be available"
     exit 1
 fi
 
 OPENSTACK_CREDENTIALS_PATH=$1
-LAUNCHPAD_CREDENTIALS_PATH=$2
-SPI_CREDENTIALS_PATH=$3
+SPI_CREDENTIALS_PATH=$2
 JENKINS_HOME=/tmp/jenkins
 JENKINS_CONTAINER_NAME=fgimenez/snappy-jenkins
 
@@ -50,10 +44,11 @@ Host *.cloudapp.net
     IdentityFile ~/.ssh/azure.key
 EOT
 
-# instance provision: copy the launchpad credentials
-cp $LAUNCHPAD_CREDENTIALS_PATH $JENKINS_HOME/.launchpad.credentials
 # instance provision: copy the spi credentials
-cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
+if [ ! -z "$SPI_CREDENTIALS_PATH" ]
+then
+    cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
+fi
 
 # instance provision: launch container
 sudo docker build --no-cache -t $JENKINS_CONTAINER_NAME .
