@@ -5,13 +5,6 @@ install_docker(){
     sudo apt-get install -y docker.io
 }
 
-setup_service(){
-    service=$1
-    sudo cp /home/ubuntu/$service.service /lib/systemd/system/$service.service
-    sudo systemctl daemon-reload
-    sudo systemctl enable $service
-}
-
 setup_jenkins_home(){
     rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
 }
@@ -40,17 +33,17 @@ EOT
 }
 
 launch_container(){
-    sudo docker pull $JENKINS_CONTAINER_NAME
-    $JENKINS_CONTAINER_INIT_COMMAND
+    CONTAINER_NAME=$1
+    CONTAINER_INIT_COMMAND=$2
+    sudo docker pull $CONTAINER_NAME
+    eval $CONTAINER_INIT_COMMAND
 }
 
 install_docker
-
-setup_service snappy-jenkins
-setup_service snappy-proxy
 
 setup_jenkins_home
 
 setup_ssh
 
-launch_container
+launch_container "$JENKINS_CONTAINER_NAME" "$JENKINS_CONTAINER_INIT_COMMAND"
+launch_container "$PROXY_CONTAINER_NAME" "$PROXY_CONTAINER_INIT_COMMAND"

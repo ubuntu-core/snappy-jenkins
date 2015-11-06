@@ -10,6 +10,9 @@ then
     echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
 fi
 
+JENKINS_HOME=/home/ubuntu/jenkins
+
+. ./bin/common.sh
 . ./bin/cloud-common.sh
 
 OPENSTACK_CREDENTIALS_PATH=$1
@@ -24,7 +27,7 @@ create_security_group() {
     # (jenkins reverse proxy) open to all
     nova secgroup-add-rule $SECGROUP tcp 22 22 10.0.0.0/8
     nova secgroup-add-rule $SECGROUP tcp 8080 8080 10.0.0.0/8
-    nova secgroup-add-rule $SECGROUP tcp 8081 8080 0.0.0.0/0
+    nova secgroup-add-rule $SECGROUP tcp 8081 8081 0.0.0.0/0
 }
 
 launch_instance(){
@@ -37,7 +40,7 @@ launch_instance(){
     if [ -z "$INSTANCE_IP" ]
     then
         echo "Couldn't get instance IP, retrying"
-        sleep 10
+        sleep 20
         INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
         if [ -z "$INSTANCE_IP" ]
         then
@@ -46,11 +49,6 @@ launch_instance(){
         fi
     fi
 
-}
-
-copy_service_definition(){
-    scp ./snappy-jenkins.service ubuntu@$INSTANCE_IP:/home/ubuntu
-    scp ./snappy-proxy.service ubuntu@$INSTANCE_IP:/home/ubuntu
 }
 
 send_and_execute(){
@@ -66,13 +64,17 @@ copy_credentials() {
     fi
 }
 
+copy_proxy_conf(){
+    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME/
+}
+
 create_security_group
 
 launch_instance
 
 wait_for_ssh
 
-copy_service_definition
+copy_proxy_conf
 
 send_and_execute
 
