@@ -5,10 +5,6 @@ install_docker(){
     sudo apt-get install -y docker.io
 }
 
-setup_jenkins_home(){
-    rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
-}
-
 setup_ssh(){
     mkdir -p $JENKINS_HOME/.ssh && ssh-keygen -q -t rsa -N '' -f $JENKINS_HOME/.ssh/id_rsa
 
@@ -40,8 +36,6 @@ launch_container(){
 }
 
 install_docker
-
-setup_jenkins_home
 
 setup_ssh
 

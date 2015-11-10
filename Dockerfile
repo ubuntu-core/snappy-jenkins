@@ -11,6 +11,7 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 # install dependencies
 RUN apt-get update && apt-get install -qy \
   snappy-tests-job \
+  build-essential \
   sudo subunit && \
   rm -rf /var/lib/apt/lists/*
 
@@ -41,7 +42,5 @@ COPY config/jobs/snappy-1504-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-1504-ci-canonistack.xml
 COPY config/jobs/snappy-rolling-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-rolling-ci-canonistack.xml
-
-# copy jenkins-launchpad-plugin config
-RUN mkdir /usr/share/jenkins/ref/.jlp
-COPY jlp.config /usr/share/jenkins/ref/.jlp/
+COPY config/jobs/github-snappy-integration-tests/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests.xml
