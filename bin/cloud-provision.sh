@@ -65,7 +65,7 @@ copy_credentials() {
 }
 
 copy_proxy_conf(){
-    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:/home/ubuntu
+    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME
 }
 
 copy_ghprb_conf(){
