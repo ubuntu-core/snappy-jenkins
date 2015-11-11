@@ -11,6 +11,7 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 # install dependencies
 RUN apt-get update && apt-get install -qy \
   snappy-tests-job \
+  build-essential \
   sudo subunit && \
   rm -rf /var/lib/apt/lists/*
 
