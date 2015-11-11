@@ -1,12 +1,13 @@
 #!/bin/sh
-
-NAME=snappy-jenkins
-JENKINS_HOME=/home/ubuntu/jenkins
-CONTAINER_NAME="fgimenez/$NAME"
-CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name $NAME -t $CONTAINER_NAME"
-
 execute_remote_command(){
-    ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$INSTANCE_IP 'export JENKINS_HOME='"'$JENKINS_HOME'"'; export OS_USERNAME='"'$OS_USERNAME'"';export OS_REGION_NAME='"'$OS_REGION_NAME'"';export CONTAINER_NAME='"'$CONTAINER_NAME'"';export CONTAINER_INIT_COMMAND='"'$CONTAINER_INIT_COMMAND'"';export NAME='"'$NAME'"'; '"$@"''
+    ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$INSTANCE_IP 'export JENKINS_HOME='"'$JENKINS_HOME'"'; \
+export OS_USERNAME='"'$OS_USERNAME'"'; \
+export OS_REGION_NAME='"'$OS_REGION_NAME'"'; \
+export JENKINS_CONTAINER_NAME='"'$JENKINS_CONTAINER_NAME'"'; \
+export JENKINS_CONTAINER_INIT_COMMAND='"'$JENKINS_CONTAINER_INIT_COMMAND'"'; \
+export NAME='"'$NAME'"'; \
+export PROXY_CONTAINER_NAME='"'$PROXY_CONTAINER_NAME'"'; \
+export PROXY_CONTAINER_INIT_COMMAND='"'$PROXY_CONTAINER_INIT_COMMAND'"'; '"$@"''
 }
 
 wait_for_ssh(){

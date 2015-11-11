@@ -3,16 +3,9 @@ set -x
 
 BACKUP_FOLDER="/home/ubuntu/jenkins_backup"
 
-stop_service(){
-    sudo service $NAME stop
-}
-
-start_service(){
-    sudo service $NAME start
-}
-
 remove_container(){
-    sudo docker rm -f $NAME
+    CONTAINER_NAME=$1
+    sudo docker rm -f $CONTAINER_NAME
 }
 
 remove_backup(){
@@ -28,7 +21,7 @@ erase_jenkins_home(){
 }
 
 copy_credentials(){
-    CREDENTIALS=( ".canonistack" ".ssh" ".launchpad.credentials" )
+    CREDENTIALS=( ".canonistack" ".ssh" )
     for i in "${CREDENTIALS[@]}"
     do
         cp -r $BACKUP_FOLDER/$i $JENKINS_HOME
@@ -36,15 +29,18 @@ copy_credentials(){
 }
 
 pull_container(){
+    CONTAINER_NAME=$1
     sudo docker pull $CONTAINER_NAME
 }
 
 run_container(){
-    $CONTAINER_INIT_COMMAND
+    CONTAINER_INIT_COMMAND=$1
+    eval $CONTAINER_INIT_COMMAND
 }
 
 stop_container(){
-    sudo docker stop $NAME
+    CONTAINER_NAME=$1
+    sudo docker stop $CONTAINER_NAME
 }
 
 wait_for_folder(){
@@ -78,9 +74,11 @@ copy_jobs_history(){
     done
 }
 
-stop_service
+stop_service snappy-jenkins
+stop_service snappy-proxy
 
-remove_container
+remove_container $JENKINS_CONTAINER_NAME
+remove_container $PROXY_CONTAINER_NAME
 
 remove_backup
 
@@ -90,12 +88,13 @@ erase_jenkins_home
 
 copy_credentials
 
-pull_container
+pull_container $JENKINS_CONTAINER_NAME
+pull_container $PROXY_CONTAINER_NAME
 
-run_container
+stop_container $JENKINS_CONTAINER_NAME
+stop_container $PROXY_CONTAINER_NAME
 
 copy_jobs_history
 
-stop_container
-
-start_service
+run_container $JENKINS_CONTAINER_INIT_COMMAND
+run_container $PROXY_CONTAINER_INIT_COMMAND

@@ -10,10 +10,12 @@ then
     echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
 fi
 
+JENKINS_HOME=/tmp/jenkins
+
+. ./bin/common.sh
+
 OPENSTACK_CREDENTIALS_PATH=$1
 SPI_CREDENTIALS_PATH=$2
-JENKINS_HOME=/tmp/jenkins
-CONTAINER_NAME=fgimenez/snappy-jenkins
 
 # instance provision: create JENKINS_HOME
 sudo rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
@@ -49,7 +51,12 @@ then
     cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
 fi
 
+# copy proxy config
+cp config/proxy/proxy.conf $JENKINS_HOME
+
 # instance provision: launch container
-sudo docker build --no-cache -t $CONTAINER_NAME .
-sudo docker rm -f snappy-jenkins
-sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --name snappy-jenkins -t $CONTAINER_NAME
+sudo docker build --no-cache -t $JENKINS_CONTAINER_NAME .
+sudo docker stop -f $NAME $PROXY_NAME
+sudo docker rm -f $NAME $PROXY_NAME
+eval $JENKINS_CONTAINER_INIT_COMMAND
+eval $PROXY_CONTAINER_INIT_COMMAND

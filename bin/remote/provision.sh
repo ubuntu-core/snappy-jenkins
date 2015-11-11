@@ -5,16 +5,6 @@ install_docker(){
     sudo apt-get install -y docker.io
 }
 
-setup_service(){
-    sudo cp /home/ubuntu/snappy-jenkins.service /lib/systemd/system/snappy-jenkins.service
-    sudo systemctl daemon-reload
-    sudo systemctl enable snappy-jenkins
-}
-
-setup_jenkins_home(){
-    rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
-}
-
 setup_ssh(){
     mkdir -p $JENKINS_HOME/.ssh && ssh-keygen -q -t rsa -N '' -f $JENKINS_HOME/.ssh/id_rsa
 
@@ -39,16 +29,15 @@ EOT
 }
 
 launch_container(){
+    CONTAINER_NAME=$1
+    CONTAINER_INIT_COMMAND=$2
     sudo docker pull $CONTAINER_NAME
-    $CONTAINER_INIT_COMMAND
+    eval $CONTAINER_INIT_COMMAND
 }
 
 install_docker
 
-setup_service
-
-setup_jenkins_home
-
 setup_ssh
 
-launch_container
+launch_container "$JENKINS_CONTAINER_NAME" "$JENKINS_CONTAINER_INIT_COMMAND"
+launch_container "$PROXY_CONTAINER_NAME" "$PROXY_CONTAINER_INIT_COMMAND"
