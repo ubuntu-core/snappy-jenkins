@@ -65,7 +65,11 @@ copy_credentials() {
 }
 
 copy_proxy_conf(){
-    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME/
+    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:/home/ubuntu
+}
+
+setup_jenkins_home(){
+    execute_remote_command "rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME"
 }
 
 create_security_group
@@ -73,6 +77,8 @@ create_security_group
 launch_instance
 
 wait_for_ssh
+
+setup_jenkins_home
 
 copy_proxy_conf
 
