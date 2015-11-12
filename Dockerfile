@@ -42,7 +42,5 @@ COPY config/jobs/snappy-1504-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-1504-ci-canonistack.xml
 COPY config/jobs/snappy-rolling-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-rolling-ci-canonistack.xml
-
-# copy jenkins-launchpad-plugin config
-RUN mkdir /usr/share/jenkins/ref/.jlp
-COPY jlp.config /usr/share/jenkins/ref/.jlp/
+COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests-cloud.xml

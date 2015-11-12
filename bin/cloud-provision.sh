@@ -65,7 +65,11 @@ copy_credentials() {
 }
 
 copy_proxy_conf(){
-    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:/home/ubuntu
+    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME
+}
+
+copy_ghprb_conf(){
+    scp ./config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml ubuntu@$INSTANCE_IP:$JENKINS_HOME
 }
 
 setup_jenkins_home(){
@@ -81,6 +85,8 @@ wait_for_ssh
 setup_jenkins_home
 
 copy_proxy_conf
+
+copy_ghprb_conf
 
 send_and_execute
 
