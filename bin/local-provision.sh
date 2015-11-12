@@ -7,7 +7,7 @@ then
 fi
 if [ -z "$2" ]
 then
-    echo "No snappy product integration credentials path given as second argument, SPI won't be available"
+    echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
 fi
 
 JENKINS_HOME=/tmp/jenkins

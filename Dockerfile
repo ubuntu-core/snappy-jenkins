@@ -42,5 +42,5 @@ COPY config/jobs/snappy-1504-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-1504-ci-canonistack.xml
 COPY config/jobs/snappy-rolling-ci-canonistack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-rolling-ci-canonistack.xml
-COPY config/jobs/github-snappy-integration-tests/config.xml \
-  /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests.xml
+COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests-cloud.xml
