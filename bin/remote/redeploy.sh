@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-BACKUP_FOLDER="/home/ubuntu/jenkins_backup"
+BACKUP_FOLDER="/mnt/jenkins_backup"
 
 remove_container(){
     CONTAINER_NAME=$1
@@ -13,6 +13,7 @@ remove_backup(){
 }
 
 create_backup(){
+    sudo mkdir -p $BACKUP_FOLDER && sudo chmod a+rwx $BACKUP_FOLDER
     cp -r $JENKINS_HOME $BACKUP_FOLDER
 }
 

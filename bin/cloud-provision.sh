@@ -10,7 +10,7 @@ then
     echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
 fi
 
-JENKINS_HOME=/home/ubuntu/jenkins
+JENKINS_HOME=/mnt/jenkins
 
 . ./bin/common.sh
 . ./bin/cloud-common.sh
@@ -52,8 +52,8 @@ launch_instance(){
 }
 
 send_and_execute(){
-    scp ./bin/remote/provision.sh ubuntu@$INSTANCE_IP:/home/ubuntu
-    execute_remote_command "sh /home/ubuntu/provision.sh"
+    scp ./bin/remote/provision.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    execute_remote_command "sh $JENKINS_HOME/provision.sh"
 }
 
 copy_credentials() {
@@ -73,7 +73,7 @@ copy_ghprb_conf(){
 }
 
 setup_jenkins_home(){
-    execute_remote_command "rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME"
+    execute_remote_command "sudo umount /mnt && sudo rm -rf $JENKINS_HOME && sudo mkdir -p $JENKINS_HOME && sudo mount /dev/vdb $JENKINS_HOME && sudo chmod a+rwx $JENKINS_HOME"
 }
 
 create_security_group
