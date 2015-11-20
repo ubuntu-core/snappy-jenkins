@@ -2,12 +2,6 @@
 <project>
   <actions/>
   <description></description>
-  <logRotator class="hudson.tasks.LogRotator">
-    <daysToKeep>5</daysToKeep>
-    <numToKeep>100</numToKeep>
-    <artifactDaysToKeep>5</artifactDaysToKeep>
-    <artifactNumToKeep>100</artifactNumToKeep>
-  </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -25,25 +19,20 @@
       <spec>H H * * *</spec>
     </hudson.triggers.TimerTrigger>
   </triggers>
-  <concurrentBuild>true</concurrentBuild>
+  <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.canonistack/novarc
-
-snappy-tests-job -release rolling -channel edge -output-dir $PWD/$BUILD_TAG
-
-subunit2junitxml $PWD/$BUILD_TAG/output/artifacts/results.subunit -o $PWD/$BUILD_TAG/output/artifacts/results.xml
+for channel in alpha stable edge
+do
+  echo &quot;cleanup for 1504 $channel&quot;
+	snappy-cloud-image -loglevel debug -release 1504 -channel $channel -action cleanup
+done
+echo &quot;cleanup for rolling edge&quot;
+snappy-cloud-image -loglevel debug -release rolling -channel edge -action cleanup
       </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.2-beta-4">
-      <testResults>$BUILD_TAG/output/artifacts/results.xml</testResults>
-      <keepLongStdio>false</keepLongStdio>
-      <testDataPublishers/>
-      <healthScaleFactor>1.0</healthScaleFactor>
-    </hudson.tasks.junit.JUnitResultArchiver>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
 </project>
