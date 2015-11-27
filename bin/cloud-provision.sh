@@ -15,10 +15,11 @@ JENKINS_HOME=/mnt/jenkins
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
-OPENSTACK_CREDENTIALS_PATH=$1
+NOVARC_PATH=$1
 SPI_CREDENTIALS_PATH=$2
 SECGROUP=$NAME
 FLAVOR=m1.large
+OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
 
 create_security_group() {
     nova secgroup-delete $SECGROUP
@@ -31,7 +32,7 @@ create_security_group() {
 }
 
 launch_instance(){
-    IMAGE_ID=$(nova image-list | grep wily-daily-amd64 | head -1 | awk '{print $4}')
+    IMAGE_ID=$(nova image-list | grep xenial-daily-amd64 | head -1 | awk '{print $4}')
 
     INSTANCE_ID=$(nova boot --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-groups $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --poll | grep '| id ' | awk '{print $4}')
 
@@ -57,7 +58,8 @@ send_and_execute(){
 }
 
 copy_credentials() {
-    scp -r $OPENSTACK_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp $NOVARC_PATH ubuntu@$INSTANCE_IP:$OPENSTACK_CREDENTIALS_DIR/novarc
+
     if [ ! -z "$SPI_CREDENTIALS_PATH" ]
     then
         scp $SPI_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.spi.ini
@@ -69,11 +71,16 @@ copy_proxy_conf(){
 }
 
 copy_ghprb_conf(){
-    scp ./config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp ./config/ghprb/$GHPRB_CONFIG_FILE ubuntu@$INSTANCE_IP:$JENKINS_HOME
 }
 
 setup_jenkins_home(){
-    execute_remote_command "sudo umount /mnt && sudo rm -rf $JENKINS_HOME && sudo mkdir -p $JENKINS_HOME && sudo mount /dev/vdb $JENKINS_HOME && sudo chmod a+rwx $JENKINS_HOME"
+    execute_remote_command "sudo umount /mnt && \
+sudo rm -rf $JENKINS_HOME && \
+sudo mkdir -p $JENKINS_HOME && \
+sudo mount /dev/vdb $JENKINS_HOME && \
+sudo chmod a+rwx $JENKINS_HOME && \
+mkdir -p $OPENSTACK_CREDENTIALS_DIR"
 }
 
 create_security_group

@@ -96,7 +96,7 @@ zyga
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.canonistack/novarc
+. $HOME/.openstack/novarc
 
 snappy-tests-job -repo $ghprbAuthorRepoGitUrl -src $ghprbSourceBranch -release rolling -channel edge -snappy-from-branch -output-dir $PWD/$BUILD_TAG
 

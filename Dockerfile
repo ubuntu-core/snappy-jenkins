@@ -42,10 +42,10 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 # copy job definitions
 RUN mkdir /usr/share/jenkins/ref/job-definitions
 
-COPY config/jobs/snappy-daily-1504-canonistack/config.xml \
-  /usr/share/jenkins/ref/job-definitions/snappy-daily-1504-canonistack.xml
-COPY config/jobs/snappy-daily-rolling-canonistack/config.xml \
-  /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-canonistack.xml
+COPY config/jobs/snappy-daily-1504-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-1504-openstack.xml
+COPY config/jobs/snappy-daily-rolling-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-openstack.xml
 COPY config/jobs/snappy-daily-rolling-bbb/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-bbb.xml
 
