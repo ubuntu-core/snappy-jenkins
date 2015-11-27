@@ -75,6 +75,10 @@ copy_jobs_history(){
     done
 }
 
+copy_ghprb_conf(){
+    cp "$BACKUP_FOLDER/$GHPRB_CONFIG_FILE" $JENKINS_HOME
+}
+
 stop_service snappy-jenkins
 stop_service snappy-proxy
 
@@ -96,6 +100,7 @@ stop_container $JENKINS_CONTAINER_NAME
 stop_container $PROXY_CONTAINER_NAME
 
 copy_jobs_history
+copy_ghprb_conf
 
 run_container $JENKINS_CONTAINER_INIT_COMMAND
 run_container $PROXY_CONTAINER_INIT_COMMAND
