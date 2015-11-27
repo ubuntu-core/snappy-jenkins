@@ -55,7 +55,7 @@ fi
 cp config/proxy/proxy.conf $JENKINS_HOME
 
 # copy ghprb config
-cp config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml $JENKINS_HOME
+cp config/ghprb/$GHPRB_CONFIG_FILE $JENKINS_HOME
 
 # instance provision: launch container
 sudo docker build --no-cache -t $JENKINS_CONTAINER_NAME .

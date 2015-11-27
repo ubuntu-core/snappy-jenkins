@@ -10,6 +10,7 @@ fi
 
 INSTANCE_IP=$1
 
+. ./bin/common.sh
 . ./bin/cloud-common.sh
 
 send_and_execute(){
