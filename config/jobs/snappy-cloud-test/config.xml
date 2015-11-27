@@ -39,7 +39,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.canonistack/novarc
+. $HOME/.openstack/novarc
 
 snappy-tests-job -release $release -channel $channel -output-dir $PWD/$BUILD_TAG
 

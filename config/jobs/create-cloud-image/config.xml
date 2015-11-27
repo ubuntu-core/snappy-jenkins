@@ -38,7 +38,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.canonistack/novarc
+. $HOME/.openstack/novarc
 snappy-cloud-image -loglevel debug -release $release -channel $channel -action create</command>
     </hudson.tasks.Shell>
   </builders>
