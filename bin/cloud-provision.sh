@@ -15,11 +15,11 @@ JENKINS_HOME=/mnt/jenkins
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
-OPENSTACK_CREDENTIALS_PATH=$1
+NOVARC_PATH=$1
 SPI_CREDENTIALS_PATH=$2
 SECGROUP=$NAME
 FLAVOR=m1.large
-REMOTE_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
+OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
 
 create_security_group() {
     nova secgroup-delete $SECGROUP
@@ -58,10 +58,8 @@ send_and_execute(){
 }
 
 copy_credentials() {
-    # first novarc file in $OPENSTACK_CREDENTIALS_PATH
-    first_novarc=$(ls $OPENSTACK_CREDENTIALS_PATH/novarc* | sort -d | head -1)
+    scp $NOVARC_PATH ubuntu@$INSTANCE_IP:$OPENSTACK_CREDENTIALS_DIR/novarc
 
-    scp $first_novarc ubuntu@$INSTANCE_IP:$REMOTE_CREDENTIALS_DIR/novarc
     if [ ! -z "$SPI_CREDENTIALS_PATH" ]
     then
         scp $SPI_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.spi.ini
@@ -82,7 +80,7 @@ sudo rm -rf $JENKINS_HOME && \
 sudo mkdir -p $JENKINS_HOME && \
 sudo mount /dev/vdb $JENKINS_HOME && \
 sudo chmod a+rwx $JENKINS_HOME && \
-mkdir -p $REMOTE_CREDENTIALS_DIR"
+mkdir -p $OPENSTACK_CREDENTIALS_DIR"
 }
 
 create_security_group

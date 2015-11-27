@@ -20,13 +20,13 @@ You can setup the enviroment locally by executing this command:
 
     $ ./bin/local-provision <cloud_credentials_path>
 
-The ```<cloud_credentials_path>``` required by the command indicates a path to the OpenStack credentials that will be used by the Jenkins instance to spin up Snappy instances. It requires a novarc file and a user key file in that directory, the scripts copies them to the Jenkins container and the jobs use them to access to the cloud provider API.
+The ```<cloud_credentials_path>``` required by the command indicates a path to a novarc file with the OpenStack credentials that will be used by the Jenkins instance to spin up Snappy instances. The scripts copies it to the Jenkins container and the jobs use it to access to the cloud provider API.
 
 Once the scripts finish you can access the jenkins instance from the browser at ```http://localhost:8080```
 
 ### Cloud provision
 
-There are additional requirements for the cloud provision besides having loaded Openstack credentials. In this case the setup is done in a cloud instance and you should be able to spin it up. The needed packages can be installed in Ubuntu with:
+There are additional requirements for the cloud provision besides having loaded OpenStack credentials. In this case the setup is done in a cloud instance and you should be able to spin it up. The needed packages can be installed in Ubuntu with:
 
     $ sudo apt-get install cloud-utils python-novaclient
 
@@ -34,7 +34,7 @@ To setup the CI instance in the cloud just execute:
 
     $ ./bin/cloud-provision.sh <cloud_credentials_path>
 
-This command creates a new VM with two containers in it, as described in this image:
+being, as in the local case, `<cloud_credentials_path>` the location of an OpeStack novarc file. This command creates a new VM with two containers in it, as described in this image:
 
 ![Block Diagram](/img/snappy-jenkins.png?raw=true)
 
