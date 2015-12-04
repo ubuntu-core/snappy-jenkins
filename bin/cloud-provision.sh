@@ -67,11 +67,11 @@ copy_credentials() {
 }
 
 copy_proxy_conf(){
-    scp ./config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp $JENKINS_MASTER_CONTAINER_DIR/config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME
 }
 
 copy_ghprb_conf(){
-    scp ./config/ghprb/$GHPRB_CONFIG_FILE ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp $JENKINS_MASTER_CONTAINER_DIR/config/ghprb/$GHPRB_CONFIG_FILE ubuntu@$INSTANCE_IP:$JENKINS_HOME
 }
 
 setup_jenkins_home(){
