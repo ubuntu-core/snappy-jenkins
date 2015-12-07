@@ -33,6 +33,7 @@ install_docker
 
 setup_ssh
 
+launch_container "$DATA_CONTAINER_NAME" "$DATA_CONTAINER_INIT_COMMAND"
 launch_container "$JENKINS_CONTAINER_NAME" "$JENKINS_CONTAINER_INIT_COMMAND"
 launch_container "$PROXY_CONTAINER_NAME" "$PROXY_CONTAINER_INIT_COMMAND"
 
