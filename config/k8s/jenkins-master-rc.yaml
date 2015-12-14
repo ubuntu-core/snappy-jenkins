@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: jenkins-master-controller
+  labels:
+    app: jenkins-master
+spec:
+  replicas: 1
+  selector:
+    app: jenkins-master
+  template:
+    metadata:
+      name: jenkins-master
+      labels:
+        app: jenkins-master
+    spec:
+      containers:
+      - name: jenkins-master
+        image: fgimenez/snappy-jenkins
+        ports:
+        - containerPort: 8080
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: jenkins-master-data
+          mountPath: /var/jenkins_home
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+      volumes:
+      - name: jenkins-master-data
+        emptyDir: {}
+        #hostPath:
+        #  path: /mnt/jenkins
