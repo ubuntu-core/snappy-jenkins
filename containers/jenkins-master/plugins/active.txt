@@ -28,5 +28,6 @@ ssh-credentials:1.10:pinned
 ssh-slaves:1.9:not-pinned
 subversion:1.54:not-pinned
 translation:1.10:not-pinned
+urltrigger:0.41:not-pinned
 windows-slaves:1.0:not-pinned
 workflow-step-api:1.10.1:not-pinned
