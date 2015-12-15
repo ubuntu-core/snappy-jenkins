@@ -54,9 +54,6 @@ fi
 # copy proxy config
 cp $JENKINS_MASTER_CONTAINER_DIR/config/proxy/proxy.conf $JENKINS_HOME
 
-# copy ghprb config
-cp $JENKINS_MASTER_CONTAINER_DIR/config/ghprb/$GHPRB_CONFIG_FILE $JENKINS_HOME
-
 # instance provision: launch container
 sudo docker build --no-cache -t $JENKINS_CONTAINER_NAME $JENKINS_MASTER_CONTAINER_DIR
 sudo docker stop $NAME $PROXY_NAME

@@ -71,3 +71,7 @@ COPY config/jobs/delete-cloud-image/config.xml \
 
 COPY config/jobs/snappy-cloud-test/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-cloud-test.xml
+
+# ghprb plugin config
+COPY config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml \
+  /usr/share/jenkins/ref/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml

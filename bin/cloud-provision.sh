@@ -70,10 +70,6 @@ copy_proxy_conf(){
     scp $JENKINS_MASTER_CONTAINER_DIR/config/proxy/proxy.conf ubuntu@$INSTANCE_IP:$JENKINS_HOME
 }
 
-copy_ghprb_conf(){
-    scp $JENKINS_MASTER_CONTAINER_DIR/config/ghprb/$GHPRB_CONFIG_FILE ubuntu@$INSTANCE_IP:$JENKINS_HOME
-}
-
 setup_jenkins_home(){
     execute_remote_command "sudo umount /mnt && \
 sudo rm -rf $JENKINS_HOME && \
@@ -92,8 +88,6 @@ wait_for_ssh
 setup_jenkins_home
 
 copy_proxy_conf
-
-copy_ghprb_conf
 
 send_and_execute
 
