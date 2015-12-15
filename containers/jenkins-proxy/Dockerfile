@@ -13,7 +13,7 @@ RUN apt-get update && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY ./config/proxy.conf /etc/nginx/conf.d/
+COPY ./config/proxy.conf /etc/nginx/conf.d/proxy.conf
 
 VOLUME ["/var/cache/nginx"]
 
