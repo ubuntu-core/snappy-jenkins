@@ -51,9 +51,6 @@ then
     cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
 fi
 
-# copy ghprb config
-cp $JENKINS_MASTER_CONTAINER_DIR/config/ghprb/$GHPRB_CONFIG_FILE $JENKINS_HOME
-
 # instance provision: launch container
 sudo docker build --no-cache -t $JENKINS_CONTAINER_NAME $JENKINS_MASTER_CONTAINER_DIR
 sudo docker build --no-cache -t $PROXY_CONTAINER_NAME $PROXY_CONTAINER_DIR

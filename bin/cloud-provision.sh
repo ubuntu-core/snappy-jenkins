@@ -66,10 +66,6 @@ copy_credentials() {
     fi
 }
 
-copy_ghprb_conf(){
-    scp $JENKINS_MASTER_CONTAINER_DIR/config/ghprb/$GHPRB_CONFIG_FILE ubuntu@$INSTANCE_IP:$JENKINS_HOME
-}
-
 setup_jenkins_home(){
     execute_remote_command "sudo umount /mnt && \
 sudo rm -rf $JENKINS_HOME && \
@@ -86,8 +82,6 @@ launch_instance
 wait_for_ssh
 
 setup_jenkins_home
-
-copy_ghprb_conf
 
 send_and_execute
 
