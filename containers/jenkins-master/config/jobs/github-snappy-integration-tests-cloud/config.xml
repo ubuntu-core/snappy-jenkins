@@ -98,7 +98,13 @@ zyga
       <command>#!/bin/bash
 . $HOME/.openstack/novarc
 
-snappy-tests-job -repo $ghprbAuthorRepoGitUrl -src $ghprbSourceBranch -release rolling -channel edge -snappy-from-branch -output-dir $PWD/$BUILD_TAG
+if [ "$ghprbTargetBranch" = "15.04" ]; then
+  release="1504"
+else
+  release="rolling"
+fi
+
+snappy-tests-job -repo $ghprbAuthorRepoGitUrl -src $ghprbSourceBranch -release $release -channel edge -snappy-from-branch -output-dir $PWD/$BUILD_TAG
 
 subunit2junitxml $PWD/$BUILD_TAG/output/artifacts/results.subunit -o $PWD/$BUILD_TAG/output/artifacts/results.xml
 
