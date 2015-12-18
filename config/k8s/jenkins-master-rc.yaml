@@ -27,6 +27,9 @@ spec:
         - name: spi
           mountPath: /var/jenkins_home/spi
           readOnly: true
+        - name: ssh-key
+          mountPath: /var/jenkins_home/ssh-key
+          readOnly: true
         livenessProbe:
           httpGet:
             path: /
@@ -42,3 +45,6 @@ spec:
       - name: spi
         secret:
           secretName: spi.ini
+      - name: ssh-key
+        secret:
+          secretName: ssh-key
