@@ -75,3 +75,7 @@ COPY config/jobs/snappy-cloud-test/config.xml \
 # ghprb plugin config
 COPY config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml \
   /usr/share/jenkins/ref/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml
+
+# ssh config
+RUN mkdir -p /usr/share/jenkins/ref/.ssh
+COPY config/ssh /usr/share/jenkins/ref/.ssh/config
