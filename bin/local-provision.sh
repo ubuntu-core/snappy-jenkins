@@ -24,7 +24,7 @@ sudo rm -rf $JENKINS_HOME && mkdir -p $JENKINS_HOME && chmod a+w $JENKINS_HOME
 cp -r $OPENSTACK_CREDENTIALS_PATH $JENKINS_HOME
 
 # instance provision: setup ssh
-mkdir -p $JENKINS_HOME/.ssh && ssh-keygen -q -t rsa -N '' -f $JENKINS_HOME/.ssh/id_rsa
+mkdir -p $JENKINS_HOME/ssh-key && ssh-keygen -q -t rsa -N '' -f $JENKINS_HOME/ssh-key/id-rsa
 
 # instance provision: copy the spi credentials
 if [ ! -z "$SPI_CREDENTIALS_PATH" ]

@@ -3,3 +3,4 @@ Host 10.55.32.* 10.55.33.* 10.55.34.* 10.55.35.* 10.55.36.* 10.55.37.* 10.55.38.
     ProxyCommand None
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
+    IdentityFile ~/ssh-key/id-rsa
