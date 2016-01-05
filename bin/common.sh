@@ -1,8 +1,8 @@
 #!/bin/sh
 
-NAME=snappy-jenkins
+NAME=jenkins-master-service
 PROXY_NAME=snappy-proxy
-JENKINS_CONTAINER_NAME="fgimenez/$NAME"
+JENKINS_CONTAINER_NAME=fgimenez/snappy-jenkins
 JENKINS_CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --privileged=true --restart always --name $NAME -t $JENKINS_CONTAINER_NAME"
 JENKINS_MASTER_CONTAINER_DIR="./containers/jenkins-master"
 

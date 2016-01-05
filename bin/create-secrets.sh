@@ -24,14 +24,14 @@ get_data_from_path(){
 }
 
 OPENSTACK_CREDENTIALS_SECRET=$(get_secret_object novarc \
-                                                 "\"novarc\": \"$(get_data_from_path $OPENSTACK_CREDENTIALS_PATH)\"")
+  "\"novarc\": \"$(get_data_from_path $OPENSTACK_CREDENTIALS_PATH)\"")
 SPI_CREDENTIALS_SECRET=$(get_secret_object spi.ini \
-                                           "\"spi.ini\": \"$(get_data_from_path $SPI_CREDENTIALS_PATH)\"")
+  "\"spi.ini\": \"$(get_data_from_path $SPI_CREDENTIALS_PATH)\"")
 SSH_KEY_PATH=$(mktemp -d)
 ssh-keygen -q -t rsa -N '' -f $SSH_KEY_PATH/id_rsa
 SSH_KEY_SECRET=$(get_secret_object ssh-key \
-                                   "\"id-rsa\": \"$(get_data_from_path $SSH_KEY_PATH/id_rsa)\", \
-                                    \"id-rsa.pub\": \"$(get_data_from_path $SSH_KEY_PATH/id_rsa.pub)\"")
+  "\"id-rsa\": \"$(get_data_from_path $SSH_KEY_PATH/id_rsa)\", \
+  \"id-rsa.pub\": \"$(get_data_from_path $SSH_KEY_PATH/id_rsa.pub)\"")
 rm -rf $SSH_KEY_PATH
 
 kubectl delete secret novarc
