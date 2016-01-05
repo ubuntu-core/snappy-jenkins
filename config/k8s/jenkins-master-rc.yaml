@@ -21,6 +21,15 @@ spec:
         volumeMounts:
         - name: jenkins-master-data
           mountPath: /var/jenkins_home
+        - name: novarc
+          mountPath: /var/jenkins_home/.openstack
+          readOnly: true
+        - name: spi
+          mountPath: /var/jenkins_home/spi
+          readOnly: true
+        - name: ssh-key
+          mountPath: /var/jenkins_home/ssh-key
+          readOnly: true
         livenessProbe:
           httpGet:
             path: /
@@ -30,3 +39,12 @@ spec:
       volumes:
       - name: jenkins-master-data
         emptyDir: {}
+      - name: novarc
+        secret:
+          secretName: novarc
+      - name: spi
+        secret:
+          secretName: spi.ini
+      - name: ssh-key
+        secret:
+          secretName: ssh-key
