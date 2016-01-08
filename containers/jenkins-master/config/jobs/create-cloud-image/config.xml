@@ -39,7 +39,13 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 . $HOME/.openstack/novarc
-snappy-cloud-image -loglevel debug -release $release -channel $channel -action create</command>
+qcow2compat="1.1"
+if [[ "$OS_REGION_NAME" == "lcy0"* ]]; then
+  qcow2compat="0.10"
+fi
+
+snappy-cloud-image -loglevel debug -release $release -channel $channel -action create -qcow2compat $qcow2compat
+      </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
