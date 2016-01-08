@@ -36,6 +36,11 @@ spec:
             port: 8080
           initialDelaySeconds: 60
           timeoutSeconds: 5
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - "/var/jenkins_home/postStart.sh"
       volumes:
       - name: jenkins-master-data
         emptyDir: {}

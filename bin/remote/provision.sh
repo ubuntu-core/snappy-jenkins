@@ -16,6 +16,11 @@ launch_container(){
     eval $CONTAINER_INIT_COMMAND
 }
 
+post_start_actions(){
+    local container_name=$1
+    sudo docker exec -t $container_name /var/jenkins_home/postStart.sh
+}
+
 purge_images(){
     # remove the images created with previous credentials, they won't be accessible
     sudo docker exec -t $JENKINS_CONTAINER_NAME 'source ~/.openstack/novarc && snappy-cloud-image -action purge'
@@ -27,5 +32,7 @@ setup_ssh
 
 launch_container "$JENKINS_CONTAINER_NAME" "$JENKINS_CONTAINER_INIT_COMMAND"
 launch_container "$PROXY_CONTAINER_NAME" "$PROXY_CONTAINER_INIT_COMMAND"
+
+post_start_actions "$NAME"
 
 purge_images

@@ -79,3 +79,6 @@ COPY config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml \
 # ssh config
 RUN mkdir -p /usr/share/jenkins/ref/.ssh
 COPY config/ssh /usr/share/jenkins/ref/.ssh/config
+
+# postStart script
+COPY config/scripts/postStart.sh /usr/share/jenkins/ref/postStart.sh

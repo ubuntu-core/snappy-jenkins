@@ -39,3 +39,5 @@ sudo docker stop $NAME $PROXY_NAME
 sudo docker rm -f $NAME $PROXY_NAME
 eval $JENKINS_CONTAINER_INIT_COMMAND
 eval $PROXY_CONTAINER_INIT_COMMAND
+
+sudo docker exec -t $NAME /var/jenkins_home/postStart.sh
