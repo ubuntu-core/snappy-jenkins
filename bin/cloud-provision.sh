@@ -31,25 +31,29 @@ create_security_group() {
     nova secgroup-add-rule $SECGROUP tcp 8081 8081 0.0.0.0/0
 }
 
+wait_for_ip(){
+    local INSTANCE_ID=$1
+    retry=60
+    INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+    while [ -z "$INSTANCE_IP" ]; do
+        retry=$(( retry - 1 ))
+        if [ $retry -le 0 ]; then
+            echo "Timed out waiting for instance IP. Aborting!"
+            exit 1
+        fi
+        sleep 20
+        INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+    done
+}
+
+
 launch_instance(){
     IMAGE_ID=$(nova image-list | grep xenial-daily-amd64 | head -1 | awk '{print $4}')
 
     INSTANCE_ID=$(nova boot --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-groups $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --poll | grep '| id ' | awk '{print $4}')
 
-    INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
-
-    if [ -z "$INSTANCE_IP" ]
-    then
-        echo "Couldn't get instance IP, retrying"
-        sleep 20
-        INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
-        if [ -z "$INSTANCE_IP" ]
-        then
-            echo "Couldn't get instance IP, exiting"
-            exit 1
-        fi
-    fi
-
+    INSTANCE_IP=""
+    wait_for_ip $INSTANCE_ID
 }
 
 send_and_execute(){

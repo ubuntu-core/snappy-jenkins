@@ -1,6 +1,6 @@
-# Snappy Jenkins Docker container
+# Snappy Jenkins CI
 
-This repo helps setting up the CI environment used for executing Snappy integration tests [1]. It contains a Dockerfile which defines the configuration of a Jenkins container and several shell scripts for bringing it to live both in a cloud provider (only OpenStack supported at the moment) and locally.
+This repo helps setting up the CI environment used for executing Snappy integration tests [1]. It contains Dockerfiles which define the required containers (Jenkins master and slaves and a Nginx proxy) and several shell scripts for bringing them to live both in a cloud provider (only OpenStack supported at the moment) and locally.
 
 The testing jenkins jobs use the binary from this project [2] for launching the tests, it takes care of determining the most recent Snappy cloud image for a given channel and release (see below for the required name patterns), instantiating a cloud instance of that image and getting its ip, executing the integration suite in the instance and shutting it down when finished or in case of errors.
 
@@ -20,9 +20,9 @@ You can setup the enviroment locally by executing this command:
 
     $ ./bin/local-provision <cloud_credentials_path>
 
-The ```<cloud_credentials_path>``` required by the command indicates a path to a novarc file with the OpenStack credentials that will be used by the Jenkins instance to spin up Snappy instances. The scripts copies it to the Jenkins container and the jobs use it to access to the cloud provider API.
+The ```<cloud_credentials_path>``` required by the command indicates a path to a novarc file with the OpenStack credentials that will be used by the Jenkins slave instances to spin up Snappy instances. The scripts copies it to the Jenkins container and the jobs use it to access to the cloud provider API.
 
-Once the scripts finish you can access the jenkins instance from the browser at ```http://localhost:8080```
+Once the scripts finish you can access the jenkins master instance from the browser at ```http://localhost:8080```
 
 ### Cloud provision
 
@@ -38,15 +38,15 @@ being, as in the local case, `<cloud_credentials_path>` the location of an OpeSt
 
 ![Block Diagram](/img/snappy-jenkins.png?raw=true)
 
-* Reverse proxy instance: it has an Nginx process listening on port 8081 that forwards requests to path ```/ghprbhook``` to the jenkins instance
+* Reverse proxy instance: it has an Nginx process listening on port 8081 that forwards requests to path ```/ghprbhook``` to the jenkins master instance
 
-* Jenkins instance: the same as in the local provision case.
+* Jenkins master instance: the same as in the local provision case.
 
 It also setups a security group that allows access to port 8081 from everywhere and ports 8080 and 22 from a local range (by default 10.0.0.0/8). All this configuration is done this way in order to facilitate a secure connection from the GitHub webhook, as detailed in the next section.
 
 ## GitHub integration
 
-The Jenkins container has installed the GitHub Pull Request Builder Plugin [3] to allow the triggering of jobs in response to events from GitHub. The default configuration in the container leaves almost all setup, there's only a few things left to do:
+The Jenkins master container has the GitHub Pull Request Builder Plugin installed [3] to allow the triggering of jobs in response to events from GitHub. The default configuration in the container leaves almost all setup, there are only a few things left to do:
 
 * First of all, you should assign a floating IP to your VM instance so that it can be reached from GitHub. The container infrastructure and security group assigned make it secure to expose it to the wild, as explained earlier.
 
