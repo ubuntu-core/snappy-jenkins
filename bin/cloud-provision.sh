@@ -57,6 +57,7 @@ launch_instance(){
 }
 
 send_and_execute(){
+    scp ./bin/common.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
     scp ./bin/remote/provision.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
     execute_remote_command "sh $JENKINS_HOME/provision.sh"
 }
@@ -87,8 +88,8 @@ wait_for_ssh
 
 setup_jenkins_home
 
-send_and_execute
-
 copy_credentials
+
+send_and_execute
 
 exit 0

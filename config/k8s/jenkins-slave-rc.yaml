@@ -3,7 +3,7 @@ kind: ReplicationController
 metadata:
   name: jenkins-slave-controller
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     app: jenkins-slave
   template:
@@ -12,8 +12,32 @@ spec:
         app: jenkins-slave
     spec:
       containers:
-      - name: jenkins-slave
+      - name: jenkins-slave-xenial
         image: fgimenez/snappy-jenkins-slave-xenial
+        securityContext:
+          privileged: true
+        command:
+        - -master http://jenkins-master-service:8080
+        - -username admin
+        - -password snappy
+        - -executors 2
+        volumeMounts:
+        - name: novarc
+          mountPath: /home/jenkins-slave/.openstack
+          readOnly: true
+        - name: spi
+          mountPath: /var/jenkins_home/spi
+          readOnly: true
+        - name: ssh-key
+          mountPath: /var/jenkins_home/ssh-key
+          readOnly: true
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - "/var/jenkins_home/postStart.sh"
+      - name: jenkins-slave-vivid
+        image: fgimenez/snappy-jenkins-slave-vivid
         securityContext:
           privileged: true
         command:
