@@ -2,6 +2,12 @@ FROM fgimenez/jenkins-swarm-slave-ubuntu:xenial
 
 USER root
 
+# ubuntu-device-flash uses parts of snappy that try to reload udev rules when
+# processing oem snaps, which this is not needed at build time; udev is not
+# not available in the container, making a symlink solves the dependency without
+# affecting the build process
+RUN ln -s /bin/true /usr/local/bin/udevadm
+
 # install ppas
 RUN apt-get update && apt-get install -qy \
   python-software-properties \
@@ -15,7 +21,7 @@ RUN apt-get update && apt-get install -qy \
   build-essential \
   sudo subunit \
   snappy-cloud-image ubuntu-core-security-utils \
-  ca-certificates squashfs-tools \
+  ca-certificates squashfs-tools grub-common \
   # snapcraft dependencies
   bzr dpkg-dev git mercurial pyflakes python3.4 \
   python3-apt python3-docopt python3-coverage \
