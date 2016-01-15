@@ -46,7 +46,7 @@
 channel=stable</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>create-cloud-image</projects>
+          <projects>create-cloud-image-vivid</projects>
           <condition>ALWAYS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
           <buildAllNodesWithLabel>false</buildAllNodesWithLabel>

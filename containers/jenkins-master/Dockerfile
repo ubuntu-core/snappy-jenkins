@@ -36,8 +36,10 @@ COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
 COPY config/jobs/cleanup-cloud-image/config.xml \
   /usr/share/jenkins/ref/job-definitions/cleanup-cloud-image.xml
 
-COPY config/jobs/create-cloud-image/config.xml \
-  /usr/share/jenkins/ref/job-definitions/create-cloud-image.xml
+COPY config/jobs/create-cloud-image-vivid/config.xml \
+  /usr/share/jenkins/ref/job-definitions/create-cloud-image-vivid.xml
+COPY config/jobs/create-cloud-image-all-snaps/config.xml \
+  /usr/share/jenkins/ref/job-definitions/create-cloud-image-all-snaps.xml
 COPY config/jobs/create-cloud-image-1504-alpha/config.xml \
   /usr/share/jenkins/ref/job-definitions/create-cloud-image-1504-alpha.xml
 COPY config/jobs/create-cloud-image-1504-edge/config.xml \
