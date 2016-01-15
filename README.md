@@ -28,7 +28,7 @@ Once the scripts finish you can access the jenkins master instance from the brow
 
 There are additional requirements for the cloud provision besides having loaded OpenStack credentials. In this case the setup is done in a cloud instance and you should be able to spin it up. The needed packages can be installed in Ubuntu with:
 
-    $ sudo apt-get install cloud-utils python-novaclient
+    $ sudo apt-get install cloud-utils python-openstackclient
 
 To setup the CI instance in the cloud just execute:
 

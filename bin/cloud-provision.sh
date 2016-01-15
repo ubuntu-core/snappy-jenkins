@@ -22,19 +22,19 @@ FLAVOR=m1.large
 OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
 
 create_security_group() {
-    nova secgroup-delete $SECGROUP
-    nova secgroup-create $SECGROUP "snappy-jenkins secgroup"
+    openstack security group delete $SECGROUP
+    openstack security group create --description "snappy-jenkins secgroup" $SECGROUP
     # ports 22 and 8080 only accessible from the vpn, port 8081
     # (jenkins reverse proxy) open to all
-    nova secgroup-add-rule $SECGROUP tcp 22 22 10.0.0.0/8
-    nova secgroup-add-rule $SECGROUP tcp 8080 8080 10.0.0.0/8
-    nova secgroup-add-rule $SECGROUP tcp 8081 8081 0.0.0.0/0
+    openstack security group rule create --proto tcp --dst-port 22 --src-ip 10.0.0.0/8 $SECGROUP
+    openstack security group rule create --proto tcp --dst-port 8080 --src-ip 10.0.0.0/8 $SECGROUP
+    openstack security group rule create --proto tcp --dst-port 8081 --src-ip 0.0.0.0/0 $SECGROUP
 }
 
 wait_for_ip(){
     local INSTANCE_ID=$1
     retry=60
-    INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+    INSTANCE_IP=$(openstack server show $INSTANCE_ID | grep 'addresses' | awk '{print $4}' | cut -d= -f2)
     while [ -z "$INSTANCE_IP" ]; do
         retry=$(( retry - 1 ))
         if [ $retry -le 0 ]; then
@@ -42,15 +42,15 @@ wait_for_ip(){
             exit 1
         fi
         sleep 20
-        INSTANCE_IP=$(nova show $INSTANCE_ID | grep 'canonistack network' | awk '{print $5}')
+        INSTANCE_IP=$(openstack server show $INSTANCE_ID | grep 'addresses' | awk '{print $4}' | cut -d= -f2)
     done
 }
 
 
 launch_instance(){
-    IMAGE_ID=$(nova image-list | grep xenial-daily-amd64 | head -1 | awk '{print $4}')
+    IMAGE_ID=$(openstack image list | grep xenial-daily-amd64 | head -1 | awk '{print $4}')
 
-    INSTANCE_ID=$(nova boot --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-groups $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --poll | grep '| id ' | awk '{print $4}')
+    INSTANCE_ID=$(openstack server create --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-group $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --wait | grep '| id ' | awk '{print $4}')
 
     INSTANCE_IP=""
     wait_for_ip $INSTANCE_ID
