@@ -41,7 +41,12 @@
       <command>#!/bin/bash
 . $HOME/.openstack/novarc
 
-snappy-tests-job -release $release -channel $channel -output-dir $PWD/$BUILD_TAG
+src="master"
+if [ "$release" = "1504" ]; then
+  src="15.04"
+fi
+
+snappy-tests-job -release $release -channel $channel -output-dir $PWD/$BUILD_TAG -src $src -test-build-tags=lowperformance
 
 subunit2junitxml $PWD/$BUILD_TAG/output/artifacts/results.subunit -o $PWD/$BUILD_TAG/output/artifacts/results.xml
 </command>
