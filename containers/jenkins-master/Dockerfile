@@ -27,6 +27,9 @@ COPY config/jobs/snappy-daily-rolling-bbb/config.xml \
 COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests-cloud.xml
 
+COPY config/jobs/github-snapcraft-integration-tests-cloud/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snapcraft-integration-tests-cloud.xml
+
 COPY config/jobs/cleanup-cloud-image/config.xml \
   /usr/share/jenkins/ref/job-definitions/cleanup-cloud-image.xml
 
