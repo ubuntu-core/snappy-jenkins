@@ -31,7 +31,7 @@ get_slave_init_command(){
     local name=$1
     local container_name=$2
     local distribution=$3
-    echo "sudo docker run -d -v $JENKINS_HOME:/var/jenkins_home --link $NAME:jenkins --privileged=true --name $name $container_name -username admin -password snappy -executors 2 -name $name -labels $distribution"
+    echo "sudo docker run -d -v $JENKINS_HOME:/var/jenkins_home --link $NAME:jenkins --privileged=true --restart always --name $name $container_name -username admin -password snappy -executors 2 -name $name -labels $distribution"
 }
 
 create_slave(){
