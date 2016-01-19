@@ -35,7 +35,10 @@ wait_for_ip(){
     local INSTANCE_ID=$1
     retry=60
     INSTANCE_IP=$(openstack server show $INSTANCE_ID | grep 'addresses' | awk '{print $4}' | cut -d= -f2)
-    while [ -z "$INSTANCE_IP" ]; do
+    # when the instance hasn't came up yet the addresses line reads:
+    #   | addresses |            |
+    # so print $4 would be '|', this value will be returned until we have an IP assigned
+    while [ -z "$INSTANCE_IP" -o "$INSTANCE_IP" = "|" ]; do
         retry=$(( retry - 1 ))
         if [ $retry -le 0 ]; then
             echo "Timed out waiting for instance IP. Aborting!"
@@ -50,7 +53,7 @@ wait_for_ip(){
 launch_instance(){
     IMAGE_ID=$(openstack image list | grep xenial-daily-amd64 | head -1 | awk '{print $4}')
 
-    INSTANCE_ID=$(openstack server create --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-group $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME --wait | grep '| id ' | awk '{print $4}')
+    INSTANCE_ID=$(openstack server create --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-group $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME | grep '| id ' | awk '{print $4}')
 
     INSTANCE_IP=""
     wait_for_ip $INSTANCE_ID
