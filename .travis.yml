@@ -1,0 +1,18 @@
+services:
+  - docker
+
+install:
+  - docker build -t jenkins-master-service ./containers/jenkins-master
+  - docker build -t snappy-proxy ./containers/jenkins-proxy
+  - docker build -t jenkins-slave-xenial ./containers/jenkins-slave-xenial
+  - docker build -t jenkins-slave-vivid ./containers/jenkins-slave-vivid
+  - docker run -d -p 8080:8080 --name jenkins-master-service jenkins-master-service
+  - docker run -d -p 8081:80 --link jenkins-master-service:jenkins-master-service --name snappy-proxy snappy-proxy
+  - docker run -d --link jenkins-master-service:jenkins --privileged=true --name jenkins-slave-xenial jenkins-slave-xenial -username admin -password snappy -executors 2 -name jenkins-slave-xenial -labels xenial
+  - docker run -d --link jenkins-master-service:jenkins --privileged=true --name jenkins-slave-vivid jenkins-slave-vivid -username admin -password snappy -executors 2 -name jenkins-slave-vivid -labels vivid
+
+script:
+  - docker ps | grep jenkins-master-service | grep -v Restarting
+  - docker ps | grep snappy-proxy | grep -v Restarting
+  - docker ps | grep jenkins-slave-xenial | grep -v Restarting
+  - docker ps | grep jenkins-slave-vivid | grep -v Restarting
