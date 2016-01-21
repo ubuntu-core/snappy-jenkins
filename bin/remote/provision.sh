@@ -10,7 +10,7 @@ install_docker(){
     sudo apt-get install -y linux-image-extra-$(uname -r) docker-engine
     # make docker write to /mnt (where the cloud instances mount the additional disk) to prevent
     # devicemapper to fill the base disk
-    sudo mkdir -p /mnt/docker && sudo rm -rf /var/lib/docker && sudo ln -s /mnt/docker /var/lib/docker
+    sudo mv /var/lib/docker /mnt && sudo ln -s /mnt/docker /var/lib/docker
     sudo service docker start
     sudo systemctl enable docker
 }
