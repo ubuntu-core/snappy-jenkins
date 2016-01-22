@@ -47,6 +47,7 @@ create_slave(){
 
     sudo docker exec -t $SLAVE_NAME /home/jenkins-slave/postStart.sh
     sudo docker exec -t $SLAVE_NAME cp -R /var/jenkins_home/.openstack /home/jenkins-slave
+    sudo docker exec -t $SLAVE_NAME chmod -R a+r /home/jenkins-slave/.openstack
 }
 
 create_slaves(){
