@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: jenkins-proxy
-        image: fgimenez/snappy-jenkins-proxy
+        image: ubuntucore/snappy-jenkins-proxy
         ports:
         - containerPort: 80
         livenessProbe:
