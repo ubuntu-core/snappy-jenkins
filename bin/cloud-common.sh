@@ -20,6 +20,6 @@ wait_for_ssh(){
             echo "Timed out waiting for ssh. Aborting!"
             exit 1
         fi
-        sleep 5
+        sleep 10
     done
 }
