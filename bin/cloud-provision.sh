@@ -60,17 +60,17 @@ launch_instance(){
 }
 
 send_and_execute(){
-    scp ./bin/common.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
-    scp ./bin/remote/provision.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ./bin/common.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ./bin/remote/provision.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
     execute_remote_command "sh $JENKINS_HOME/provision.sh"
 }
 
 copy_credentials() {
-    scp $NOVARC_PATH ubuntu@$INSTANCE_IP:$OPENSTACK_CREDENTIALS_DIR/novarc
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $NOVARC_PATH ubuntu@$INSTANCE_IP:$OPENSTACK_CREDENTIALS_DIR/novarc
 
     if [ ! -z "$SPI_CREDENTIALS_PATH" ]
     then
-        scp $SPI_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.spi.ini
+        scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $SPI_CREDENTIALS_PATH ubuntu@$INSTANCE_IP:$JENKINS_HOME/.spi.ini
     fi
 }
 
