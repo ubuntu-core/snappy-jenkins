@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DIST="trusty"
+
 NAME=jenkins-master-service
 PROXY_NAME=snappy-proxy
 JENKINS_CONTAINER_NAME=fgimenez/snappy-jenkins

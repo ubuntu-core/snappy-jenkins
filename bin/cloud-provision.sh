@@ -51,7 +51,7 @@ wait_for_ip(){
 
 
 launch_instance(){
-    IMAGE_ID=$(openstack image list | grep wily-daily-amd64 | head -1 | awk '{print $4}')
+    IMAGE_ID=$(openstack image list | grep "$DIST"-daily-amd64 | head -1 | awk '{print $4}')
 
     INSTANCE_ID=$(openstack server create --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-group $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME | grep '| id ' | awk '{print $4}')
 
