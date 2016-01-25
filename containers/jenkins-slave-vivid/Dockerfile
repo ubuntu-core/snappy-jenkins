@@ -17,6 +17,7 @@ RUN add-apt-repository -y ppa:fgimenez/snappy-cloud-image
 
 # install dependencies
 RUN apt-get update && apt-get install -qy \
+  snappy-tests-job \
   build-essential \
   sudo subunit \
   snappy-cloud-image ubuntu-core-security-utils \
