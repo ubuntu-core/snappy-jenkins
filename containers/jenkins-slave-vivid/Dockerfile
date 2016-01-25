@@ -1,4 +1,4 @@
-FROM fgimenez/jenkins-swarm-slave-ubuntu:vivid
+FROM ubuntucore/jenkins-swarm-slave-ubuntu:vivid
 
 USER root
 
