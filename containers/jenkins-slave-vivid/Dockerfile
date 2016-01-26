@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -qy \
   python-software-properties \
   software-properties-common
 RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
-RUN add-apt-repository -y ppa:fgimenez/snappy-cloud-image
 
 # install dependencies
 RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list && \
