@@ -14,7 +14,6 @@ install_docker(){
     sudo mv /var/lib/docker /mnt
     echo 'DOCKER_OPTS="-g /mnt/docker"' | sudo tee /etc/default/docker
     sudo service docker start
-    sudo systemctl enable docker
 }
 
 setup_ssh(){
