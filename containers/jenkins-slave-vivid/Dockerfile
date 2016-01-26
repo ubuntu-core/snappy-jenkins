@@ -16,7 +16,7 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 RUN add-apt-repository -y ppa:fgimenez/snappy-cloud-image
 
 # install dependencies
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list &&
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list && \
   apt-get update && apt-get install -qy \
   snappy-tests-job \
   build-essential \
