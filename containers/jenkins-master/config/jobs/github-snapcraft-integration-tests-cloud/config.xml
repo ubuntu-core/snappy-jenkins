@@ -35,6 +35,7 @@
     <submoduleCfg class="list"/>
     <extensions/>
   </scm>
+  <assignedNode>xenial</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
