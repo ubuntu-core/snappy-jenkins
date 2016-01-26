@@ -37,3 +37,8 @@ RUN chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh
 
 # postStart script
 COPY config/scripts/postStart.sh /home/jenkins-slave/postStart.sh
+
+# Patch ubuntu-device-flash to make it work on vivid.
+RUN wget http://people.ubuntu.com/~elopio/snappy/vivid/ubuntu-device-flash && \
+  chmod +x ubuntu-device-flash && \
+  mv ubuntu-device-flash /usr/bin/ubuntu-device-flash
