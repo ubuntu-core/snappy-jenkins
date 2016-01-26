@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: jenkins-master
-        image: fgimenez/snappy-jenkins
+        image: ubuntucore/snappy-jenkins-master
         ports:
         - containerPort: 8080
         volumeMounts:

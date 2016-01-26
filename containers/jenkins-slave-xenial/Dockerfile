@@ -1,4 +1,4 @@
-FROM fgimenez/jenkins-swarm-slave-ubuntu:xenial
+FROM ubuntucore/jenkins-swarm-slave-ubuntu:xenial
 
 USER root
 
