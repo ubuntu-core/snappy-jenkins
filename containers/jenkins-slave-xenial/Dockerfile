@@ -42,3 +42,8 @@ RUN chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh
 
 # postStart script
 COPY config/scripts/postStart.sh /home/jenkins-slave/postStart.sh
+
+# Patch ubuntu-device-flash to generate all-snaps images.
+RUN wget https://people.canonical.com/~mvo/all-snaps/ubuntu-device-flash && \
+  chmod +x ubuntu-device-flash && \
+  mv ubuntu-device-flash /usr/bin/ubuntu-device-flash
