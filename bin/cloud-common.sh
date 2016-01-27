@@ -1,4 +1,6 @@
 #!/bin/sh
+JENKINS_HOME=/mnt/jenkins
+
 execute_remote_command(){
     ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$INSTANCE_IP 'export JENKINS_HOME='"'$JENKINS_HOME'"'; \
 export OS_USERNAME='"'$OS_USERNAME'"'; \

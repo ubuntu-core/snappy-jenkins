@@ -10,8 +10,6 @@ then
     echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
 fi
 
-JENKINS_HOME=/mnt/jenkins
-
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
