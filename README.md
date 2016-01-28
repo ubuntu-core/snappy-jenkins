@@ -65,7 +65,7 @@ With both kinds of provision, for the jobs to be able to run your openstack user
 
 ## Syncing servers
 
-In order to deploy a new server it may be useful to keep the job story and the keys used for creating images from a previous server. This can be done with the `sync.sh` script:
+In order to deploy a new server it may be useful to keep the configuration from a previous server. The `sync.sh` script copies the job story, ssh keys used to create cloud images and access instances created from them and the GitHub credentials. It can be executed with:
 
     $ ./bin/sync.sh <source_ip> <target_ip>
 
