@@ -63,6 +63,12 @@ With cloud provision, in order to spin up the jenkins host an image with a name 
 
 With both kinds of provision, for the jobs to be able to run your openstack user should be able to access snappy images with a name of the form ```ubuntu-core/custom/ubuntu-rolling-snappy-core-amd64-edge*``` for the rolling release tests and ```ubuntu-core/custom/ubuntu-1504-snappy-core-amd64-edge*``` for the 15.04 release tests. This kind of images can be created with the snappy-cloud-image tool [4]. The configuration can be changed with the release and channel switches in the respective jobs.
 
+## Syncing servers
+
+In order to deploy a new server it may be useful to keep the configuration from a previous server. The `sync.sh` script copies the job story, ssh keys used to create cloud images and access instances created from them and the GitHub credentials. It can be executed with:
+
+    $ ./bin/sync.sh <source_ip> <target_ip>
+
 [1] https://github.com/ubuntu-core/snappy
 
 [2] https://launchpad.net/snappy-tests-job
