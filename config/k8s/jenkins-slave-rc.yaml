@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: jenkins-slave-xenial
-        image: fgimenez/snappy-jenkins-slave-xenial
+        image: ubuntucore/snappy-jenkins-slave-xenial
         securityContext:
           privileged: true
         command:
@@ -37,7 +37,7 @@ spec:
               command:
                 - "/var/jenkins_home/postStart.sh"
       - name: jenkins-slave-vivid
-        image: fgimenez/snappy-jenkins-slave-vivid
+        image: ubuntucore/snappy-jenkins-slave-vivid
         securityContext:
           privileged: true
         command:

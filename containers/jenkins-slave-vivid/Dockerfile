@@ -1,4 +1,4 @@
-FROM fgimenez/jenkins-swarm-slave-ubuntu:vivid
+FROM ubuntucore/jenkins-swarm-slave-ubuntu:vivid
 
 USER root
 
@@ -16,7 +16,10 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 RUN add-apt-repository -y ppa:fgimenez/snappy-cloud-image
 
 # install dependencies
-RUN apt-get update && apt-get install -qy \
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list && \
+  apt-get update && apt-get install -qy \
+  autopkgtest/vivid-backports \
+  snappy-tests-job \
   build-essential \
   sudo subunit \
   snappy-cloud-image ubuntu-core-security-utils \
@@ -29,6 +32,8 @@ RUN echo "jenkins-slave ALL=NOPASSWD: ALL" >> /etc/sudoers
 # ssh config
 RUN mkdir -p /home/jenkins-slave/.ssh
 COPY config/ssh /home/jenkins-slave/.ssh/config
+RUN sed -i 's@ssh-key/id-rsa@.ssh/id_rsa@' /home/jenkins-slave/.ssh/config
+RUN chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh
 
 # postStart script
 COPY config/scripts/postStart.sh /home/jenkins-slave/postStart.sh
