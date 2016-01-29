@@ -24,6 +24,7 @@ sync_ssh_keys(){
     mkdir $dir
 
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$SOURCE_IP:$JENKINS_HOME/ssh-key/* $dir
+    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP mkdir -p $JENKINS_HOME/ssh-key
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $dir/* ubuntu@$TARGET_IP:$JENKINS_HOME/ssh-key
 
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
@@ -35,11 +36,30 @@ sync_ssh_keys(){
     done
 }
 
+sync_openstack_credentials(){
+    local dir="$basedir"/.openstack
+    mkdir $dir
+
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$SOURCE_IP:$JENKINS_HOME/.openstack/novarc $dir
+    scp -r -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $dir ubuntu@$TARGET_IP:$JENKINS_HOME
+
+    for slave in vivid-1 xenial-1 xenial-2 xenial-3
+    do
+        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
+            sudo docker exec -t jenkins-slave-$slave bash -c \"mkdir -p /home/jenkins-slave/.openstack\"
+        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
+            sudo docker exec -t jenkins-slave-$slave bash -c \"cp /var/jenkins_home/.openstack/novarc /home/jenkins-slave/.openstack\"
+        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
+            sudo docker exec -t jenkins-slave-$slave bash -c \"chown jenkins-slave:jenkins-slave /home/jenkins-slave/.openstack/novarc\"
+    done
+}
+
+
 sync_job_history(){
     local dir="$basedir"/jobs
     mkdir $dir
 
-    rsync -avzL $SOURCE_IP:$JENKINS_HOME/jobs/* $dir
+    rsync -avzL --exclude config.xml $SOURCE_IP:$JENKINS_HOME/jobs/* $dir
     rsync -avz $dir $TARGET_IP:$JENKINS_HOME
 }
 
@@ -57,6 +77,7 @@ sync_jenkins_credentials(){
 }
 
 sync_ssh_keys
+sync_openstack_credentials
 
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
     sudo docker stop $NAME

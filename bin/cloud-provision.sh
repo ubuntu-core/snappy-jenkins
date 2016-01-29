@@ -16,7 +16,7 @@ fi
 NOVARC_PATH=$1
 SPI_CREDENTIALS_PATH=$2
 SECGROUP=$NAME
-FLAVOR=m1.large
+FLAVOR=cpu8-ram10-disk100-ephemeral20
 OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
 
 create_security_group() {
