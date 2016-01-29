@@ -13,9 +13,4 @@ INSTANCE_IP=$1
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
-send_and_execute(){
-    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ./bin/remote/redeploy.sh ubuntu@$INSTANCE_IP:$JENKINS_HOME
-    execute_remote_command ". $JENKINS_HOME/redeploy.sh"
-}
-
-send_and_execute
+send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/redeploy.sh"

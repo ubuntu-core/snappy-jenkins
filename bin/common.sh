@@ -5,7 +5,7 @@ DIST="trusty"
 NAME=jenkins-master-service
 PROXY_NAME=snappy-proxy
 JENKINS_CONTAINER_NAME=ubuntucore/snappy-jenkins-master
-JENKINS_CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v $JENKINS_HOME:/var/jenkins_home --restart always --name $NAME -t $JENKINS_CONTAINER_NAME"
+JENKINS_CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v /tmp/tmp -v $JENKINS_HOME:/var/jenkins_home --restart always --name $NAME -t $JENKINS_CONTAINER_NAME"
 JENKINS_MASTER_CONTAINER_DIR="./containers/jenkins-master"
 
 PROXY_CONTAINER_NAME="ubuntucore/snappy-jenkins-proxy"
@@ -67,6 +67,24 @@ create_slaves(){
     create_slave 1 vivid
 }
 
+create_container(){
+    local dir="$1"
+    local name="$2"
+    local init_cmd="$3"
+    if [ -d $dir ]; then
+        sudo docker build -t $name $dir
+    fi
+    sudo docker rm -f $name
+    eval $init_cmd
+}
+
+create_containers(){
+    create_container $JENKINS_MASTER_CONTAINER_DIR $NAME $JENKINS_CONTAINER_INIT_COMMAND
+    create_container $PROXY_CONTAINER_DIR $PROXY_CONTAINER_NAME $PROXY_CONTAINER_INIT_COMMAND
+
+    create_slaves
+}
+
 execute_remote_command(){
     local INSTANCE_IP=$1
     shift
@@ -126,13 +144,12 @@ launch_instance(){
 
     INSTANCE_ID=$(openstack server create --key-name ${OS_USERNAME}_${OS_REGION_NAME} --security-group $SECGROUP --flavor $FLAVOR --image $IMAGE_ID $NAME | grep '| id ' | awk '{print $4}')
 
-    INSTANCE_IP=$(wait_for_ip "$INSTANCE_ID")
-    echo "$INSTANCE_IP"
+    echo "$INSTANCE_ID"
 }
 
 update_container(){
-    local name="$2"
-    local image="$3"
+    local name="$1"
+    local image="$2"
 
     sudo docker stop "$name"
     sudo docker pull "$image"
@@ -155,13 +172,11 @@ update_containers(){
     done
 }
 
-post_start_actions(){
-    local container_name=$1
-    sudo docker exec -t $container_name /home/jenkins-slave/postStart.sh
-    sudo docker exec -t $container_name cp -R /var/jenkins_home/.openstack /home/jenkins-slave
-    sudo docker exec -t $container_name chmod -R a+r /home/jenkins-slave/.openstack
-}
-
-run_containers(){
-
+send_and_execute(){
+    local INSTANCE_IP=$1
+    local JENKINS_HOME=$2
+    local script=$3
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ./bin/common.sh ubuntu@"$INSTANCE_IP":"$JENKINS_HOME"
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$script" ubuntu@"$INSTANCE_IP":"$JENKINS_HOME"
+    execute_remote_command "$INSTANCE_IP" "sh $JENKINS_HOME/provision.sh"
 }

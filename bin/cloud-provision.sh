@@ -10,13 +10,11 @@ then
     echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
 fi
 
-JENKINS_HOME=/mnt/jenkins
-
 . ./bin/common.sh
+. ./bin/cloud-common.sh
 
 NOVARC_PATH=$1
 SPI_CREDENTIALS_PATH=$2
-FLAVOR=m1.large
 OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
 
 create_security_group() {
@@ -44,12 +42,13 @@ copy_credentials() {
     fi
 }
 
-
 create_security_group "$NAME"
 
 IMAGE_NAME=$(get_base_image_name "$DIST")
 
-INSTANCE_IP=$(launch_instance "$IMAGE_NAME")
+INSTANCE_ID=$(launch_instance "$IMAGE_NAME")
+
+INSTANCE_IP=$(wait_for_ip "$INSTANCE_ID")
 
 wait_for_ssh "$INSTANCE_IP"
 
