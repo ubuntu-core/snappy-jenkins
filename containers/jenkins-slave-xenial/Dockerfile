@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -qy \
   python-software-properties \
   software-properties-common
 RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
-RUN add-apt-repository -y ppa:fgimenez/snappy-cloud-image
 
 # install dependencies
 RUN apt-get update && apt-get install -qy \
@@ -42,3 +41,8 @@ RUN chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh
 
 # postStart script
 COPY config/scripts/postStart.sh /home/jenkins-slave/postStart.sh
+
+# Patch ubuntu-device-flash to generate all-snaps images.
+RUN wget https://people.canonical.com/~mvo/all-snaps/ubuntu-device-flash && \
+  chmod +x ubuntu-device-flash && \
+  mv ubuntu-device-flash /usr/bin/ubuntu-device-flash

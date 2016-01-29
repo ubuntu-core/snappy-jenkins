@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -x
 
 . ./bin/common.sh
 . ./bin/cloud-common.sh
@@ -27,11 +27,15 @@ create_snapshot(){
 
     image_name=$(get_base_image_name "$dist")
     prev_image_name="$image_name"-prev
+    new_image_name="$image_name"-new
 
     openstack image delete "$prev_image_name"
+    openstack server image create --name "$new_image_name" --wait "$id"
     openstack image rename "$image_name" "$prev_image_name"
-    openstack server image create --name "$image_name" --wait "$id"
+    openstack image rename "$new_image_name" "$image_name"
 }
+
+create_security_group "$SECGROUP"
 
 IMAGE_NAME=$(get_image_name "$DIST")
 

@@ -17,17 +17,6 @@ NOVARC_PATH=$1
 SPI_CREDENTIALS_PATH=$2
 OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
 
-create_security_group() {
-    local SECGROUP=$1
-    openstack security group delete $SECGROUP
-    openstack security group create --description "snappy-jenkins secgroup" $SECGROUP
-    # ports 22 and 8080 only accessible from the vpn, port 8081
-    # (jenkins reverse proxy) open to all
-    openstack security group rule create --proto tcp --dst-port 22 --src-ip 10.0.0.0/8 $SECGROUP
-    openstack security group rule create --proto tcp --dst-port 8080 --src-ip 10.0.0.0/8 $SECGROUP
-    openstack security group rule create --proto tcp --dst-port 8081 --src-ip 0.0.0.0/0 $SECGROUP
-}
-
 copy_credentials() {
     local NOVARC_PATH=$1
     local INSTANCE_IP=$2
@@ -42,7 +31,7 @@ copy_credentials() {
     fi
 }
 
-create_security_group "$NAME"
+create_security_group "$SECGROUP"
 
 IMAGE_NAME=$(get_base_image_name "$DIST")
 

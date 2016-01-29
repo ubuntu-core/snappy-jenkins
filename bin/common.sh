@@ -16,6 +16,8 @@ SLAVE_BASE_NAME=jenkins-slave
 JENKINS_SLAVE_CONTAINER_NAME=ubuntucore/snappy-jenkins-slave
 JENKINS_SLAVE_CONTAINER_DIR="./containers/jenkins-slave"
 
+SECGROUP=$NAME
+
 get_container_slave_name(){
     local distribution=$1
     echo "$JENKINS_SLAVE_CONTAINER_NAME-$distribution"
@@ -179,4 +181,15 @@ send_and_execute(){
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ./bin/common.sh ubuntu@"$INSTANCE_IP":"$JENKINS_HOME"
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$script" ubuntu@"$INSTANCE_IP":"$JENKINS_HOME"
     execute_remote_command "$INSTANCE_IP" "sh $JENKINS_HOME/provision.sh"
+}
+
+create_security_group() {
+    local SECGROUP=$1
+    openstack security group delete $SECGROUP
+    openstack security group create --description "snappy-jenkins secgroup" $SECGROUP
+    # ports 22 and 8080 only accessible from the vpn, port 8081
+    # (jenkins reverse proxy) open to all
+    openstack security group rule create --proto tcp --dst-port 22 --src-ip 10.0.0.0/8 $SECGROUP
+    openstack security group rule create --proto tcp --dst-port 8080 --src-ip 10.0.0.0/8 $SECGROUP
+    openstack security group rule create --proto tcp --dst-port 8081 --src-ip 0.0.0.0/0 $SECGROUP
 }

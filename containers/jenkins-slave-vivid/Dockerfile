@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -qy \
   python-software-properties \
   software-properties-common
 RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
-RUN add-apt-repository -y ppa:fgimenez/snappy-cloud-image
 
 # install dependencies
 RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list && \
@@ -37,3 +36,8 @@ RUN chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh
 
 # postStart script
 COPY config/scripts/postStart.sh /home/jenkins-slave/postStart.sh
+
+# Patch ubuntu-device-flash to make it work on vivid.
+RUN wget http://people.ubuntu.com/~elopio/snappy/vivid/ubuntu-device-flash && \
+  chmod +x ubuntu-device-flash && \
+  mv ubuntu-device-flash /usr/bin/ubuntu-device-flash
