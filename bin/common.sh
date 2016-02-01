@@ -44,7 +44,6 @@ get_slave_init_command(){
 post_start_actions(){
     local container_name=$1
     sudo docker exec -t $container_name /home/jenkins-slave/postStart.sh
-    sudo docker exec -t $container_name cp -R /var/jenkins_home/.openstack /home/jenkins-slave
 }
 
 create_slave(){

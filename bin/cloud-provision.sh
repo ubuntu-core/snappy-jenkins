@@ -23,6 +23,7 @@ copy_credentials() {
     local OPENSTACK_CREDENTIALS_DIR=$3
     local SPI_CREDENTIALS_PATH=$4
     local JENKINS_HOME=$5
+    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@"$INSTANCE_IP" mkdir -p "$OPENSTACK_CREDENTIALS_DIR"
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$NOVARC_PATH" ubuntu@"$INSTANCE_IP":"$OPENSTACK_CREDENTIALS_DIR"/novarc
 
     if [ ! -z "$SPI_CREDENTIALS_PATH" ]
