@@ -1,7 +1,5 @@
 FROM ubuntucore/jenkins-ubuntu
 
-USER root
-
 USER jenkins
 
 # copy scripts
