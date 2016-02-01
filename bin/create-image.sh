@@ -31,8 +31,8 @@ create_snapshot(){
 
     openstack image delete "$prev_image_name"
     openstack server image create --name "$new_image_name" --wait "$id"
-    openstack image rename "$image_name" "$prev_image_name"
-    openstack image rename "$new_image_name" "$image_name"
+    openstack image set --name "$image_name" "$prev_image_name"
+    openstack image set --name "$new_image_name" "$image_name"
 }
 
 create_security_group "$SECGROUP"
@@ -43,12 +43,14 @@ INSTANCE_ID=$(launch_instance "$IMAGE_NAME")
 
 INSTANCE_IP=$(wait_for_ip "$INSTANCE_ID")
 
-wait_for_ssh "$INSTANCE_IP"
+wait_for_ssh "$INSTANCE_IP" "$INSTANCE_ID"
 
 setup_jenkins_home "$INSTANCE_IP" "$JENKINS_HOME" "$OPENSTACK_CREDENTIALS_DIR"
 
 send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/provision.sh"
 
-create_snapshot "$INSTANCE_ID"
+create_snapshot "$INSTANCE_ID" "$DIST"
 
 openstack server delete "$INSTANCE_ID"
+
+exit 0

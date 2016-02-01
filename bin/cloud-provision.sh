@@ -39,7 +39,7 @@ INSTANCE_ID=$(launch_instance "$IMAGE_NAME")
 
 INSTANCE_IP=$(wait_for_ip "$INSTANCE_ID")
 
-wait_for_ssh "$INSTANCE_IP"
+wait_for_ssh "$INSTANCE_IP" "$INSTANCE_ID"
 
 copy_credentials "$NOVARC_PATH" "$INSTANCE_IP" "$OPENSTACK_CREDENTIALS_DIR" "$SPI_CREDENTIALS_PATH" "$JENKINS_HOME"
 
