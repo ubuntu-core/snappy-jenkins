@@ -5,7 +5,8 @@ DIST="trusty"
 NAME=jenkins-master-service
 PROXY_NAME=snappy-proxy
 JENKINS_CONTAINER_NAME=ubuntucore/snappy-jenkins-master
-JENKINS_CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v /tmp/tmp -v $JENKINS_HOME:/var/jenkins_home --restart always --name $NAME -t $JENKINS_CONTAINER_NAME"
+# we mount the internal /tmp dir to the external to prevent ownership errors when jenkins war is expanded
+JENKINS_CONTAINER_INIT_COMMAND="sudo docker run -p 8080:8080 -d -v /tmp:/tmp -v $JENKINS_HOME:/var/jenkins_home --restart always --name $NAME -t $JENKINS_CONTAINER_NAME"
 JENKINS_MASTER_CONTAINER_DIR="./containers/jenkins-master"
 
 PROXY_CONTAINER_NAME="ubuntucore/snappy-jenkins-proxy"
@@ -51,8 +52,7 @@ create_slave(){
     local distribution=$2
     local SLAVE_NAME=$(get_slave_name $count $distribution)
 
-    sudo docker ps | grep $SLAVE_NAME
-    if [ "$?" -ne 0 ]; then
+    if [ "$(sudo docker ps | grep $SLAVE_NAME)" != "" ]; then
         sudo docker stop $SLAVE_NAME
         sudo docker rm -f $SLAVE_NAME
     fi
@@ -88,10 +88,11 @@ create_container(){
     if [ -d $dir ]; then
         sudo docker build -t $name $dir
     fi
-    sudo docker ps | grep $name
-    if [ "$?" -ne 0 ]; then
+
+    if [ "$(sudo docker ps | grep $name)" != "" ]; then
         sudo docker rm -f $name
     fi
+
     eval $init_cmd
 }
 

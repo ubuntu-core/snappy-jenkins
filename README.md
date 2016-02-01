@@ -17,15 +17,15 @@ You can setup the enviroment locally by executing this command:
 
     $ ./bin/local-provision <cloud_credentials_path>
 
-This command creates three kind of containers:
+This command creates three kinds of containers:
 
 * Jenkins master instance: the actual Jenkins server, the jobs, plugins and configuration options are stored here.
 
-* Jenkins slave instances: the jobs are executed in this containers. We have instances belonging to different distributions so that we can get tests results for each of them.
+* Jenkins slave instances: the jobs are executed in this containers. We have instances of different distributions so that we can get tests results from each of them.
 
 * Reverse proxy instance: it has an Nginx process listening on port 8081 that forwards requests to path ```/ghprbhook``` to the jenkins master instance. This is useful only for the cloud deployment, see below
 
-The ```<cloud_credentials_path>``` required by the command indicates a path to a novarc file with the OpenStack credentials that will be used by the Jenkins slave instances to spin up Snappy instances. The scripts copies it to the Jenkins slave containers and the jobs use it to access to the cloud provider API.
+The ```<cloud_credentials_path>``` required by the command indicates a path to a novarc file with the OpenStack credentials that will be used by the Jenkins slave instances to spin up Snappy instances. The scripts copy it to the Jenkins slave containers and the jobs use it to access to the cloud provider API.
 
 Once the scripts finish you can access the jenkins master instance from the browser at ```http://localhost:8080```
 
@@ -35,13 +35,13 @@ In this case you need to have OpenStack credentials loaded, for example by sourc
 
     $ source path/to/openstack/credentials/novarc
 
-Before Executing the provision script you should have at least the ```$OS_USERNAME``` and ```$OS_REGION_NAME``` environment variables set. This credentials are used for creating the hosts where the CI environment itself is going to run, and maybe different of the ones used later for the Ubuntu Core instances, more on this later
+Before Executing the provision script you should have at least the ```$OS_USERNAME``` and ```$OS_REGION_NAME``` environment variables set. This credentials are used for creating the hosts where the CI environment itself is going to run, and maybe different to the ones used later for the Ubuntu Core instances, more on this later.
 
 The cloud provision process relies on the existence of a prebuilt image on the glance endpoint with the required setup in place. This images can be created with the command:
 
     $ ./bin/create-image.sh
 
-This command creates a new seed instance based on trusty64, provisions it with the 1.9.1 version of docker (with the AUFS storage backend enabled) and setups some additional packages, paths and files required for the system. Then a new image created from it is stored so that it can be used to create new instances.
+This command creates a new seed instance based on trusty64, provisions it with the 1.9.1 version of docker (with the AUFS storage backend enabled) and sets up some additional packages, paths and files required for the system. Then a new image created from it is stored so that it can be used to create new instances.
 
 There are additional requirements for the cloud provision besides having loaded OpenStack credentials. In this case the setup is done in a cloud instance and you should be able to spin it up. The needed packages can be installed in Ubuntu with:
 
@@ -55,7 +55,7 @@ being, as in the local case, `<cloud_credentials_path>` the location of an OpeSt
 
 ![Block Diagram](/img/snappy-jenkins.png?raw=true)
 
-The provision command also setups a security group that allows access to port 8081 from everywhere and ports 8080 and 22 from a local range (by default 10.0.0.0/8). All this configuration is done this way in order to facilitate a secure connection from the GitHub webhook, as detailed in the next section.
+The provision command also sets up a security group that allows access to port 8081 from everywhere and ports 8080 and 22 from a local range (by default 10.0.0.0/8). All this configuration is done this way in order to facilitate a secure connection from the GitHub webhook, as detailed in the next section.
 
 ## GitHub integration
 
