@@ -41,7 +41,7 @@ The cloud provision process relies on the existence of a prebuilt image on the g
 
     $ ./bin/create-image.sh
 
-This command creates a new instance based on trusty64, provisions it with the 1.9.1 version of docker (AUFS storage backend) and setups some additional packages, paths and files required for the system. Then it is stored so that new instances can be created from it.
+This command creates a new seed instance based on trusty64, provisions it with the 1.9.1 version of docker (with the AUFS storage backend enabled) and setups some additional packages, paths and files required for the system. Then a new image created from it is stored so that it can be used to create new instances.
 
 There are additional requirements for the cloud provision besides having loaded OpenStack credentials. In this case the setup is done in a cloud instance and you should be able to spin it up. The needed packages can be installed in Ubuntu with:
 

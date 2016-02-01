@@ -31,8 +31,8 @@ create_snapshot(){
 
     openstack image delete "$prev_image_name"
     openstack server image create --name "$new_image_name" --wait "$id"
-    openstack image set --name "$image_name" "$prev_image_name"
-    openstack image set --name "$new_image_name" "$image_name"
+    openstack image set --name "$prev_image_name" "$image_name"
+    openstack image set --name "$image_name" "$new_image_name"
 }
 
 create_security_group "$SECGROUP"
@@ -49,8 +49,12 @@ setup_jenkins_home "$INSTANCE_IP" "$JENKINS_HOME" "$OPENSTACK_CREDENTIALS_DIR"
 
 send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/provision.sh"
 
-create_snapshot "$INSTANCE_ID" "$DIST"
+if [ "$?" -eq 0 ]; then
+    create_snapshot "$INSTANCE_ID" "$DIST"
+else
+    echo "Error provisioning seed instance"
+fi
 
 openstack server delete "$INSTANCE_ID"
 
-exit 0
+exit

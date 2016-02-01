@@ -18,6 +18,8 @@ JENKINS_SLAVE_CONTAINER_DIR="./containers/jenkins-slave"
 
 SECGROUP=$NAME
 
+OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
+
 get_container_slave_name(){
     local distribution=$1
     echo "$JENKINS_SLAVE_CONTAINER_NAME-$distribution"
@@ -48,8 +50,12 @@ create_slave(){
     local count=$1
     local distribution=$2
     local SLAVE_NAME=$(get_slave_name $count $distribution)
-    sudo docker stop $SLAVE_NAME
-    sudo docker rm -f $SLAVE_NAME
+
+    sudo docker ps | grep $SLAVE_NAME
+    if [ "$?" -ne 0 ]; then
+        sudo docker stop $SLAVE_NAME
+        sudo docker rm -f $SLAVE_NAME
+    fi
 
     local CONTAINER_SLAVE_NAME=$(get_container_slave_name $distribution)
     init_command=$(get_slave_init_command $SLAVE_NAME $CONTAINER_SLAVE_NAME $distribution)
@@ -82,7 +88,10 @@ create_container(){
     if [ -d $dir ]; then
         sudo docker build -t $name $dir
     fi
-    sudo docker rm -f $name
+    sudo docker ps | grep $name
+    if [ "$?" -ne 0 ]; then
+        sudo docker rm -f $name
+    fi
     eval $init_cmd
 }
 

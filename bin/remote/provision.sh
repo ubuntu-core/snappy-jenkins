@@ -1,5 +1,5 @@
 #!/bin/sh
-set -x
+set -ex
 
 . $JENKINS_HOME/common.sh
 
@@ -10,7 +10,6 @@ install_docker(){
     sudo apt-get update
     sudo apt-get purge -y lxc-docker
     sudo apt-get install -y linux-image-extra-$(uname -r) docker-engine
-    sudo service docker start
     ps -p1 | grep systemd && init=systemd || init=upstart
     if [ "$init" = "systemd" ]; then
         sudo systemctl enable docker
