@@ -38,6 +38,12 @@ get_slave_init_command(){
     echo "sudo docker run -d -v $JENKINS_HOME:/var/jenkins_home --link $NAME:jenkins --privileged=true --restart always --name $name $container_name -username admin -password snappy -executors 2 -name $name -labels $distribution"
 }
 
+post_start_actions(){
+    local container_name=$1
+    sudo docker exec -t $container_name /home/jenkins-slave/postStart.sh
+    sudo docker exec -t $container_name cp -R /var/jenkins_home/.openstack /home/jenkins-slave
+}
+
 create_slave(){
     local count=$1
     local distribution=$2
@@ -81,8 +87,8 @@ create_container(){
 }
 
 create_containers(){
-    create_container $JENKINS_MASTER_CONTAINER_DIR $NAME $JENKINS_CONTAINER_INIT_COMMAND
-    create_container $PROXY_CONTAINER_DIR $PROXY_CONTAINER_NAME $PROXY_CONTAINER_INIT_COMMAND
+    create_container "$JENKINS_MASTER_CONTAINER_DIR" "$NAME" "$JENKINS_CONTAINER_INIT_COMMAND"
+    create_container "$PROXY_CONTAINER_DIR" "$PROXY_CONTAINER_NAME" "$PROXY_CONTAINER_INIT_COMMAND"
 
     create_slaves
 }
@@ -103,11 +109,14 @@ export PROXY_CONTAINER_INIT_COMMAND='"'$PROXY_CONTAINER_INIT_COMMAND'"'; '"$*"''
 }
 
 wait_for_ssh(){
-    retry=60
-    while ! execute_remote_command true; do
+    local ip="$1"
+    local id="$2"
+    retry=30
+    while ! execute_remote_command "$ip" true; do
         retry=$(( retry - 1 ))
         if [ $retry -le 0 ]; then
             echo "Timed out waiting for ssh. Aborting!"
+            openstack server delete "$id"
             exit 1
         fi
         sleep 10
@@ -121,7 +130,7 @@ get_base_image_name(){
 
 wait_for_ip(){
     local INSTANCE_ID=$1
-    local retry=60
+    local retry=30
     local INSTANCE_IP=""
     INSTANCE_IP=$(openstack server show $INSTANCE_ID | grep 'addresses' | awk '{print $4}' | cut -d= -f2)
     # when the instance hasn't came up yet the addresses line reads:
@@ -131,6 +140,7 @@ wait_for_ip(){
         retry=$(( retry - 1 ))
         if [ $retry -le 0 ]; then
             echo "Timed out waiting for instance IP. Aborting!"
+            openstack server delete "$INSTANCE_ID"
             exit 1
         fi
         sleep 20
