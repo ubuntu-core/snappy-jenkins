@@ -44,6 +44,6 @@ wait_for_ssh "$INSTANCE_IP" "$INSTANCE_ID"
 
 copy_credentials "$NOVARC_PATH" "$INSTANCE_IP" "$OPENSTACK_CREDENTIALS_DIR" "$SPI_CREDENTIALS_PATH" "$JENKINS_HOME"
 
-update_containers
+send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/redeploy.sh"
 
 exit 0

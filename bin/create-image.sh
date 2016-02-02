@@ -13,11 +13,10 @@ setup_jenkins_home(){
     local IP=$1
     local JENKINS_HOME=$2
     local OPENSTACK_CREDENTIALS_DIR=$3
-    execute_remote_command "$IP" "sudo umount /mnt && \
-sudo rm -rf $JENKINS_HOME && \
+    execute_remote_command "$IP" "sudo rm -rf $JENKINS_HOME && \
 sudo mkdir -p $JENKINS_HOME && \
-sudo mount /dev/vdb $JENKINS_HOME && \
 sudo chmod a+rwx $JENKINS_HOME && \
+sudo chown ubuntu:ubuntu $JENKINS_HOME && \
 mkdir -p $OPENSTACK_CREDENTIALS_DIR"
 }
 
