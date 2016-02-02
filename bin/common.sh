@@ -197,9 +197,10 @@ send_and_execute(){
     local INSTANCE_IP=$1
     local JENKINS_HOME=$2
     local script=$3
+    local script_base=$(basename "$script")
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ./bin/common.sh ubuntu@"$INSTANCE_IP":"$JENKINS_HOME"
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$script" ubuntu@"$INSTANCE_IP":"$JENKINS_HOME"
-    execute_remote_command "$INSTANCE_IP" "sh $JENKINS_HOME/provision.sh"
+    execute_remote_command "$INSTANCE_IP" "sh $JENKINS_HOME/$script_base"
 }
 
 create_security_group() {
