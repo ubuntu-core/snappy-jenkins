@@ -32,12 +32,4 @@ then
     cp $SPI_CREDENTIALS_PATH $JENKINS_HOME/.spi.ini
 fi
 
-# instance provision: launch container
-sudo docker build -t $JENKINS_CONTAINER_NAME $JENKINS_MASTER_CONTAINER_DIR
-sudo docker build -t $PROXY_CONTAINER_NAME $PROXY_CONTAINER_DIR
-sudo docker stop $NAME $PROXY_NAME
-sudo docker rm -f $NAME $PROXY_NAME
-eval $JENKINS_CONTAINER_INIT_COMMAND
-eval $PROXY_CONTAINER_INIT_COMMAND
-
-create_slaves
+create_containers
