@@ -21,13 +21,15 @@ mkdir -p $OPENSTACK_CREDENTIALS_DIR"
 }
 
 create_snapshot(){
-    local id="$1"
-    local dist="$2"
+    local ip="$1"
+    local id="$2"
+    local dist="$3"
 
     image_name=$(get_base_image_name "$dist")
     prev_image_name="$image_name"-prev
     new_image_name="$image_name"-new
 
+    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$ip sync
     openstack image delete "$prev_image_name"
     openstack server image create --name "$new_image_name" --wait "$id"
     openstack image set --name "$prev_image_name" "$image_name"
@@ -49,7 +51,7 @@ setup_jenkins_home "$INSTANCE_IP" "$JENKINS_HOME" "$OPENSTACK_CREDENTIALS_DIR"
 send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/provision.sh"
 
 if [ "$?" -eq 0 ]; then
-    create_snapshot "$INSTANCE_ID" "$DIST"
+    create_snapshot "$INSTANCE_IP" "$INSTANCE_ID" "$DIST"
 else
     echo "Error provisioning seed instance"
 fi
