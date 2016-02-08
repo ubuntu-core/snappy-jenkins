@@ -6,7 +6,7 @@ RUN echo "deb http://nginx.org/packages/mainline/ubuntu/ wily nginx" >> /etc/apt
 ENV NGINX_VERSION 1.9.8-1~wily
 
 RUN apt-get update && \
-  apt-get install -y ca-certificates nginx=${NGINX_VERSION} && \
+  apt-get install -y --no-install-recommends ca-certificates nginx=${NGINX_VERSION} && \
   rm -rf /var/lib/apt/lists/*
 
 # forward request and error logs to docker log collector

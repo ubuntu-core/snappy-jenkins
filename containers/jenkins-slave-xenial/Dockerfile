@@ -9,13 +9,13 @@ USER root
 RUN ln -s /bin/true /usr/local/bin/udevadm
 
 # install ppas
-RUN apt-get update && apt-get install -qy \
+RUN apt-get update && apt-get install --no-install-recommends -qy \
   python-software-properties \
-  software-properties-common
+  software-properties-common && rm -rf /var/lib/apt/lists/*
 RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 
 # install dependencies
-RUN apt-get update && apt-get install -qy \
+RUN apt-get update && apt-get install --no-install-recommends -qy \
   snappy-tests-job \
   build-essential \
   sudo subunit \
@@ -27,8 +27,7 @@ RUN apt-get update && apt-get install -qy \
   python3-fixtures python3-jsonschema python3-mccabe \
   python3-pep8 python3-pip python3-requests \
   python3-testscenarios python3-testtools python3-yaml \
-  python3-lxml squashfs-tools && \
-  rm -rf /var/lib/apt/lists/*
+  python3-lxml && rm -rf /var/lib/apt/lists/*
 
 # make jenkins-slave sudoer
 RUN echo "jenkins-slave ALL=NOPASSWD: ALL" >> /etc/sudoers
