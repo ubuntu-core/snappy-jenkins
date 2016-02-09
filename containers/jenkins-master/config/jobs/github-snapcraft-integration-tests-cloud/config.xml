@@ -101,7 +101,7 @@ snappy-cloud-client create -release $release -channel edge > instance.info
 id=$(head -n 1 instance.info | awk 'NF>1{print $NF}')
 ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 
-trap "snappy-cloud-client kill $id" EXIT
+trap "snappy-cloud-client kill -instance-id $id" EXIT
 
 ./runtests.sh examples --subunit --ip $ip
 

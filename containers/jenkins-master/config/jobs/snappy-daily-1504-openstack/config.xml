@@ -9,8 +9,45 @@
     <artifactNumToKeep>100</artifactNumToKeep>
   </logRotator>
   <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.15.0">
+      <projectUrl>https://github.com/ubuntu-core/snappy/</projectUrl>
+      <displayName></displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>channel</name>
+          <description></description>
+          <defaultValue>edge</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/ubuntu-core/snappy</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/15.04</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+        <relativeTargetDir>src/github.com/ubuntu-core/snappy</relativeTargetDir>
+      </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+    </extensions>
+  </scm>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -27,9 +64,22 @@
       <command>#!/bin/bash
 . $HOME/.openstack/novarc
 
-snappy-tests-job -release 1504 -channel edge -output-dir $PWD/$BUILD_TAG -src 15.04 -test-build-tags=lowperformance
+export GOPATH=$WORKSPACE
+cd $GOPATH/src/github.com/ubuntu-core/snappy
 
-subunit2junitxml $PWD/$BUILD_TAG/output/artifacts/results.subunit -o $PWD/$BUILD_TAG/output/artifacts/results.xml
+go get launchpad.net/godeps
+export PATH=$PATH:$GOPATH/bin
+godeps -u dependencies.tsv
+
+snappy-cloud-client create -release 1504 -channel $channel > instance.info
+id=$(head -n 1 instance.info | awk 'NF>1{print $NF}')
+ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
+
+trap "snappy-cloud-client kill -instance-id $id" EXIT
+
+go run ./integration-tests/main.go -ip $ip -output-dir $WORKSPACE/$BUILD_TAG -test-build-tags=lowperformance
+
+subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
 </command>
     </hudson.tasks.Shell>
   </builders>
