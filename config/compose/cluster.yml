@@ -1,0 +1,40 @@
+version: "2"
+services:
+  jenkins-master-service:
+    image: ubuntucore/snappy-jenkins-master
+    ports:
+      - 8080:8080
+    volumes:
+      - ${JENKINS_HOME}:/var/jenkins_home:rw
+    restart: always
+    user: root
+
+  snappy-proxy:
+    depends_on:
+      - jenkins-master-service
+    image: ubuntucore/snappy-jenkins-proxy
+    ports:
+      - 8081:80
+    restart: always
+
+  jenkins-slave-vivid-1:
+    image: ubuntucore/snappy-jenkins-slave-vivid
+    command: -username admin -password snappy -executors 2 -name jenkins-slave-vivid-1 -labels vivid -master http://jenkins-master-service:8080
+    volumes:
+      - ${JENKINS_HOME}:/var/jenkins_home
+    privileged: true
+    restart: always
+    user: jenkins-slave
+
+  jenkins-slave-xenial-1:
+    extends: jenkins-slave-vivid-1
+    image: ubuntucore/snappy-jenkins-slave-xenial
+    command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-1 -labels xenial -master http://jenkins-master-service:8080
+
+  jenkins-slave-xenial-2:
+    extends: jenkins-slave-xenial-1
+    command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-2 -labels xenial -master http://jenkins-master-service:8080
+
+  jenkins-slave-xenial-3:
+    extends: jenkins-slave-xenial-1
+    command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-3 -labels xenial -master http://jenkins-master-service:8080

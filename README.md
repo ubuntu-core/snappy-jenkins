@@ -9,13 +9,35 @@ There are also jobs configured for accessing the Snappy Product Integration envi
 
 ## Provision
 
-There are provision scripts for creating the CI environment locally and in the cloud.
+There are provision scripts for creating the CI environment locally and in the cloud. These scripts use docker-machine and docker-compose, so you need to have them installed, see [https://docs.docker.com/machine/install-machine/](here) and [https://docs.docker.com/compose/install/](here). Once the provision is finished you can use the common commands of machine and compose, for instance, to list the machines:
+
+    docker-machine ls
+
+To point your docker client to the engine in a local provisioned server:
+
+    eval $(docker-machine env snappy-jenkins-local)
+
+The same for the cloud environment:
+
+    eval $(docker-machine env snappy-jenkins-remote)
+
+Once that's done you can use your local docker client as if you were in the remote machine, try `docker info`, `docker images`, `docker ps` and the like.
+
+With the client configured to connect to the remote host you can also use compose:
+
+    docker-compose -f ./config/compose/cluster.yml down
+    docker-compose -f ./config/compose/cluster.yml pull
+    docker-compose -f ./config/compose/cluster.yml up -d
+
+More on [https://docs.docker.com/machine/](docker-machine) and [https://docs.docker.com/compose/](docker-compose) at their respective project pages.
 
 ### Local Provision
 
+We have verified the installation and configured the provision script for using the docker-machine kvm driver, it can be installed following the instructions at [https://github.com/dhiltgen/docker-machine-kvm](the project page).
+
 You can setup the enviroment locally by executing this command:
 
-    $ ./bin/local-provision <cloud_credentials_path>
+    $ ./bin/local-provision
 
 This command creates three kinds of containers:
 
@@ -25,9 +47,9 @@ This command creates three kinds of containers:
 
 * Reverse proxy instance: it has an Nginx process listening on port 8081 that forwards requests to path ```/ghprbhook``` to the jenkins master instance. This is useful only for the cloud deployment, see below
 
-The ```<cloud_credentials_path>``` required by the command indicates a path to a novarc file with the OpenStack credentials that will be used by the Jenkins slave instances to spin up Snappy instances. The scripts copy it to the Jenkins slave containers and the jobs use it to access to the cloud provider API.
+Once the scripts finish you can check the machine ip executing `docker-machine ip snappy-jenkins-local` and access the jenkins master instance from the browser at ```http://<server_ip>:8080```
 
-Once the scripts finish you can access the jenkins master instance from the browser at ```http://localhost:8080```
+If you want to try the jobs you can sync the credentials from an accessible running server, see `Syncing servers` below.
 
 ### Cloud provision
 
@@ -35,7 +57,7 @@ In this case you need to have OpenStack credentials loaded, for example by sourc
 
     $ source path/to/openstack/credentials/novarc
 
-Before Executing the provision script you should have at least the ```$OS_USERNAME``` and ```$OS_REGION_NAME``` environment variables set. This credentials are used for creating the hosts where the CI environment itself is going to run, and maybe different to the ones used later for the Ubuntu Core instances, more on this later.
+Before executing the provision script you should have at least the ```$OS_USERNAME``` and ```$OS_REGION_NAME``` environment variables set. This credentials are used for creating the hosts where the CI environment itself is going to run, and may be different to the ones used later for the Ubuntu Core instances, more on this later. The scripts also assume that you have a valid private key at `~/.canonistack/${OS_USERNAME}_${OS_REGION_NAME}.key`, if that's not the case you can pass the path as the last argument.
 
 The cloud provision process relies on the existence of a prebuilt image on the glance endpoint with the required setup in place. This images can be created with the command:
 
@@ -56,6 +78,16 @@ being, as in the local case, `<cloud_credentials_path>` the location of an OpeSt
 ![Block Diagram](/img/snappy-jenkins.png?raw=true)
 
 The provision command also sets up a security group that allows access to port 8081 from everywhere and ports 8080 and 22 from a local range (by default 10.0.0.0/8). All this configuration is done this way in order to facilitate a secure connection from the GitHub webhook, as detailed in the next section.
+
+You can retrieve job history and existing credentials from an accessible running server, see `Syncing servers` below.
+
+## Redeploy
+
+Once the server is deployed in order to update the containers you can use the redeploy script:
+
+    $ ./bin/cloud-redeploy.sh
+
+It stops the running containers, pulls the new images and restarts the cluster.
 
 ## GitHub integration
 
