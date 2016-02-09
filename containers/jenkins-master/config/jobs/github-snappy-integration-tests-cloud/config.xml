@@ -35,6 +35,7 @@
     <submoduleCfg class="list"/>
     <extensions/>
   </scm>
+  <assignedNode>xenial</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -95,7 +96,7 @@ else
   release="rolling"
 fi
 
-snappy-tests-job -repo $ghprbAuthorRepoGitUrl -src $ghprbSourceBranch -release $release -channel edge -snappy-from-branch -output-dir $PWD/$BUILD_TAG
+snappy-tests-job -repo $ghprbAuthorRepoGitUrl -src $ghprbSourceBranch -release $release -channel edge -snappy-from-branch -output-dir $PWD/$BUILD_TAG -test-build-tags lowperformance
 
 subunit2junitxml $PWD/$BUILD_TAG/output/artifacts/results.subunit -o $PWD/$BUILD_TAG/output/artifacts/results.xml
 
