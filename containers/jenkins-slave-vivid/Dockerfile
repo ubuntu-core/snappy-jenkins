@@ -9,14 +9,14 @@ USER root
 RUN ln -s /bin/true /usr/local/bin/udevadm
 
 # install ppas
-RUN apt-get update && apt-get install -qy \
+RUN apt-get update && apt-get install --no-install-recommends -qy \
   python-software-properties \
-  software-properties-common
+  software-properties-common && rm -rf /var/lib/apt/lists/*
 RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 
 # install dependencies
 RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list && \
-  apt-get update && apt-get install -qy \
+  apt-get update && apt-get install -qy --no-install-recommends \
   autopkgtest/vivid-backports \
   snappy-tests-job \
   build-essential \
