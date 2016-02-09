@@ -55,11 +55,10 @@ snappy-cloud-image -loglevel debug -release $release -channel $channel -action c
         <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>release=$release
-channel=$channel</properties>
+              <properties>channel=$channel</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>snappy-cloud-test,</projects>
+          <projects>snappy-daily-1504-openstack,</projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
