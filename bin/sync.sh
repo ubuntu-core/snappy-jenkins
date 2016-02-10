@@ -59,8 +59,8 @@ sync_job_history(){
     local dir="$basedir"/jobs
     mkdir $dir
 
-    rsync -avzL --exclude config.xml $SOURCE_IP:$JENKINS_HOME/jobs/* $dir
-    rsync -avz $dir $TARGET_IP:$JENKINS_HOME
+    rsync -avzL -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" --exclude config.xml $SOURCE_IP:$JENKINS_HOME/jobs/* $dir
+    rsync -avz -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" $dir $TARGET_IP:$JENKINS_HOME
 }
 
 sync_jenkins_credentials(){
