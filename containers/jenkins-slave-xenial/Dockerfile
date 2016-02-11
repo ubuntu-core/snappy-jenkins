@@ -16,11 +16,15 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 
 # install dependencies
 RUN apt-get update && apt-get install --no-install-recommends -qy \
-  snappy-tests-job \
   build-essential \
+  ca-certificates \
+  grub-common \
+  python-junitxml \
   sudo subunit \
-  snappy-cloud-image ubuntu-core-security-utils \
-  ca-certificates squashfs-tools grub-common \
+  snappy-cloud-image \
+  snappy-tests-job \
+  squashfs-tools  \
+  ubuntu-core-security-utils \
   # snapcraft dependencies
   bzr dpkg-dev git mercurial pyflakes python3.4 \
   python3-apt python3-docopt python3-coverage \

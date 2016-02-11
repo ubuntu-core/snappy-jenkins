@@ -18,11 +18,16 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted" >> /etc/apt/sources.list && \
   apt-get update && apt-get install -qy --no-install-recommends \
   autopkgtest/vivid-backports \
-  snappy-tests-job \
   build-essential \
-  sudo subunit \
-  snappy-cloud-image ubuntu-core-security-utils \
-  ca-certificates squashfs-tools && \
+  ca-certificates \
+  python-junitxml \
+  snappy-cloud-image \
+  snappy-tests-job \
+  squashfs-tools \
+  ssh \
+  sudo \
+  subunit \
+  ubuntu-core-security-utils && \
   rm -rf /var/lib/apt/lists/*
 
 # make jenkins-slave sudoer
