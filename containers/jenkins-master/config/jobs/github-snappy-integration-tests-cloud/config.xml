@@ -113,7 +113,7 @@ ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 
 trap "snappy-cloud-client kill -instance-id $id" EXIT
 
-go run ./integration-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORKSPACE/$BUILD_TAG -test-build-tags=lowperformance
+go run ./integration-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORKSPACE/$BUILD_TAG
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
 </command>
