@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   snappy-tests-job \
   squashfs-tools  \
   ubuntu-core-security-utils \
+  openssh-client \
   # snapcraft dependencies
   bzr dpkg-dev git mercurial pyflakes python3.4 \
   python3-apt python3-docopt python3-coverage \
