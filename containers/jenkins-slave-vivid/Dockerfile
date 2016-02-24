@@ -24,7 +24,7 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu/ vivid-backports main restricted"
   snappy-cloud-image \
   snappy-tests-job \
   squashfs-tools \
-  ssh \
+  openssh-client \
   sudo \
   subunit \
   ubuntu-core-security-utils && \
