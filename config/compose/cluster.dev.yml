@@ -1,0 +1,13 @@
+version: "2"
+services:
+  jenkins-master-service:
+    build: ../../containers/jenkins-master
+
+  snappy-proxy:
+    build: ../../containers/jenkins-proxy
+
+  jenkins-slave-vivid-1:
+    build: ../../containers/jenkins-slave-vivid
+
+  jenkins-slave-xenial-1:
+    build: ../../containers/jenkins-slave-xenial

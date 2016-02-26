@@ -4,21 +4,8 @@ set -x
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
-get_image_name(){
-    DIST=$1
-    echo "$DIST-daily-amd64"
-}
-
-setup_jenkins_home(){
-    local IP=$1
-    local JENKINS_HOME=$2
-    local OPENSTACK_CREDENTIALS_DIR=$3
-    execute_remote_command "$IP" "sudo rm -rf $JENKINS_HOME && \
-sudo mkdir -p $JENKINS_HOME && \
-sudo chmod a+rwx $JENKINS_HOME && \
-sudo chown ubuntu:ubuntu $JENKINS_HOME && \
-mkdir -p $OPENSTACK_CREDENTIALS_DIR"
-}
+PRIVATE_KEY_PATH=${1:-$DEFAULT_PRIVATE_KEY_PATH}
+IMAGE_NAME="uci/cloudimg/$DIST-amd64.img"
 
 create_snapshot(){
     local ip="$1"
@@ -36,26 +23,30 @@ create_snapshot(){
     openstack image set --name "$image_name" "$new_image_name"
 }
 
+create_docker_machine(){
+    docker-machine rm -f $NAME_REMOTE_SEED
+    docker-machine create --driver openstack \
+               --openstack-flavor-name $FLAVOR \
+               --openstack-image-name $IMAGE_NAME \
+               --openstack-sec-groups $NAME \
+               --openstack-ssh-user ubuntu \
+               --openstack-keypair-name $KEYPAIR_NAME \
+               --openstack-private-key-file $PRIVATE_KEY_PATH \
+               $NAME_REMOTE_SEED
+}
+
 create_security_group "$SECGROUP"
 
-IMAGE_NAME=$(get_image_name "$DIST")
+create_keypair "$PRIVATE_KEY_PATH" "$KEYPAIR_NAME"
 
-INSTANCE_ID=$(launch_instance "$IMAGE_NAME")
+create_docker_machine
+IP=$(docker-machine ip "$NAME_REMOTE_SEED")
+ID=$(openstack server list | grep "$IP" | awk '{ print $2 }')
+trap "openstack server delete $ID" EXIT
 
-INSTANCE_IP=$(wait_for_ip "$INSTANCE_ID")
-
-wait_for_ssh "$INSTANCE_IP" "$INSTANCE_ID"
-
-setup_jenkins_home "$INSTANCE_IP" "$JENKINS_HOME" "$OPENSTACK_CREDENTIALS_DIR"
-
-send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/provision.sh"
+eval $(docker-machine env "$NAME_REMOTE_SEED")
+docker-compose -f ./config/compose/cluster.yml up -d
 
 if [ "$?" -eq 0 ]; then
-    create_snapshot "$INSTANCE_IP" "$INSTANCE_ID" "$DIST"
-else
-    echo "Error provisioning seed instance"
+    create_snapshot "$IP" "$ID" "$DIST"
 fi
-
-openstack server delete "$INSTANCE_ID"
-
-exit

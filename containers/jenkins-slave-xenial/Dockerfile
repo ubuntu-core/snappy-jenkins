@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   ubuntu-core-security-utils \
   openssh-client \
   # snapcraft dependencies
-  bzr dpkg-dev git mercurial pyflakes python3.4 \
+  bzr dpkg-dev git mercurial pyflakes \
   python3-apt python3-docopt python3-coverage \
   python3-fixtures python3-jsonschema python3-mccabe \
   python3-pep8 python3-pip python3-requests \

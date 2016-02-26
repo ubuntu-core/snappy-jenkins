@@ -2,15 +2,10 @@
 
 set -x
 
-if [ -z "$1" ]
-then
-    echo "No instance IP given, exiting"
-    exit 1
-fi
-
-INSTANCE_IP=$1
-
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
-send_and_execute "$INSTANCE_IP" "$JENKINS_HOME" "./bin/remote/redeploy.sh"
+eval $(docker-machine env "$NAME_REMOTE")
+docker-compose -f ./config/compose/cluster.yml down
+docker-compose -f ./config/compose/cluster.yml pull
+docker-compose -f ./config/compose/cluster.yml up -d

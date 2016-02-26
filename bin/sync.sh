@@ -24,15 +24,12 @@ sync_ssh_keys(){
     mkdir $dir
 
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$SOURCE_IP:$JENKINS_HOME/ssh-key/* $dir
-    ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP mkdir -p $JENKINS_HOME/ssh-key
-    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $dir/* ubuntu@$TARGET_IP:$JENKINS_HOME/ssh-key
 
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
     do
-        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-            sudo docker exec -t jenkins-slave-$slave bash -c \"cp /var/jenkins_home/ssh-key/id_rsa* /home/jenkins-slave/.ssh\"
-        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-            sudo docker exec -t jenkins-slave-$slave bash -c \"chown jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh/*\"
+        docker cp $dir/id_rsa compose_jenkins-slave-${slave}_1:/home/jenkins-slave/.ssh
+        docker cp $dir/id_rsa.pub compose_jenkins-slave-${slave}_1:/home/jenkins-slave/.ssh
+        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh"
     done
 }
 
@@ -41,19 +38,14 @@ sync_openstack_credentials(){
     mkdir $dir
 
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$SOURCE_IP:$JENKINS_HOME/.openstack/novarc $dir
-    scp -r -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $dir ubuntu@$TARGET_IP:$JENKINS_HOME
 
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
     do
-        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-            sudo docker exec -t jenkins-slave-$slave bash -c \"mkdir -p /home/jenkins-slave/.openstack\"
-        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-            sudo docker exec -t jenkins-slave-$slave bash -c \"cp /var/jenkins_home/.openstack/novarc /home/jenkins-slave/.openstack\"
-        ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-            sudo docker exec -t jenkins-slave-$slave bash -c \"chown jenkins-slave:jenkins-slave /home/jenkins-slave/.openstack/novarc\"
+        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "rm -rf /home/jenkins-slave/.openstack && mkdir -p /home/jenkins-slave/.openstack"
+        docker cp $dir/novarc compose_jenkins-slave-${slave}_1:/home/jenkins-slave/.openstack/novarc
+        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "chown jenkins-slave:jenkins-slave /home/jenkins-slave/.openstack/novarc"
     done
 }
-
 
 sync_job_history(){
     local dir="$basedir"/jobs
@@ -76,14 +68,19 @@ sync_jenkins_credentials(){
     scp -r -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $dir/* ubuntu@$TARGET_IP:$JENKINS_HOME/
 }
 
+eval $(docker-machine env snappy-jenkins-remote)
+
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP sudo chmod -R a+w $JENKINS_HOME
+
 sync_ssh_keys
 sync_openstack_credentials
 
-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-    sudo docker stop $NAME
+docker stop compose_jenkins-master-service_1
 
 sync_job_history
 sync_jenkins_credentials
 
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
-    sudo docker start $NAME
+    sync
+
+docker start compose_jenkins-master-service_1
