@@ -77,7 +77,7 @@ ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 
 trap "snappy-cloud-client kill -instance-id $id" EXIT
 
-go run ./integration-tests/main.go -ip $ip -update -output-dir $WORKSPACE/$BUILD_TAG
+go run ./integration-tests/main.go -ip $ip -update -output-dir $WORKSPACE/$BUILD_TAG -http-proxy http://squid.internal:3128
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
 </command>
