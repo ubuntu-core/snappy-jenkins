@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   bzr dpkg-dev git mercurial pyflakes \
   python3-apt python3-docopt python3-coverage \
   python3-fixtures python3-jsonschema python3-mccabe \
-  python3-pep8 python3-pip python3-requests \
+  python3-pep8 python3-petname python3-pip python3-requests \
   python3-testscenarios python3-testtools python3-yaml \
   python3-lxml && rm -rf /var/lib/apt/lists/*
 
