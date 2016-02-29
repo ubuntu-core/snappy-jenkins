@@ -88,6 +88,8 @@ sergiusens
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
+set -e
+
 . $HOME/.openstack/novarc
 
 if [ "$ghprbTargetBranch" = "1.x" ]; then
@@ -104,13 +106,6 @@ adt-run --built-tree . --setup-commands setup-testbed --- ssh -d -l ubuntu -o='-
 </command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.2-beta-4">
-      <testResults>results.xml</testResults>
-      <keepLongStdio>false</keepLongStdio>
-      <testDataPublishers/>
-      <healthScaleFactor>1.0</healthScaleFactor>
-    </hudson.tasks.junit.JUnitResultArchiver>
-  </publishers>
+  <publishers/>
   <buildWrappers/>
 </project>
