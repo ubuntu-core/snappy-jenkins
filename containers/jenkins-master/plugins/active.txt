@@ -1,5 +1,6 @@
 ant:1.2:pinned
 antisamy-markup-formatter:1.1:pinned
+cobertura:1.9.7:pinned
 credentials:1.24:pinned
 cvs:2.11:pinned
 external-monitor-job:1.4:pinned
@@ -27,9 +28,9 @@ ssh-agent:1.8:pinned
 ssh-credentials:1.10:pinned
 ssh-slaves:1.9:pinned
 subversion:1.54:pinned
-support-core:2.30:not-pinned
+support-core:2.30:pinned
 swarm:2.0:pinned
-token-macro:1.12.1:not-pinned
+token-macro:1.12.1:pinned
 translation:1.10:pinned
 urltrigger:0.41:pinned
 windows-slaves:1.0:pinned
