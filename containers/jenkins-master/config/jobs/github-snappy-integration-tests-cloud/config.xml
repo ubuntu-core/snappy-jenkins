@@ -91,7 +91,7 @@ niemeyer
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash
+      <command><![CDATA[#!/bin/bash
 . $HOME/.openstack/novarc
 
 if [ "$ghprbTargetBranch" = "15.04" ]; then
@@ -117,16 +117,15 @@ go run ./integration-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORK
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
 
-
 go get github.com/axw/gocov/gocov
 go get github.com/AlekSi/gocov-xml
 BASE_COVERAGE_DIR=$WORKSPACE/$BUILD_TAG/output/artifacts/coverage
-gocov convert $BASE_COVERAGE_DIR/* &gt; $BASE_COVERAGE_DIR/total.json
-cat $BASE_COVERAGE_DIR/total.json | gocov-xml &gt; $BASE_COVERAGE_DIR/total.xml
+gocov convert $BASE_COVERAGE_DIR/* > $BASE_COVERAGE_DIR/total.json
+cat $BASE_COVERAGE_DIR/total.json | gocov-xml > $BASE_COVERAGE_DIR/total.xml
 
-sed -i &quot;s|&lt;packages&gt;|&lt;sources&gt;&lt;source&gt;&quot;$SRC_PATH&quot;&lt;/source&gt;&lt;/sources&gt;&lt;packages&gt;|&quot; $BASE_COVERAGE_DIR/total.xml
-sed -i &quot;s|filename=\&quot;$SRC_PATH/|filename=\&quot;|g&quot; $BASE_COVERAGE_DIR/total.xml
-</command>
+sed -i "s|<packages>|<sources><source>"$SRC_PATH"</source></sources><packages>|" $BASE_COVERAGE_DIR/total.xml
+sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
+]]></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
