@@ -101,9 +101,16 @@ snappy-cloud-client create -release $release -channel edge > instance.info
 id=$(head -n 1 instance.info | awk 'NF>1{print $NF}')
 ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 
-trap "snappy-cloud-client kill -instance-id $id" EXIT
+trap "openstack server delete --wait $id && openstack security group delete snapcraft-examples-$BUILD_TAG" EXIT
 
-./runtests.sh examples --subunit --ip $ip
+openstack security group create --description "snapcraft-examples secgroup" snapcraft-examples-$BUILD_TAG
+openstack security group rule create --proto tcp --dst-port 3000 --src-ip 10.0.0.0/8 snapcraft-examples-$BUILD_TAG
+openstack security group rule create --proto tcp --dst-port 8080 --src-ip 10.0.0.0/8 snapcraft-examples-$BUILD_TAG
+openstack security group rule create --proto tcp --dst-port 9000 --src-ip 10.0.0.0/8 snapcraft-examples-$BUILD_TAG
+openstack server add security group $id snapcraft-examples-$BUILD_TAG
+
+sudo apt-get update
+./runtests.sh examples --subunit --ip $ip 
 
 subunit2junitxml results.subunit -o results.xml
 </command>
