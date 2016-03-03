@@ -10,9 +10,19 @@
   </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.15.0">
       <projectUrl>https://github.com/ubuntu-core/snapcraft/</projectUrl>
+      <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>sha1</name>
+          <description></description>
+          <defaultValue>master</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -41,7 +51,7 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.29.4">
+    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.29.8">
       <spec>H/5 * * * *</spec>
       <latestVersion>3</latestVersion>
       <triggerPhrase></triggerPhrase>
@@ -57,7 +67,7 @@ sergiusens
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
       <useGitHubHooks>true</useGitHubHooks>
       <permitAll>false</permitAll>
-      <whitelist></whitelist>
+      <whitelist> dholbach</whitelist>
       <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
       <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
       <whiteListTargetBranches>
@@ -65,9 +75,9 @@ sergiusens
           <branch></branch>
         </org.jenkinsci.plugins.ghprb.GhprbBranch>
       </whiteListTargetBranches>
-      <project>github-test</project>
+      <project>github-snapcraft-autopkgtest-cloud</project>
       <__project class="project" reference="../../.."/>
-      <gitHubAuthId>c166a6ec-1866-48b3-b336-d9d40f218133</gitHubAuthId>
+      <gitHubAuthId>73d060a3-d1dd-4445-9c98-f164d6d755bf</gitHubAuthId>
       <extensions>
         <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
           <commitStatusContext>autopkgtest</commitStatusContext>
@@ -88,21 +98,17 @@ sergiusens
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-set -e
+
+set -ex
 
 . $HOME/.openstack/novarc
 
-if [ "$ghprbTargetBranch" = "1.x" ]; then
-  # 1.x needs a slave older than xenial.
-  exit 0
-else
-  release="rolling"
-fi
-
 dpkg-buildpackage -us -uc
 openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD_TAG
-trap "openstack keypair delete $BUILD_TAG" EXIT
-adt-run --built-tree . --setup-commands setup-testbed --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-daily-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
+trap &quot;openstack keypair delete $BUILD_TAG&quot; EXIT
+adt-run --built-tree . --setup-commands setup-testbed --- ssh -d -l ubuntu -o=&apos;-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no&apos; -s nova -- -d --flavor autopkgtest --image &apos;ubuntu/ubuntu-xenial-daily-amd64-server-*&apos; --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e &apos;http_proxy=http://squid.internal:3128&apos; -e &apos;https_proxy=http://squid.internal:3128&apos; -e &apos;no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net&apos;
+
+
 </command>
     </hudson.tasks.Shell>
   </builders>
