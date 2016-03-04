@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project>
+<com.cloudbees.plugins.flow.BuildFlow plugin="build-flow-plugin@0.18">
   <actions/>
   <description></description>
   <logRotator class="hudson.tasks.LogRotator">
@@ -16,76 +16,43 @@
     </com.sonyericsson.rebuild.RebuildSettings>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
+  <assignedNode>vivid</assignedNode>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <org.jenkinsci.plugins.urltrigger.URLTrigger plugin="urltrigger@0.41">
-      <spec>H/30 * * * *</spec>
-      <entries>
-        <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[https://search.apps.ubuntu.com/api/v1/search?q=architecture:amd64,name:ubuntu-core.canonical,channel:edge&size=1]]></url>
-          <proxyActivated>false</proxyActivated>
-          <checkStatus>false</checkStatus>
-          <statusCode>200</statusCode>
-          <timeout>300</timeout>
-          <checkETag>false</checkETag>
-          <checkLastModificationDate>false</checkLastModificationDate>
-          <inspectingContent>true</inspectingContent>
-          <contentTypes>
-            <org.jenkinsci.plugins.urltrigger.content.SimpleContentType/>
-          </contentTypes>
-        </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-        <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[https://search.apps.ubuntu.com/api/v1/search?q=architecture:amd64,name:canonical-pc-linux.canonical,channel:edge&size=1]]></url>
-          <proxyActivated>false</proxyActivated>
-          <checkStatus>false</checkStatus>
-          <statusCode>200</statusCode>
-          <timeout>300</timeout>
-          <checkETag>false</checkETag>
-          <checkLastModificationDate>false</checkLastModificationDate>
-          <inspectingContent>true</inspectingContent>
-          <contentTypes>
-            <org.jenkinsci.plugins.urltrigger.content.SimpleContentType/>
-          </contentTypes>
-        </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-        <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[https://search.apps.ubuntu.com/api/v1/search?q=architecture:all,name:canonical-pc.canonical,channel:edge&size=1]]></url>
-          <proxyActivated>false</proxyActivated>
-          <checkStatus>false</checkStatus>
-          <statusCode>200</statusCode>
-          <timeout>300</timeout>
-          <checkETag>false</checkETag>
-          <checkLastModificationDate>false</checkLastModificationDate>
-          <inspectingContent>true</inspectingContent>
-          <contentTypes>
-            <org.jenkinsci.plugins.urltrigger.content.SimpleContentType/>
-          </contentTypes>
-        </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-      </entries>
-      <labelRestriction>false</labelRestriction>
-    </org.jenkinsci.plugins.urltrigger.URLTrigger>
+    <hudson.triggers.TimerTrigger>
+      <spec>H/15 * * * *</spec>
+    </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.29">
-      <configs>
-        <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
-          <configs>
-            <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>release=rolling
-channel=edge</properties>
-            </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-          </configs>
-          <projects>create-cloud-image-all-snaps</projects>
-          <condition>ALWAYS</condition>
-          <triggerWithNoParameters>false</triggerWithNoParameters>
-          <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
-        </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
-      </configs>
-    </hudson.plugins.parameterizedtrigger.TriggerBuilder>
-  </builders>
+  <builders/>
   <publishers/>
   <buildWrappers/>
-</project>
+  <icon/>
+  <dsl>for (item in ["ubuntu-core.canonical", "canonical-pc.canonical", "canonical-pc-linux.canonical"]) {
+  ignore(FAILURE) {
+    b = build("check-snap-from-store", snap: item)
+  }
+  if (b.result.name == "SUCCESS") {
+    ignore(FAILURE) {
+      c = build("create-cloud-image-all-snaps", release: "rolling", channel: "edge", arch: "amd64")
+    }
+    if c.result.name == "FAILURE"{
+      out.println("Error creating image, reseting version file")
+      String filename = "/home/jenkins-slave/workspace/check-snap-from-store/${item}/amd64/edge/version"
+      boolean fileSuccessfullyDeleted =  new File(filename).delete()
+
+      if (fileSuccessfullyDeleted) {
+        out.println("File ${filename} deleted after error building image")
+      } else {
+        out.println("Error deleting ${filename} after error building image")
+      }
+    }
+    break;
+  }
+}
+</dsl>
+  <buildNeedsWorkspace>false</buildNeedsWorkspace>
+</com.cloudbees.plugins.flow.BuildFlow>

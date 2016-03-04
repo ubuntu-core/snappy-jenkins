@@ -46,6 +46,9 @@ COPY config/jobs/create-cloud-image-1504-stable/config.xml \
 COPY config/jobs/create-cloud-image-rolling-edge/config.xml \
   /usr/share/jenkins/ref/job-definitions/create-cloud-image-rolling-edge.xml
 
+COPY config/jobs/check-snap-from-store/config.xml \
+  /usr/share/jenkins/ref/job-definitions/check-snap-from-store.xml
+
 COPY config/jobs/delete-cloud-image/config.xml \
   /usr/share/jenkins/ref/job-definitions/delete-cloud-image.xml
 
