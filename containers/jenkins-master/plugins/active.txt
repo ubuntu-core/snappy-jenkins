@@ -1,5 +1,6 @@
 ant:1.2:pinned
 antisamy-markup-formatter:1.1:pinned
+build-flow-plugin:0.18:pinned
 cobertura:1.9.7:pinned
 credentials:1.24:pinned
 cvs:2.11:pinned

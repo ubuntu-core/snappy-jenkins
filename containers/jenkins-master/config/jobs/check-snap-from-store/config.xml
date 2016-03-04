@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>2</daysToKeep>
+    <numToKeep>20</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>snap</name>
+          <description></description>
+          <defaultValue>ubuntu-core.canonical</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>arch</name>
+          <description></description>
+          <defaultValue>amd64</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>channel</name>
+          <description></description>
+          <defaultValue>edge</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>vivid</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>previous_version=""
+previous_version_path=${WORKSPACE}/${snap}/${arch}/${channel}
+previous_version_file=${previous_version_path}/version
+
+echo "Snap: ${snap}, Arch: ${arch}, Channel: ${channel}"
+
+if [ -f ${previous_version_file} ]; then
+    previous_version=$(cat ${previous_version_file})
+    echo "Previous version found: ${previous_version}"
+else
+    echo "No previous version found, creating ${previous_version_path}"
+    mkdir -p ${previous_version_path}
+fi
+
+target_url=https://search.apps.ubuntu.com/api/v1/package/${snap}/${channel}
+current_version=$(curl -H "X-Ubuntu-Architecture: ${arch}" -H "Accept: application/hal+json" "${target_url}" | \
+      python -c 'import sys, json; print json.load(sys.stdin)["version"]')
+
+echo "Store version: $current_version"
+echo "$current_version" > "$previous_version_file"
+
+if [ "$current_version" != "$previous_version" ]; then
+    echo "New version found!"
+    return_value=0
+else
+    echo "No new version found"
+    return_value=1
+fi
+
+exit ${return_value}
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
