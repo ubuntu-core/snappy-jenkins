@@ -17,6 +17,12 @@ services:
       - 8081:80
     restart: always
 
+  snapversion:
+    image: ubuntucore/snapversion
+    ports:
+      - 8000:8000
+    restart: always
+
   jenkins-slave-vivid-1:
     image: ubuntucore/snappy-jenkins-slave-vivid
     command: -username admin -password snappy -executors 2 -name jenkins-slave-vivid-1 -labels vivid -master http://jenkins-master-service:8080
