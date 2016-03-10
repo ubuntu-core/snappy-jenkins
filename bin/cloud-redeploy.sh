@@ -6,6 +6,6 @@ set -x
 . ./bin/cloud-common.sh
 
 eval $(docker-machine env "$NAME_REMOTE")
-docker-compose -f ./config/compose/cluster.yml pull
-docker-compose -f ./config/compose/cluster.yml down
-docker-compose -f ./config/compose/cluster.yml up -d
+docker-compose -f ./config/jenkins/cluster.yml pull
+docker-compose -f ./config/jenkins/cluster.yml down
+docker-compose -f ./config/jenkins/cluster.yml up -d
