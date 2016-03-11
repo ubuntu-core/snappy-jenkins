@@ -45,7 +45,7 @@ ID=$(openstack server list | grep "$IP" | awk '{ print $2 }')
 trap "openstack server delete $ID" EXIT
 
 eval $(docker-machine env "$NAME_REMOTE_SEED")
-docker-compose -f ./config/compose/cluster.yml up -d
+docker-compose -f ./config/jenkins/cluster.yml up -d
 
 if [ "$?" -eq 0 ]; then
     create_snapshot "$IP" "$ID" "$DIST"

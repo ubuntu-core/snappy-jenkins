@@ -1,0 +1,20 @@
+version: "2"
+services:
+  consul:
+    image: progrium/consul
+    ports:
+      - 8600:53/udp
+      - 8400:8400
+      - 8500:8500
+    command: "-server -bootstrap -ui-dir /ui"
+    volumes:
+      - /mnt:/data
+    restart: always
+
+  vault:
+    image: ubuntucore/vault
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - 8200:8200
+    restart: always

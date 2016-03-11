@@ -37,7 +37,7 @@ We have verified the installation and configured the provision script for using 
 
 You can setup the enviroment locally by executing this command:
 
-    $ ./bin/local-provision
+    $ ./bin/local-provision.sh
 
 This command creates three kinds of containers:
 
@@ -71,9 +71,9 @@ There are additional requirements for the cloud provision besides having loaded 
 
 To setup the CI instance in the cloud just execute:
 
-    $ ./bin/cloud-provision.sh <cloud_credentials_path>
+    $ ./bin/cloud-provision.sh
 
-being, as in the local case, `<cloud_credentials_path>` the location of an OpeStack novarc file. This command creates a new VM with the same kind of containers as in the local provision, but now the proxy container is used for receiving connections from github, where the Snappy project is held, in order to trigger job executions in response to PR submissions. This is described in the following image:
+This command creates a new VM with the same kind of containers as in the local provision, but now the proxy container is used for receiving connections from github, where the Snappy project is held, in order to trigger job executions in response to PR submissions. This is described in the following image:
 
 ![Block Diagram](/img/snappy-jenkins.png?raw=true)
 
@@ -112,6 +112,20 @@ With both kinds of provision, for the jobs to be able to run your openstack user
 In order to deploy a new server it may be useful to keep the configuration from a previous server. The `sync.sh` script copies the job story, ssh keys used to create cloud images and access instances created from them and the GitHub credentials. It can be executed with:
 
     $ ./bin/sync.sh <source_ip> <target_ip>
+
+## Secrets management
+
+We use Hashicorp's [https://www.vaultproject.io/](Vault) to manage the secrets used by the jenkins deployment. There is a script for setting up this service on a cloud environment, you can provision it with:
+
+    $ ./bin/secrets/cloud-provision.sh <private_key_path> <openstack_credentials_path>
+
+being `<private_key_path>` the ssh key that the slaves will use for creating images and accessing instances created from them, and `<openstack_credentials_path>` the path of the novarc file needed for accessing the cloud resources where the testbeds will be created. These secrets will be created under the vault path `secrets/jenkins/tests/ssh-key` and `secrets/jenkins/tests/openstack-credentials` respectively.
+
+After the provisioning, a `vault-remote.txt` text file is created in the current directory containing the server keys and root token, keep it safe because they are unique for each deployment.
+
+You can also try the deployment locally with:
+
+    $ ./bin/secrets/local-provision.sh
 
 [1] https://github.com/ubuntu-core/snappy
 

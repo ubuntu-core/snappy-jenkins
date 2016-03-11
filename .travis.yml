@@ -14,10 +14,13 @@ before_install:
   - sudo apt-get update
   - sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" install docker-engine
 install:
-  - docker-compose -f ./config/compose/cluster.yml -f ./config/compose/cluster.dev.yml up -d
+  - docker-compose -f ./config/jenkins/cluster.yml -f ./config/jenkins/cluster.dev.yml up -d
+  - docker-compose -f ./config/vault/cluster.yml -f ./config/vault/cluster.dev.yml up -d
 script:
   - docker ps | grep jenkins-master-service | grep -v Restarting
   - docker ps | grep snappy-proxy | grep -v Restarting
   - docker ps | grep jenkins-slave-xenial | grep -v Restarting
   - docker ps | grep jenkins-slave-vivid | grep -v Restarting
   - docker ps | grep snapversion | grep -v Restarting
+  - docker ps | grep consul | grep -v Restarting
+  - docker ps | grep vault | grep -v Restarting
