@@ -12,7 +12,7 @@ services:
     restart: always
 
   vault:
-    image: fgimenez/vault
+    image: ubuntucore/vault
     cap_add:
       - IPC_LOCK
     ports:

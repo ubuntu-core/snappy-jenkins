@@ -121,7 +121,7 @@ We use Hashicorp's [https://www.vaultproject.io/](Vault) to manage the secrets u
 
 being `<private_key_path>` the ssh key that the slaves will use for creating images and accessing instances created from them, and `<openstack_credentials_path>` the path of the novarc file needed for accessing the cloud resources where the testbeds will be created. These secrets will be created under the vault path `secrets/jenkins/tests/ssh-key` and `secrets/jenkins/tests/openstack-credentials` respectively.
 
-After the provisioning a `vault-remote.txt` text file is created in the current directory containing the server keys and root token, keep it safe because they are unique for each deployment.
+After the provisioning, a `vault-remote.txt` text file is created in the current directory containing the server keys and root token, keep it safe because they are unique for each deployment.
 
 You can also try the deployment locally with:
 
