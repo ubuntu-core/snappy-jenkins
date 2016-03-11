@@ -40,11 +40,7 @@ RUN echo "jenkins-slave ALL=NOPASSWD: ALL" >> /etc/sudoers
 # ssh config
 RUN mkdir -p /home/jenkins-slave/.ssh
 COPY config/ssh /home/jenkins-slave/.ssh/config
-RUN sed -i 's@ssh-key/id-rsa@.ssh/id_rsa@' /home/jenkins-slave/.ssh/config
 RUN chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh
-
-# postStart script
-COPY config/scripts/postStart.sh /home/jenkins-slave/postStart.sh
 
 # Patch ubuntu-device-flash to generate all-snaps images.
 RUN wget https://people.canonical.com/~mvo/all-snaps/ubuntu-device-flash && \

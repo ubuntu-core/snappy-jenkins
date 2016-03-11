@@ -26,8 +26,6 @@ services:
   jenkins-slave-vivid-1:
     image: ubuntucore/snappy-jenkins-slave-vivid
     command: -username admin -password snappy -executors 2 -name jenkins-slave-vivid-1 -labels vivid -master http://jenkins-master-service:8080
-    volumes:
-      - ${JENKINS_HOME}:/var/jenkins_home
     privileged: true
     restart: always
     user: jenkins-slave

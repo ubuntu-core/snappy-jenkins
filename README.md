@@ -79,7 +79,7 @@ This command creates a new VM with the same kind of containers as in the local p
 
 The provision command also sets up a security group that allows access to port 8081 from everywhere and ports 8080 and 22 from a local range (by default 10.0.0.0/8). All this configuration is done this way in order to facilitate a secure connection from the GitHub webhook, as detailed in the next section.
 
-You can retrieve job history and existing credentials from an accessible running server, see `Syncing servers` below.
+You can retrieve the job history from an accessible running server, and also initialize the required credentials in order to run jobs, see `Syncing servers` below.
 
 ## Redeploy
 
@@ -109,9 +109,15 @@ With both kinds of provision, for the jobs to be able to run your openstack user
 
 ## Syncing servers
 
-In order to deploy a new server it may be useful to keep the configuration from a previous server. The `sync.sh` script copies the job story, ssh keys used to create cloud images and access instances created from them and the GitHub credentials. It can be executed with:
+In order to deploy a new server it may be useful to keep the configuration and job history from a previous one. There are two scripts for doing so, `sync-data.sh` copies the job history, it can be executed with:
 
-    $ ./bin/sync.sh <source_ip> <target_ip>
+    $ ./bin/sync-data.sh <source_ip> <target_ip>
+
+`init-credentials.sh` gets the credentials from a vault server (see below) and puts them into a local or remote cluster. In order to execute this script you must be able to authenticate against the Vault server. It is executed with:
+
+    $ ./bin/secrets/init-credentials.sh <environment>
+
+with `<environment>` being either `local` or `remote` (default).
 
 ## Secrets management
 
