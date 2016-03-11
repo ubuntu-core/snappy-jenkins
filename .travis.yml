@@ -22,3 +22,5 @@ script:
   - docker ps | grep jenkins-slave-xenial | grep -v Restarting
   - docker ps | grep jenkins-slave-vivid | grep -v Restarting
   - docker ps | grep snapversion | grep -v Restarting
+  - docker ps | grep consul | grep -v Restarting
+  - docker ps | grep vault | grep -v Restarting
