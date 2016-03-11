@@ -103,7 +103,6 @@ export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/ubuntu-core/snappy
 
 sudo apt-get update
-sudo apt-get install --yes devscripts equivs
 sudo mk-build-deps -i -t 'apt-get --yes --no-install-recommends'
 
 dpkg-buildpackage -us -uc
