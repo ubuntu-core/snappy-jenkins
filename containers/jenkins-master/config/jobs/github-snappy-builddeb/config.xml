@@ -97,8 +97,6 @@ niemeyer
 
 set -ex
 
-. $HOME/.openstack/novarc
-
 export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/ubuntu-core/snappy
 
