@@ -1,5 +1,9 @@
 #!/bin/sh
 
+export TEST_SSH_KEY_SECRET_PATH=secret/jenkins/tests/ssh/id_rsa
+export TEST_OPENSTACK_CREDENTIALS_SECRET_PATH=secret/jenkins/tests/openstack/novarc
+export TEST_JENKINS_CONFIG_SECRET_PATH=secret/jenkins/config
+
 setup_vault(){
     machine_name=$1
     deploy_env=$2
@@ -22,8 +26,8 @@ setup_vault(){
     sleep 3
     vault auth "$root_token"
 
-    vault write secret/jenkins/tests/ssh-key value=@"$SLAVE_SSH_PRIVATE_KEY_PATH"
-    vault write secret/jenkins/tests/openstack-credentials value=@"$SLAVE_OPENSTACK_CREDENTIALS_PATH"
+    vault write $TEST_SSH_KEY_SECRET_PATH value=@"$SLAVE_SSH_PRIVATE_KEY_PATH"
+    vault write $TEST_OPENSTACK_CREDENTIALS_SECRET_PATH value=@"$SLAVE_OPENSTACK_CREDENTIALS_PATH"
 
     echo "$init_output" > "./vault-${deploy_env}.txt"
 }
