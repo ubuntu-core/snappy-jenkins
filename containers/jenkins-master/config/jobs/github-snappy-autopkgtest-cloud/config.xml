@@ -122,7 +122,7 @@ adt-run --built-tree . --setup-commands setup-testbed --- ssh -d -l ubuntu -o='-
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/github.com/ubuntu-core/*.deb</artifacts>
+      <artifacts>src/github.com/ubuntu-core/*.deb,src/github.com/ubuntu-core/*.changes,src/github.com/ubuntu-core/*.dsc,src/github.com/ubuntu-core/*.tar.xz</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>true</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
