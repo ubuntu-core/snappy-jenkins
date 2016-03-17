@@ -52,7 +52,7 @@ init_spi_credentials(){
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
     do
         docker cp $basedir/spi.ini compose_jenkins-slave-${slave}_1:/home/jenkins-slave/spi.ini
-        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/spi.ini"
+        docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/spi.ini"
     done
 }
 
