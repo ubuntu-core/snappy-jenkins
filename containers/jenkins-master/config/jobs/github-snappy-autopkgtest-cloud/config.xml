@@ -44,6 +44,7 @@
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
     <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
         <relativeTargetDir>src/github.com/ubuntu-core/snappy</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
