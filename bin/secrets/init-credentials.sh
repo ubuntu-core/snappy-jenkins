@@ -47,6 +47,15 @@ init_jenkins_credentials(){
     done
 }
 
+init_spi_credentials(){
+    vault read -field=value $TEST_SPI_CREDENTIALS_PATH > $basedir/spi.ini
+    for slave in vivid-1 xenial-1 xenial-2 xenial-3
+    do
+        docker cp $basedir/spi.ini compose_jenkins-slave-${slave}_1:/home/jenkins-slave/spi.ini
+        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/spi.ini"
+    done
+}
+
 init_credentials(){
     echo "Access to Vault is required for retrieving secrets"
 
@@ -54,6 +63,7 @@ init_credentials(){
 
     init_ssh_keys
     init_openstack_credentials
+    init_spi_credentials
 
     target_ip=$(docker-machine ip "snappy-jenkins-${environment}")
     docker stop jenkins_jenkins-master-service_1
