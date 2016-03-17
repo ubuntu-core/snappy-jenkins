@@ -16,9 +16,9 @@ init_ssh_keys(){
 
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
     do
-        docker cp $dir/id_rsa compose_jenkins-slave-${slave}_1:/home/jenkins-slave/.ssh
-        docker cp $dir/id_rsa.pub compose_jenkins-slave-${slave}_1:/home/jenkins-slave/.ssh
-        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh"
+        docker cp $dir/id_rsa jenkins_jenkins-slave-${slave}_1:/home/jenkins-slave/.ssh
+        docker cp $dir/id_rsa.pub jenkins_jenkins-slave-${slave}_1:/home/jenkins-slave/.ssh
+        docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.ssh"
     done
 }
 
@@ -30,9 +30,9 @@ init_openstack_credentials(){
 
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
     do
-        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "rm -rf /home/jenkins-slave/.openstack && mkdir -p /home/jenkins-slave/.openstack"
-        docker cp $dir/novarc compose_jenkins-slave-${slave}_1:/home/jenkins-slave/.openstack/novarc
-        docker exec -u root -t compose_jenkins-slave-${slave}_1 bash -c "chown jenkins-slave:jenkins-slave /home/jenkins-slave/.openstack/novarc"
+        docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "rm -rf /home/jenkins-slave/.openstack && mkdir -p /home/jenkins-slave/.openstack"
+        docker cp $dir/novarc jenkins_jenkins-slave-${slave}_1:/home/jenkins-slave/.openstack/novarc
+        docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "chown jenkins-slave:jenkins-slave /home/jenkins-slave/.openstack/novarc"
     done
 }
 
@@ -43,7 +43,7 @@ init_jenkins_credentials(){
     for file in org.jenkinsci.plugins.ghprb.GhprbTrigger.xml credentials.xml secret.key secrets/master.key
     do
         vault read -field=value $TEST_JENKINS_CONFIG_SECRET_PATH/$file > $dir/$file
-        docker cp $dir/$file compose_jenkins-master-service_1:/var/jenkins_home/$file
+        docker cp $dir/$file jenkins_jenkins-master-service_1:/var/jenkins_home/$file
     done
 }
 
@@ -56,12 +56,14 @@ init_credentials(){
     init_openstack_credentials
 
     target_ip=$(docker-machine ip "snappy-jenkins-${environment}")
-    docker stop compose_jenkins-master-service_1
+    docker stop jenkins_jenkins-master-service_1
     init_jenkins_credentials
     ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$target_ip \
         sync
-    docker start compose_jenkins-master-service_1
+    docker start jenkins_jenkins-master-service_1
 }
+
+export VAULT_ADDR=http://$(docker-machine ip "vault-$environment-${OS_USERNAME}-${OS_REGION_NAME}"):8200
 
 init_credentials
 
