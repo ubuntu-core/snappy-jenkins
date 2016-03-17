@@ -63,6 +63,8 @@ init_credentials(){
     docker start compose_jenkins-master-service_1
 }
 
+export VAULT_ADDR=http://$(docker-machine ip "vault-$environment"):8200
+
 init_credentials
 
 rm -rf $basedir
