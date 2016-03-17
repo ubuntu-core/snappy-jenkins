@@ -3,6 +3,7 @@
 export TEST_SSH_KEY_SECRET_PATH=secret/jenkins/tests/ssh/id_rsa
 export TEST_OPENSTACK_CREDENTIALS_SECRET_PATH=secret/jenkins/tests/openstack/novarc
 export TEST_JENKINS_CONFIG_SECRET_PATH=secret/jenkins/config
+export TEST_SPI_CREDENTIALS_PATH=secret/jenkins/tests/spi
 
 setup_vault(){
     machine_name=$1
@@ -28,6 +29,7 @@ setup_vault(){
 
     vault write $TEST_SSH_KEY_SECRET_PATH value=@"$SLAVE_SSH_PRIVATE_KEY_PATH"
     vault write $TEST_OPENSTACK_CREDENTIALS_SECRET_PATH value=@"$SLAVE_OPENSTACK_CREDENTIALS_PATH"
+    vault write $TEST_SPI_CREDENTIALS_PATH=@"$SLAVE_SPI_CREDENTIALS_PATH"
 
     echo "$init_output" > "./vault-${deploy_env}.txt"
 }
