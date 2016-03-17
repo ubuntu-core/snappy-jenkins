@@ -31,8 +31,8 @@ setup_vault(){
 
     vault write $TEST_SSH_KEY_SECRET_PATH value=@"$SLAVE_SSH_PRIVATE_KEY_PATH"
     vault write $TEST_OPENSTACK_CREDENTIALS_SECRET_PATH value=@"$SLAVE_OPENSTACK_CREDENTIALS_PATH"
-    vault write $TEST_SPI_CREDENTIALS_PATH=@"$SLAVE_SPI_CREDENTIALS_PATH"
-    vault write $TEST_BOT_GPG_PRIVATE_KEY_PATH=@"$SLAVE_BOT_GPG_PRIVATE_KEY_PATH"
+    vault write $TEST_SPI_CREDENTIALS_PATH value=@"$SLAVE_SPI_CREDENTIALS_PATH"
+    vault write $TEST_BOT_GPG_PRIVATE_KEY_PATH value=@"$SLAVE_BOT_GPG_PRIVATE_KEY_PATH"
     vault write $TEST_BOT_GPG_PASSWORD value="$SLAVE_BOT_GPG_PASSWORD"
 
     echo "$init_output" > "./vault-${deploy_env}.txt"
