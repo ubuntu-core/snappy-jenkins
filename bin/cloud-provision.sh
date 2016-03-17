@@ -4,7 +4,7 @@ set -x
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 
-PRIVATE_KEY_PATH=${3:-$DEFAULT_PRIVATE_KEY_PATH}
+PRIVATE_KEY_PATH=${1:-$DEFAULT_PRIVATE_KEY_PATH}
 
 wait_for_ip(){
     local INSTANCE_ID=$1
