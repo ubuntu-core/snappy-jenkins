@@ -13,7 +13,7 @@ then
 fi
 if [ -z "$3" ]
 then
-    echo "No snappy product integration credentials path given as second argument, won't be able to connect to SPI"
+    echo "No snappy product integration credentials path given as third argument, exiting"
     exit 1
 fi
 
