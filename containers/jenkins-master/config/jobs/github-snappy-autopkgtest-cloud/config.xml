@@ -112,6 +112,7 @@ cd $GOPATH/src/github.com/ubuntu-core/snappy
 sudo apt-get update
 sudo mk-build-deps -i -t 'apt-get --yes --no-install-recommends'
 
+rm ../*.deb ../*.changes ../*.dsc ../*.tar.xz
 dpkg-buildpackage -us -uc
 
 openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD_TAG
