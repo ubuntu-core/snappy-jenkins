@@ -112,21 +112,17 @@ set -ex
 export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/ubuntu-core/snappy
 
-sudo apt-get update
-sudo mk-build-deps -i -t 'apt-get --yes --no-install-recommends'
-
-rm ../*.deb ../*.changes ../*.dsc ../*.tar.xz
-dpkg-buildpackage -us -uc
-
 openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD_TAG
 trap "openstack keypair delete $BUILD_TAG" EXIT
-adt-run --built-tree . --setup-commands setup-testbed --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-daily-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
+
+rm -rf $WORKSPACE/adt-run-output
+adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-daily-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/github.com/ubuntu-core/*.deb,src/github.com/ubuntu-core/*.changes,src/github.com/ubuntu-core/*.dsc,src/github.com/ubuntu-core/*.tar.xz</artifacts>
+      <artifacts>adt-run-output/binaries/*.deb</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>true</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
