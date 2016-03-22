@@ -33,7 +33,9 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <submoduleCfg class="list"/>
-    <extensions/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
+    </extensions>
   </scm>
   <assignedNode>xenial</assignedNode>
   <canRoam>false</canRoam>
@@ -110,7 +112,7 @@ openstack security group rule create --proto tcp --dst-port 9000 --src-ip 10.0.0
 openstack server add security group $id snapcraft-examples-$BUILD_TAG
 
 sudo apt-get update
-./runtests.sh examples --subunit --ip $ip 
+./runtests.sh examples --subunit --ip $ip
 
 subunit2junitxml results.subunit -o results.xml
 </command>
