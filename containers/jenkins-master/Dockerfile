@@ -31,6 +31,9 @@ COPY config/jobs/github-snappy-autopkgtest-cloud/config.xml \
 COPY config/jobs/github-snappy-merge/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-merge.xml
 
+COPY config/jobs/github-snappy-daily-ppa/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snappy-daily-ppa.xml
+
 COPY config/jobs/github-snapcraft-autopkgtest-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snapcraft-autopkgtest-cloud.xml
 COPY config/jobs/github-snapcraft-examples-tests-cloud/config.xml \

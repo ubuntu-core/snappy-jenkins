@@ -18,6 +18,7 @@ RUN add-apt-repository -y ppa:snappy-dev/tools-proposed
 RUN apt-get update && apt-get install --no-install-recommends -qy \
   build-essential \
   ca-certificates \
+  dput \
   grub-common \
   python-junitxml \
   sudo subunit \
