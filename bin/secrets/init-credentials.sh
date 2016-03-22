@@ -56,6 +56,20 @@ init_spi_credentials(){
     done
 }
 
+init_gpg_credentials(){
+    local dir="$basedir"/.gnupg
+    vault read -field=value $TEST_BOT_GPG_PRIVATE_KEY_PATH > $dir/snappy-m-o-private.key
+    vault read -field=value $TEST_BOT_GPG_PASSWORD > $dir/snappy-m-o-password
+    for slave in vivid-1 xenial-1 xenial-2 xenial-3
+    do
+        docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "rm -rf /home/jenkins-slave/.gnupg && mkdir -p /home/jenkins-slave/.gnupg"
+        docker cp $dir/snappy-m-o-private.key jenkins_jenkins-slave-${slave}_1:/home/jenkins-slave/.gnupg/
+        docker cp $dir/snappy-m-o-password jenkins_jenkins-slave-${slave}_1:/home/jenkins-slave/.gnupg/
+        docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "chown jenkins-slave:jenkins-slave /home/jenkins-slave/.gnupg"
+        docker exec -u jenkins-slave -t jenkins_jenkins-slave-${slave}_1 bash -c "gpg --import /home/jenkins-slave/.gnupg/snappy-m-o-private.key"
+    done
+}
+
 init_credentials(){
     echo "Access to Vault is required for retrieving secrets"
 
@@ -64,6 +78,7 @@ init_credentials(){
     init_ssh_keys
     init_openstack_credentials
     init_spi_credentials
+    init_gpg_credentials
 
     target_ip=$(docker-machine ip "snappy-jenkins-${environment}")
     docker stop jenkins_jenkins-master-service_1

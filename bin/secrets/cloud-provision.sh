@@ -16,6 +16,16 @@ then
     echo "No snappy product integration credentials path given as third argument, exiting"
     exit 1
 fi
+if [ -z "$4" ]
+then
+    echo "No snappy-m-o GPG private key given as fourth argument, exiting"
+    exit 1
+fi
+if [ -z "$5" ]
+then
+    echo "No snappy-m-o GPG password given as fifth argument, exiting"
+    exit 1
+fi
 
 . ./bin/common.sh
 . ./bin/cloud-common.sh
@@ -28,6 +38,8 @@ VAULT_SECGROUP="vault"
 SLAVE_SSH_PRIVATE_KEY_PATH=$1
 SLAVE_OPENSTACK_CREDENTIALS_PATH=$2
 SLAVE_SPI_CREDENTIALS_PATH=$3
+SLAVE_BOT_GPG_PRIVATE_KEY_PATH=$4
+SLAVE_BOT_GPG_PASSWORD=$5
 
 create_vault_security_group() {
     openstack security group delete $VAULT_SECGROUP
