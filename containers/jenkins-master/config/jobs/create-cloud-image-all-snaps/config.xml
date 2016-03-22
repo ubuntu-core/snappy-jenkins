@@ -64,7 +64,7 @@ snappy-cloud-image -loglevel debug -release $release -channel $channel -action c
               <properties>channel=$channel</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>snappy-daily-rolling-openstack,</projects>
+          <projects>snappy-daily-rolling-openstack,snappy-rollbackstress-rolling-openstack, </projects>
           <condition>SUCCESS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
         </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>

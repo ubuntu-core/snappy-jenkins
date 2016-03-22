@@ -22,6 +22,11 @@ COPY config/jobs/snappy-daily-rolling-openstack/config.xml \
 COPY config/jobs/snappy-daily-rolling-bbb/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-bbb.xml
 
+COPY config/jobs/snappy-rollbackstress-rolling-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-rollbackstress-rolling-openstack.xml
+COPY config/jobs/snappy-rollbackstress-1504-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-rollbackstress-1504-openstack.xml
+
 COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests-cloud.xml
 
