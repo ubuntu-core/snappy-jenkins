@@ -1,5 +1,4 @@
-
-  FROM ubuntucore/jenkins-ubuntu
+FROM ubuntucore/jenkins-ubuntu
 
 USER jenkins
 
