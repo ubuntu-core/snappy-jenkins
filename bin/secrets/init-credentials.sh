@@ -58,8 +58,11 @@ init_spi_credentials(){
 
 init_gpg_credentials(){
     local dir="$basedir"/.gnupg
+    mkdir $dir
+
     vault read -field=value $TEST_BOT_GPG_PRIVATE_KEY_PATH > $dir/snappy-m-o-private.key
     vault read -field=value $TEST_BOT_GPG_PASSWORD > $dir/snappy-m-o-password
+
     for slave in vivid-1 xenial-1 xenial-2 xenial-3
     do
         docker exec -u root -t jenkins_jenkins-slave-${slave}_1 bash -c "rm -rf /home/jenkins-slave/.gnupg && mkdir -p /home/jenkins-slave/.gnupg"
