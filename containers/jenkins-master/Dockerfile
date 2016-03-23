@@ -54,6 +54,10 @@ COPY config/jobs/create-cloud-image-1504-stable/config.xml \
   /usr/share/jenkins/ref/job-definitions/create-cloud-image-1504-stable.xml
 COPY config/jobs/create-cloud-image-rolling-edge/config.xml \
   /usr/share/jenkins/ref/job-definitions/create-cloud-image-rolling-edge.xml
+COPY config/jobs/create-cloud-image-rolling-beta/config.xml \
+  /usr/share/jenkins/ref/job-definitions/create-cloud-image-rolling-beta.xml
+COPY config/jobs/create-cloud-image-rolling-release-candidate/config.xml \
+  /usr/share/jenkins/ref/job-definitions/create-cloud-image-rolling-release-candidate.xml
 
 COPY config/jobs/delete-cloud-image/config.xml \
   /usr/share/jenkins/ref/job-definitions/delete-cloud-image.xml
