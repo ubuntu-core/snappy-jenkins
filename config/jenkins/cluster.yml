@@ -4,10 +4,13 @@ services:
     image: ubuntucore/snappy-jenkins-master
     ports:
       - 8080:8080
-    volumes:
-      - ${JENKINS_HOME}:/var/jenkins_home:rw
+    volumes_from:
+      - jenkins-data
     restart: always
     user: root
+
+  jenkins-data:
+    image: ubuntucore/jenkins-data
 
   snappy-proxy:
     depends_on:

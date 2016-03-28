@@ -3,7 +3,6 @@ set -x
 
 . ./bin/common.sh
 
-export JENKINS_HOME=/tmp/jenkins
 NAME_LOCAL="$NAME-local"
 
 docker-machine rm -f "$NAME_LOCAL"

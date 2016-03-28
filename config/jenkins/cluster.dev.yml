@@ -3,6 +3,9 @@ services:
   jenkins-master-service:
     build: ../../containers/jenkins-master
 
+  jenkins-data:
+    build: ../../containers/jenkins-data
+
   snappy-proxy:
     build: ../../containers/jenkins-proxy
 
