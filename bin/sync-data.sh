@@ -29,8 +29,8 @@ sync_job_history(){
 
 eval $(docker-machine env snappy-jenkins-remote)
 
-docker stop compose_jenkins-master-service_1
+docker stop jenkins_jenkins-master-service_1
 sync_job_history
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@$TARGET_IP \
     sync
-docker start compose_jenkins-master-service_1
+docker start jenkins_jenkins-master-service_1
