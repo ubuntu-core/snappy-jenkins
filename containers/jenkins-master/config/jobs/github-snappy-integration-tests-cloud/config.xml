@@ -148,7 +148,7 @@ sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
       <autoUpdateStability>false</autoUpdateStability>
       <zoomCoverageChart>false</zoomCoverageChart>
       <maxNumberOfBuilds>0</maxNumberOfBuilds>
-      <failNoReports>true</failNoReports>
+      <failNoReports>false</failNoReports>
       <healthyTarget>
         <targets class="enum-map" enum-type="hudson.plugins.cobertura.targets.CoverageMetric">
           <entry>
