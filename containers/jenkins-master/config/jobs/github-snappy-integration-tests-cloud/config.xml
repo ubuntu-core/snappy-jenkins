@@ -139,6 +139,28 @@ sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
     </hudson.tasks.Shell>
   </builders>
   <publishers>
+    <hudson.plugins.postbuildtask.PostbuildTask plugin="postbuild-task@1.8">
+      <tasks>
+        <hudson.plugins.postbuildtask.TaskProperties>
+          <logTexts>
+            <hudson.plugins.postbuildtask.LogProperties>
+              <logText></logText>
+              <operator>AND</operator>
+            </hudson.plugins.postbuildtask.LogProperties>
+          </logTexts>
+          <EscalateStatus>false</EscalateStatus>
+          <RunIfJobSuccessful>false</RunIfJobSuccessful>
+          <script><![CDATA[
+    rm -rf ./qakit && bzr branch lp:~fgimenez/qakit/snappy qakit
+    cp /home/jenkins-slave/.practitest/config.ini ./qakit/qakit/practitest
+    cd ./qakit
+    result=$(python3 -m qakit.practitest.report_subunit_results_to_practitest create "integration test suite :: GitHub PR $ghprbPullId :: amd64" "openstack-amd64" "Regression" "rolling" "$ghprbPullId" "$ghprbPullLink")
+    # $result is of the form: "INFO:__main__:Created TestSet with display_id 24"
+    display_id=$(echo $result | grep -P '\d+$' -o)
+    python3 -m qakit.practitest.report_subunit_results_to_practitest update --no_ask_confirm $display_id $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit]]></script>
+        </hudson.plugins.postbuildtask.TaskProperties>
+      </tasks>
+    </hudson.plugins.postbuildtask.PostbuildTask>
     <hudson.plugins.cobertura.CoberturaPublisher plugin="cobertura@1.9.7">
       <coberturaReportFile>**/output/artifacts/coverage/total.xml</coberturaReportFile>
       <onlyStable>false</onlyStable>
