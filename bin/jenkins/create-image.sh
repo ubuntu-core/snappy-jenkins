@@ -1,8 +1,8 @@
 #!/bin/sh
 set -x
 
-. ./bin/common.sh
-. ./bin/cloud-common.sh
+. ./bin/jenkins/common.sh
+. ./bin/jenkins/cloud-common.sh
 
 PRIVATE_KEY_PATH=${1:-$DEFAULT_PRIVATE_KEY_PATH}
 IMAGE_NAME="uci/cloudimg/$DIST-amd64.img"

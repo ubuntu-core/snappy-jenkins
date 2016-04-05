@@ -3,7 +3,7 @@
 export DIST="trusty"
 export NAME=snappy-jenkins
 export SECGROUP=$NAME
-export OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
+export JENKINS_HOME="/var/jenkins_home"
 
 get_base_image_name(){
     local DIST=$1

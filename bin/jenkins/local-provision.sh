@@ -1,7 +1,7 @@
 #!/bin/sh
 set -x
 
-. ./bin/common.sh
+. ./bin/jenkins/common.sh
 
 NAME_LOCAL="$NAME-local"
 
