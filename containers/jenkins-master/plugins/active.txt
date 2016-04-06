@@ -4,7 +4,7 @@ cobertura:1.9.7:pinned
 credentials:1.24:pinned
 cvs:2.11:pinned
 external-monitor-job:1.4:pinned
-ghprb:1.29.8:pinned
+ghprb:1.31.3:pinned
 git:2.4.0:pinned
 git-client:1.19.0:pinned
 github:1.15.0:pinned

@@ -131,7 +131,11 @@ niemeyer
     <org.jenkinsci.plugins.ghprb.GhprbPullRequestMerge plugin="ghprb@1.29.8">
       <onlyAdminsMerge>false</onlyAdminsMerge>
       <disallowOwnCode>false</disallowOwnCode>
-      <mergeComment>Merged by snappy-m-o.</mergeComment>
+      <mergeComment>Merge pull request #${ghprbPullId} from ${ghprbPullAuthorLogin}/${ghprbSourceBranch}
+
+      ${ghprbPullTitle}
+
+      ${ghprbPullLongDescription}</mergeComment>
       <failOnNonMerge>true</failOnNonMerge>
       <deleteOnMerge>false</deleteOnMerge>
     </org.jenkinsci.plugins.ghprb.GhprbPullRequestMerge>
