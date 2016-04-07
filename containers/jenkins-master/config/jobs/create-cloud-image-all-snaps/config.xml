@@ -51,7 +51,7 @@ if [[ "$OS_REGION_NAME" == "lcy0"* ]]; then
   qcow2compat="0.10"
 fi
 
-snappy-cloud-image -loglevel debug -release $release -channel $channel -action create -qcow2compat $qcow2compat
+snappy-cloud-image -loglevel debug -release $release -os-channel $channel -kernel-channel $channel -gadget-channel $channel -action create -qcow2compat $qcow2compat
       </command>
     </hudson.tasks.Shell>
   </builders>
