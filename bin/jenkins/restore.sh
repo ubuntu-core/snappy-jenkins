@@ -21,4 +21,5 @@ docker-machine scp "$BACKUP_FILE" "$machine_name":backup.tar.gz
 docker-machine ssh "$machine_name" sudo rm -rf /tmp/backup.tar.gz
 docker-machine ssh "$machine_name" cp backup.tar.gz /tmp
 docker-machine ssh "$machine_name" sudo docker run --rm --volumes-from jenkins_jenkins-master-service_1 -v /tmp:/backup ubuntu:xenial tar xvfz /backup/backup.tar.gz
-docker-compose -f ./config/jenkins/cluster.yml restart jenkins-master-service
+
+safe_restart "$ENV"

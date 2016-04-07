@@ -115,7 +115,7 @@ The job history can be saved and restored using the `./bin/jenkins/backup.sh` an
 
 creates a `backup.tar.gz` file in the current directory with all the existing executions of the jobs, being `<environment>` `local` or `remote` (default).
 
-This backup files can be restored to a running server with:
+These backup files can be restored to a running server with:
 
     $ ./bin/jenkins/restore.sh /path/to/backup/file <environment>
 
