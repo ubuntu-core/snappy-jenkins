@@ -3,7 +3,7 @@
 export DIST="trusty"
 export NAME=snappy-jenkins
 export SECGROUP=$NAME
-export OPENSTACK_CREDENTIALS_DIR="$JENKINS_HOME/.openstack"
+export JENKINS_HOME="/var/jenkins_home"
 
 get_base_image_name(){
     local DIST=$1
@@ -36,4 +36,20 @@ create_keypair(){
     openstack keypair create --public-key $public_key $keypair_name
 
     rm -rf $tmpdir
+}
+
+safe_restart(){
+    local env=$1
+
+    . ./bin/secrets/common.sh
+
+    machine_name=$(vault_machine_name "$env")
+
+    setup_vault_addr "$machine_name"
+
+    token=$(vault read -field=value "secret/jenkins/config/admin_token")
+    master_ip=$(docker-machine ip "snappy-jenkins-${env}")
+
+    echo "Restarting Jenkins after all the current jobs have finished..."
+    curl -u admin:"$token" -X POST "http://${master_ip}:8080/safeRestart" --data token="$token"
 }

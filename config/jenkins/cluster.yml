@@ -4,8 +4,6 @@ services:
     image: ubuntucore/snappy-jenkins-master
     ports:
       - 8080:8080
-    volumes:
-      - ${JENKINS_HOME}:/var/jenkins_home:rw
     restart: always
     user: root
 

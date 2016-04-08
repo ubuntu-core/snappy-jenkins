@@ -37,7 +37,7 @@ We have verified the installation and configured the provision script for using 
 
 You can setup the enviroment locally by executing this command:
 
-    $ ./bin/local-provision.sh
+    $ ./bin/jenkins/local-provision.sh
 
 This command creates three kinds of containers:
 
@@ -49,7 +49,7 @@ This command creates three kinds of containers:
 
 Once the scripts finish you can check the machine ip executing `docker-machine ip snappy-jenkins-local` and access the jenkins master instance from the browser at ```http://<server_ip>:8080```
 
-If you want to try the jobs you can sync the credentials from an accessible running server, see `Syncing servers` below.
+If you want to try the jobs you can download the credentials from an accessible running server, see `Initializing servers` below.
 
 ### Cloud provision
 
@@ -61,7 +61,7 @@ Before executing the provision script you should have at least the ```$OS_USERNA
 
 The cloud provision process relies on the existence of a prebuilt image on the glance endpoint with the required setup in place. This images can be created with the command:
 
-    $ ./bin/create-image.sh
+    $ ./bin/jenkins/create-image.sh
 
 This command creates a new seed instance based on trusty64, provisions it with the 1.9.1 version of docker (with the AUFS storage backend enabled) and sets up some additional packages, paths and files required for the system. Then a new image created from it is stored so that it can be used to create new instances.
 
@@ -71,7 +71,7 @@ There are additional requirements for the cloud provision besides having loaded 
 
 To setup the CI instance in the cloud just execute:
 
-    $ ./bin/cloud-provision.sh
+    $ ./bin/jenkins/cloud-provision.sh
 
 This command creates a new VM with the same kind of containers as in the local provision, but now the proxy container is used for receiving connections from github, where the Snappy project is held, in order to trigger job executions in response to PR submissions. This is described in the following image:
 
@@ -85,7 +85,7 @@ You can retrieve the job history from an accessible running server, and also ini
 
 Once the server is deployed in order to update the containers you can use the redeploy script:
 
-    $ ./bin/cloud-redeploy.sh
+    $ ./bin/jenkins/cloud-redeploy.sh
 
 It stops the running containers, pulls the new images and restarts the cluster.
 
@@ -107,17 +107,17 @@ With cloud provision, in order to spin up the jenkins host an image with a name 
 
 With both kinds of provision, for the jobs to be able to run your openstack user should be able to access snappy images with a name of the form ```ubuntu-core/custom/ubuntu-rolling-snappy-core-amd64-edge*``` for the rolling release tests and ```ubuntu-core/custom/ubuntu-1504-snappy-core-amd64-edge*``` for the 15.04 release tests. This kind of images can be created with the snappy-cloud-image tool [4]. The configuration can be changed with the release and channel switches in the respective jobs.
 
-## Syncing servers
+## Data backup and restore
 
-In order to deploy a new server it may be useful to keep the configuration and job history from a previous one. There are two scripts for doing so, `sync-data.sh` copies the job history, it can be executed with:
+The job history can be saved and restored using the `./bin/jenkins/backup.sh` and `./bin/jenkins/restore.sh` scripts. Executing:
 
-    $ ./bin/sync-data.sh <source_ip> <target_ip>
+    $ ./bin/jenkins/backup.sh <environment>
 
-`init-credentials.sh` gets the credentials from a vault server (see below) and puts them into a local or remote cluster. In order to execute this script you must be able to authenticate against the Vault server. It is executed with:
+creates a `backup.tar.gz` file in the current directory with all the existing executions of the jobs, being `<environment>` `local` or `remote` (default).
 
-    $ ./bin/secrets/init-credentials.sh <environment>
+These backup files can be restored to a running server with:
 
-with `<environment>` being either `local` or `remote` (default).
+    $ ./bin/jenkins/restore.sh /path/to/backup/file <environment>
 
 ## Secrets management
 
@@ -132,6 +132,15 @@ After the provisioning, a `vault-remote.txt` text file is created in the current
 You can also try the deployment locally with:
 
     $ ./bin/secrets/local-provision.sh
+
+`init-credentials.sh` gets the credentials from the vault server and puts them into a local or remote cluster. In order to execute this script you must be able to authenticate against the Vault server. It is executed with:
+
+    $ ./bin/secrets/init-credentials.sh <environment>
+
+with `<environment>` being either `local` or `remote` (default).
+
+Finally, you can also backup and restore the credentials with the `./bin/secrets/backup.sh` and `./bin/secrets/restore.sh` scripts.
+
 
 [1] https://github.com/ubuntu-core/snappy
 

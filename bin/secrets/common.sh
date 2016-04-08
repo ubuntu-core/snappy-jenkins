@@ -7,12 +7,26 @@ export TEST_SPI_CREDENTIALS_PATH=secret/jenkins/tests/spi
 export TEST_BOT_GPG_PRIVATE_KEY_PATH=secret/jenkins/tests/gpg/private.key
 export TEST_BOT_GPG_PASSWORD=secret/jenkins/tests/gpg/password
 
+setup_vault_addr(){
+    machine_name=$1
+
+    export VAULT_ADDR=http://$(docker-machine ip "$machine_name"):8200
+}
+
+vault_machine_name(){
+    environment=$1
+    os_username=${2:-${OS_USERNAME}}
+    os_region_name=${3:-${OS_REGION_NAME}}
+
+    echo "vault-${environment}-${os_username}-${os_region_name}"
+}
+
 setup_vault(){
     machine_name=$1
     deploy_env=$2
 
     # vault client should be installed locally!
-    export VAULT_ADDR=http://$(docker-machine ip "$machine_name"):8200
+    setup_vault_addr "$machine_name"
     echo "Waiting for the vault server to settle"
     sleep 10
 

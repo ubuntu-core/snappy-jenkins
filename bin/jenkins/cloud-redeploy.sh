@@ -2,12 +2,18 @@
 
 set -x
 
-. ./bin/common.sh
-. ./bin/cloud-common.sh
+. ./bin/jenkins/common.sh
+. ./bin/jenkins/cloud-common.sh
 
 eval $(docker-machine env "$NAME_REMOTE")
 docker-compose -f ./config/jenkins/cluster.yml pull
+
+. ./bin/jenkins/backup.sh
+
 docker-compose -f ./config/jenkins/cluster.yml down
+
+. ./bin/jenkins/restore.sh backup.tar.gz
+
 docker-compose -f ./config/jenkins/cluster.yml up -d
 
 . ./bin/secrets/init-credentials.sh

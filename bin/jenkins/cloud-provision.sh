@@ -1,8 +1,8 @@
 #!/bin/sh
 set -x
 
-. ./bin/common.sh
-. ./bin/cloud-common.sh
+. ./bin/jenkins/common.sh
+. ./bin/jenkins/cloud-common.sh
 
 PRIVATE_KEY_PATH=${1:-$DEFAULT_PRIVATE_KEY_PATH}
 
@@ -54,4 +54,4 @@ INSTANCE_IP=$(wait_for_ip "$INSTANCE_ID")
 
 add_instance_to_docker_machine "$NAME_REMOTE" "$INSTANCE_IP" "$PRIVATE_KEY_PATH"
 
-. ./bin/cloud-redeploy.sh
+. ./bin/jenkins/cloud-redeploy.sh

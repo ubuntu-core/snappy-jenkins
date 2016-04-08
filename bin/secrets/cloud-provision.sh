@@ -32,7 +32,7 @@ fi
 . ./bin/secrets/common.sh
 
 IMAGE_NAME="uci/cloudimg/$DIST-amd64.img"
-VAULT_REMOTE="vault-remote-${OS_USERNAME}-${OS_REGION_NAME}"
+VAULT_REMOTE=$(vault_machine_name "remote")
 VAULT_SECGROUP="vault"
 
 SLAVE_SSH_PRIVATE_KEY_PATH=$1

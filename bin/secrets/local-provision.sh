@@ -3,7 +3,7 @@ set -x
 
 . ./bin/secrets/common.sh
 
-NAME_LOCAL="vault-local"
+NAME_LOCAL=$(vault_machine_name "local")
 
 docker-machine rm -f "$NAME_LOCAL"
 docker-machine create -d kvm "$NAME_LOCAL"
