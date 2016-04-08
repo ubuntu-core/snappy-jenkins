@@ -6,7 +6,7 @@ services:
       - 8600:53/udp
       - 8400:8400
       - 8500:8500
-    command: "-server -bootstrap -ui-dir /ui"
+    command: "-server -bootstrap -ui-dir /non-ui"
     volumes:
       - /mnt:/data
     restart: always
