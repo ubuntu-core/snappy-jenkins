@@ -71,7 +71,8 @@ set -ex
 export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/ubuntu-core/snappy
 
-sudo mk-build-deps -i -t "apt-get --yes --no-install-recommends"
+sudo apt update
+sudo apt build-dep -y ./
 
 rm -rf ../*.deb ../*.changes ../*.dsc ../*.tar.xz ../*.upload
 
