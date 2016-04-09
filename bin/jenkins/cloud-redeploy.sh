@@ -12,9 +12,9 @@ docker-compose -f ./config/jenkins/cluster.yml pull
 
 docker-compose -f ./config/jenkins/cluster.yml down
 
-. ./bin/jenkins/restore.sh backup.tar.gz
-
 docker-compose -f ./config/jenkins/cluster.yml up -d
+
+. ./bin/jenkins/restore.sh backup.tar.gz
 
 . ./bin/secrets/init-credentials.sh
 
