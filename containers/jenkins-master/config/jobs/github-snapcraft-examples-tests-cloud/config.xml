@@ -89,7 +89,8 @@ sergiusens
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>#!/bin/bash
+      <command><![CDATA[
+      #!/bin/bash
 . $HOME/.openstack/novarc
 
 if [ "$ghprbTargetBranch" = "1.x" ]; then
@@ -115,7 +116,7 @@ sudo apt-get update
 ./runtests.sh examples --subunit --ip $ip
 
 subunit2junitxml results.subunit -o results.xml
-</command>
+]]></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
