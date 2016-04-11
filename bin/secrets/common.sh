@@ -1,11 +1,18 @@
 #!/bin/sh
 
-export TEST_SSH_KEY_SECRET_PATH=secret/jenkins/tests/ssh/id_rsa
-export TEST_OPENSTACK_CREDENTIALS_SECRET_PATH=secret/jenkins/tests/openstack/novarc
-export TEST_JENKINS_CONFIG_SECRET_PATH=secret/jenkins/config
-export TEST_SPI_CREDENTIALS_PATH=secret/jenkins/tests/spi
-export TEST_BOT_GPG_PRIVATE_KEY_PATH=secret/jenkins/tests/gpg/private.key
-export TEST_BOT_GPG_PASSWORD=secret/jenkins/tests/gpg/password
+setup_vault_addr(){
+    machine_name=$1
+
+    export VAULT_ADDR=http://$(docker-machine ip "$machine_name"):8200
+}
+
+vault_machine_name(){
+    environment=$1
+    os_username=${2:-${OS_USERNAME}}
+    os_region_name=${3:-${OS_REGION_NAME}}
+
+    echo "vault-${environment}-${os_username}-${os_region_name}"
+}
 
 setup_vault_addr(){
     machine_name=$1
@@ -24,6 +31,7 @@ vault_machine_name(){
 setup_vault(){
     machine_name=$1
     deploy_env=$2
+    credentials_dir=$3
 
     # vault client should be installed locally!
     setup_vault_addr "$machine_name"
@@ -32,6 +40,8 @@ setup_vault(){
 
     echo "Keep the following keys and root token in a safe place! They are unique for this deployment and will be saved in a vault-${deploy_env}.txt file in the current directory"
     init_output=$(vault init)
+    echo "$init_output" > "./vault-${deploy_env}.txt"
+
     echo "The keys will be used next to unseal the server"
     for index in $(seq 3); do
         key=$(echo "$init_output" | grep "Key ${index}:" | awk '{ print $3 }')
@@ -41,13 +51,9 @@ setup_vault(){
     root_token=$(echo "$init_output" | grep "Initial Root Token:" | awk '{ print $4 }')
     echo "Waiting for the vault server to settle"
     sleep 3
-    vault auth "$root_token"
 
-    vault write $TEST_SSH_KEY_SECRET_PATH value=@"$SLAVE_SSH_PRIVATE_KEY_PATH"
-    vault write $TEST_OPENSTACK_CREDENTIALS_SECRET_PATH value=@"$SLAVE_OPENSTACK_CREDENTIALS_PATH"
-    vault write $TEST_SPI_CREDENTIALS_PATH value=@"$SLAVE_SPI_CREDENTIALS_PATH"
-    vault write $TEST_BOT_GPG_PRIVATE_KEY_PATH value=@"$SLAVE_BOT_GPG_PRIVATE_KEY_PATH"
-    vault write $TEST_BOT_GPG_PASSWORD value="$SLAVE_BOT_GPG_PASSWORD"
-
-    echo "$init_output" > "./vault-${deploy_env}.txt"
+    if [ ! -z "$credentials_dir" ]; then
+        vault auth "$root_token"
+        . ./bin/secrets/restore.sh "$credentials_dir"
+    fi
 }

@@ -133,9 +133,9 @@ You can also try the deployment locally with:
 
     $ ./bin/secrets/local-provision.sh
 
-`init-credentials.sh` gets the credentials from the vault server and puts them into a local or remote cluster. In order to execute this script you must be able to authenticate against the Vault server. It is executed with:
+`bin/secrets/inject.sh` gets the credentials from a vault server (see below) and puts them into a local or remote cluster. In order to execute this script you must be able to authenticate against the Vault server. It is executed with:
 
-    $ ./bin/secrets/init-credentials.sh <environment>
+    $ ./bin/secrets/inject.sh <environment>
 
 with `<environment>` being either `local` or `remote` (default).
 

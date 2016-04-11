@@ -1,32 +1,6 @@
 #!/bin/sh
 set -x
 
-if [ -z "$1" ]
-then
-    echo "No ssh private key path given as first argument, exiting"
-    exit 1
-fi
-if [ -z "$2" ]
-then
-    echo "No Openstack credentials path given as second argument, exiting"
-    exit 1
-fi
-if [ -z "$3" ]
-then
-    echo "No snappy product integration credentials path given as third argument, exiting"
-    exit 1
-fi
-if [ -z "$4" ]
-then
-    echo "No snappy-m-o GPG private key given as fourth argument, exiting"
-    exit 1
-fi
-if [ -z "$5" ]
-then
-    echo "No snappy-m-o GPG password given as fifth argument, exiting"
-    exit 1
-fi
-
 . ./bin/common.sh
 . ./bin/cloud-common.sh
 . ./bin/secrets/common.sh
@@ -34,12 +8,6 @@ fi
 IMAGE_NAME="uci/cloudimg/$DIST-amd64.img"
 VAULT_REMOTE=$(vault_machine_name "remote")
 VAULT_SECGROUP="vault"
-
-SLAVE_SSH_PRIVATE_KEY_PATH=$1
-SLAVE_OPENSTACK_CREDENTIALS_PATH=$2
-SLAVE_SPI_CREDENTIALS_PATH=$3
-SLAVE_BOT_GPG_PRIVATE_KEY_PATH=$4
-SLAVE_BOT_GPG_PASSWORD=$5
 
 create_vault_security_group() {
     openstack security group delete $VAULT_SECGROUP
@@ -75,4 +43,4 @@ create_docker_machine
 eval $(docker-machine env "$VAULT_REMOTE")
 docker-compose -f ./config/vault/cluster.yml up -d
 
-setup_vault $VAULT_REMOTE remote
+setup_vault $VAULT_REMOTE remote $1
