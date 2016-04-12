@@ -6,40 +6,30 @@ set -x
 
 environment=${1:-remote}
 
-vault_read(){
-    local path="$1"
-    local value=$(vault read -field=value "$path")
-
-    if [ "$value" != "No value found at $path" ]; then
-        echo "$value"
-    else
-        echo ""
-    fi
-}
-
 remote_copy(){
-    local value="$1"
-    local path="$2"
+    local vault_path="$1"
+    local file_path="$2"
     local nodes="$3"
 
-    local dir=$(mktemp -d)
-    local file="$dir/value"
-    echo "$value" > "$file"
+    local file=$(mktemp)
+    vault_read_to_file "$vault_path" "$file"
 
     for node in $nodes; do
-        docker cp "$file" "$node":"$path"
+        docker cp "$file" "$node":"$file_path"
     done
 
-    rm -rf "$dir"
+    rm -rf "$file"
 }
 
 remote_execute(){
     local script="$1"
     local nodes="${2:-$all_nodes}"
 
-    for node in $nodes; do
-        docker exec -u root -t "$node" bash -c "$script"
-    done
+    if [ "$script" != "" ]; then
+        for node in $nodes; do
+            docker exec -u root -t "$node" bash -c "$script"
+        done
+    fi
 }
 
 inject(){
@@ -58,11 +48,11 @@ inject(){
         else
             if [ "$line" != "Keys" ]; then
                 local vault_path="$base_path$line"
-                local value=$(vault_read "$vault_path")
                 local file_path="${paths_map[$vault_path]}"
                 if [ "$file_path" != "" ]; then
-                    remote_copy "$value" "$file_path" "$nodes"
+                    remote_copy "$vault_path" "$file_path" "$nodes"
                 fi
+                rm -rf "$file"
             fi
         fi
     done
