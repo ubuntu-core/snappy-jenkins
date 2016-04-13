@@ -39,3 +39,8 @@ nodes_map["secret/jenkins/tests/practitest/"]="$slaves"
 paths_map["secret/jenkins/tests/practitest/config.ini"]="/home/jenkins-slave/.practitest/config.ini"
 before_scripts_map["secret/jenkins/tests/practitest/"]="rm -rf /home/jenkins-slave/.practitest && mkdir -p /home/jenkins-slave/.practitest"
 after_scripts_map["secret/jenkins/tests/practitest/"]="chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.practitest"
+
+nodes_map["secret/jenkins/tests/snapcraft/"]="$slaves"
+paths_map["secret/jenkins/tests/snapcraft/snapcraft.cfg"]="/home/jenkins-slave/.config/snapcraft/snapcraft.cfg"
+before_scripts_map["secret/jenkins/tests/snapcraft/"]="rm -rf /home/jenkins-slave/.config/snapcraft && mkdir -p /home/jenkins-slave/.config/snapcraft/"
+after_scripts_map["secret/jenkins/tests/snapcraft/"]="chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.config/snapcraft"
