@@ -34,6 +34,11 @@ for instance in $(openstack server list -c Name -f value)
 do
   openstack server delete $instance
 done
+
+for group in $(openstack security group list -c Name -f value | grep -v ssh | grep -v default)
+do
+  openstack security group delete $group
+done
       </command>
     </hudson.tasks.Shell>
   </builders>
