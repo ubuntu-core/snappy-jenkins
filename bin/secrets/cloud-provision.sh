@@ -1,7 +1,6 @@
 #!/bin/sh
 set -x
 
-. ./bin/common.sh
 . ./bin/cloud-common.sh
 . ./bin/secrets/common.sh
 

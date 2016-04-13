@@ -1,6 +1,5 @@
 #!/bin/sh
 
-export DIST="trusty"
 export NAME=snappy-jenkins
 export SECGROUP=$NAME
 export JENKINS_HOME="/var/jenkins_home"
@@ -22,20 +21,6 @@ create_security_group() {
     # https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=docker
     openstack security group rule create --proto tcp --dst-port 2376 --src-ip 10.0.0.0/8 $SECGROUP
     openstack security group rule create --proto tcp --dst-port 8081 --src-ip 0.0.0.0/0 $SECGROUP
-}
-
-create_keypair(){
-    local private_key=$1
-    local keypair_name=$2
-
-    local tmpdir=$(mktemp -d)
-    local public_key=$tmpdir/$keypair_name
-
-    openstack keypair delete $keypair_name
-    ssh-keygen -y -f $private_key > $public_key
-    openstack keypair create --public-key $public_key $keypair_name
-
-    rm -rf $tmpdir
 }
 
 safe_restart(){

@@ -3,7 +3,7 @@
 set -x
 
 . ./bin/jenkins/common.sh
-. ./bin/jenkins/cloud-common.sh
+. ./bin/cloud-common.sh
 
 eval $(docker-machine env "$NAME_REMOTE")
 docker-compose -f ./config/jenkins/cluster.yml pull
