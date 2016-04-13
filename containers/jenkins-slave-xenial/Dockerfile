@@ -30,10 +30,12 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   # snapcraft dependencies
   bzr devscripts dpkg-dev equivs git mercurial pyflakes \
   python3-apt python3-docopt python3-coverage \
-  python3-fixtures python3-jsonschema python3-mccabe \
-  python3-pep8 python3-petname python3-pip python3-requests \
-  python3-testscenarios python3-testtools python3-yaml \
-  python3-lxml && rm -rf /var/lib/apt/lists/*
+  python3-fixtures python3-jsonschema python3-lxml \
+  python3-magic python3-mccabe python3-pep8 python3-petname \
+  python3-pip python3-progressbar python3-requests \
+  python3-requests-oauthlib python3-requests-toolbelt \
+  python3-ssoclient python3-testscenarios python3-testtools \
+  python3-xdg python3-yaml && rm -rf /var/lib/apt/lists/*
 
 # make jenkins-slave sudoer
 RUN echo "jenkins-slave ALL=NOPASSWD: ALL" >> /etc/sudoers
