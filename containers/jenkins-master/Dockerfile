@@ -44,6 +44,9 @@ COPY config/jobs/github-snapcraft-autopkgtest-cloud/config.xml \
 COPY config/jobs/github-snapcraft-examples-tests-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snapcraft-examples-tests-cloud.xml
 
+COPY config/jobs/scalingstack-cleanup/config.xml \
+  /usr/share/jenkins/ref/job-definitions/scalingstack-cleanup.xml
+
 COPY config/jobs/cleanup-cloud-image/config.xml \
   /usr/share/jenkins/ref/job-definitions/cleanup-cloud-image.xml
 
