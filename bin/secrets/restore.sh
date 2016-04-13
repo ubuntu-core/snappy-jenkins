@@ -28,7 +28,7 @@ restore_dir(){
         for completefile in $(find "$dir" -maxdepth 1 -type f); do
             echo "writing file $file"
             file=$(strip_base_dir "$completefile")
-            vault write "secret$file" value=@"$completefile"
+            vault_write_from_file "$completefile" "secret$file"
         done
     done
 }

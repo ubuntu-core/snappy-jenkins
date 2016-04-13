@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 setup_vault_addr(){
     machine_name=$1
@@ -14,18 +14,23 @@ vault_machine_name(){
     echo "vault-${environment}-${os_username}-${os_region_name}"
 }
 
-setup_vault_addr(){
-    machine_name=$1
+vault_read_to_file(){
+    local vault_path="$1"
+    local file_path="$2"
+    local value=$(vault read -field=value "$vault_path")
 
-    export VAULT_ADDR=http://$(docker-machine ip "$machine_name"):8200
+    if [ "$value" != "No value found at $vault_path" ]; then
+        echo -n "$value" | uudecode -o /dev/stdout > "$file_path"
+    else
+        echo ""
+    fi
 }
 
-vault_machine_name(){
-    environment=$1
-    os_username=${2:-${OS_USERNAME}}
-    os_region_name=${3:-${OS_REGION_NAME}}
+vault_write_from_file(){
+    local file_path="$1"
+    local vault_path="$2"
 
-    echo "vault-${environment}-${os_username}-${os_region_name}"
+    uuencode -m "$file_path" /dev/stdout | vault write "$vault_path" value=-
 }
 
 setup_vault(){

@@ -24,7 +24,7 @@ backup_dir(){
             if [ "$line" != "Keys" ]; then
                 local dir="$base_target_dir/$source_dir"
                 mkdir -p "$dir"
-                vault read -field=value "$source_dir$line" > "$dir/$line"
+                vault_read_to_file "$source_dir$line" "$dir/$line"
             fi
         fi
     done

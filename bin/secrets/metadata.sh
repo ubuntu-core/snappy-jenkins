@@ -10,7 +10,10 @@ nodes_map["secret/jenkins/config/"]="$master"
 paths_map["secret/jenkins/config/credentials.xml"]="/var/jenkins_home/credentials.xml"
 paths_map["secret/jenkins/config/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml"]="/var/jenkins_home/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml"
 paths_map["secret/jenkins/config/secret.key"]="/var/jenkins_home/secret.key"
+
+nodes_map["secret/jenkins/config/secrets/"]="$master"
 paths_map["secret/jenkins/config/secrets/master.key"]="/var/jenkins_home/secrets/master.key"
+paths_map["secret/jenkins/config/secrets/hudson.util.Secret"]="/var/jenkins_home/secrets/hudson.util.Secret"
 paths_map["secret/jenkins/config/users/admin/config.xml"]="/var/jenkins_home/users/admin/config.xml"
 
 nodes_map["secret/jenkins/tests/gpg/"]="$slaves"
