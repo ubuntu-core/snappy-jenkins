@@ -1,6 +1,7 @@
 #!/bin/bash
 set -x
 
+. ./bin/cloud-common.sh
 . ./bin/secrets/common.sh
 . ./bin/secrets/metadata.sh
 
@@ -60,15 +61,17 @@ inject(){
     remote_execute "$after_script" "$nodes"
 }
 
-machine_name=$(vault_machine_name "$environment")
-setup_vault_addr "$machine_name"
+vault_machine_name=$(vault_machine_name "$environment")
+setup_vault_addr "$vault_machine_name"
 
 echo "Access to Vault is required for retrieving secrets"
 
-eval $(docker-machine env "snappy-jenkins-${environment}")
+machine_name=$(swarm_master_name)
+
+eval $(docker-machine env --swarm "$machine_name")
 
 inject secret/
 
-docker-machine ssh "snappy-jenkins-${environment}" sync
+docker-machine ssh "${machine_name}" sync
 
 docker restart $master

@@ -6,8 +6,8 @@ services:
   snappy-proxy:
     build: ../../containers/jenkins-proxy
 
-  jenkins-slave-vivid-1:
+  jenkins-slave-vivid:
     build: ../../containers/jenkins-slave-vivid
 
-  jenkins-slave-xenial-1:
+  jenkins-slave-xenial:
     build: ../../containers/jenkins-slave-xenial

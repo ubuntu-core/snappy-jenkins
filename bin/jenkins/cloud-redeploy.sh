@@ -5,7 +5,10 @@ set -x
 . ./bin/jenkins/common.sh
 . ./bin/cloud-common.sh
 
-eval $(docker-machine env "$NAME_REMOTE")
+machine_name=$(swarm_master_name)
+
+eval $(docker-machine env --swarm "$machine_name")
+
 docker-compose -f ./config/jenkins/cluster.yml pull
 
 . ./bin/jenkins/backup.sh
@@ -13,6 +16,8 @@ docker-compose -f ./config/jenkins/cluster.yml pull
 docker-compose -f ./config/jenkins/cluster.yml down
 
 docker-compose -f ./config/jenkins/cluster.yml up -d
+
+docker-compose -f ./config/jenkins/cluster.yml scale jenkins-slave-xenial=5
 
 . ./bin/jenkins/restore.sh backup.tar.gz
 
