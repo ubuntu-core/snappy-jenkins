@@ -25,7 +25,7 @@
       <spec>H/30 * * * *</spec>
       <entries>
         <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[http://snapversion:8000/ubuntu-core.canonical/edge/amd64]]></url>
+          <url><![CDATA[http://snapversion:8000/ubuntu-core/edge/amd64]]></url>
           <proxyActivated>false</proxyActivated>
           <checkStatus>false</checkStatus>
           <statusCode>200</statusCode>
@@ -38,7 +38,7 @@
           </contentTypes>
         </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
         <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[http://snapversion:8000/canonical-pc-linux.canonical/edge/amd64]]></url>
+          <url><![CDATA[http://snapversion:8000/canonical-pc-linux/edge/amd64]]></url>
           <proxyActivated>false</proxyActivated>
           <checkStatus>false</checkStatus>
           <statusCode>200</statusCode>
@@ -51,7 +51,7 @@
           </contentTypes>
         </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
         <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[http://snapversion:8000/canonical-pc.canonical/edge/all]]></url>
+          <url><![CDATA[http://snapversion:8000/canonical-pc/edge/all]]></url>
           <proxyActivated>false</proxyActivated>
           <checkStatus>false</checkStatus>
           <statusCode>200</statusCode>
