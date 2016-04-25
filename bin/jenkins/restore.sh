@@ -2,7 +2,7 @@
 
 set -x
 
-. ./bin/jenkins/common.sh
+. ./bin/cloud-common.sh
 
 if [ -z "$1" ]
 then
@@ -11,9 +11,8 @@ then
 fi
 
 BACKUP_FILE="$1"
-ENV=${2:-remote}
 
-machine_name="$NAME-$ENV"
+machine_name=$(swarm_public_name)
 
 eval $(docker-machine env "$machine_name")
 
@@ -23,4 +22,4 @@ docker-machine ssh "$machine_name" sudo rm -rf /home/ubuntu/backup.tar.gz
 docker-machine scp "$BACKUP_FILE" "$machine_name":/home/ubuntu/backup.tar.gz
 docker-machine ssh "$machine_name" sudo docker run --rm --volumes-from jenkins_jenkins-master-service_1 -v /home/ubuntu:/backup ubuntu:xenial tar xvfz /backup/backup.tar.gz
 
-safe_restart "$ENV"
+safe_restart

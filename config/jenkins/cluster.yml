@@ -6,6 +6,8 @@ services:
       - 8080:8080
     restart: always
     user: root
+    environment:
+      - "constraint:public==yes"
 
   snappy-proxy:
     depends_on:
@@ -14,6 +16,8 @@ services:
     ports:
       - 8081:80
     restart: always
+    environment:
+      - "constraint:public==yes"
 
   snapversion:
     image: ubuntucore/snapversion
@@ -21,22 +25,14 @@ services:
       - 8000:8000
     restart: always
 
-  jenkins-slave-vivid-1:
+  jenkins-slave-vivid:
     image: ubuntucore/snappy-jenkins-slave-vivid
     command: -username admin -password snappy -executors 2 -name jenkins-slave-vivid-1 -labels vivid -master http://jenkins-master-service:8080
     privileged: true
     restart: always
     user: jenkins-slave
 
-  jenkins-slave-xenial-1:
-    extends: jenkins-slave-vivid-1
+  jenkins-slave-xenial:
+    extends: jenkins-slave-vivid
     image: ubuntucore/snappy-jenkins-slave-xenial
     command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-1 -labels xenial -master http://jenkins-master-service:8080
-
-  jenkins-slave-xenial-2:
-    extends: jenkins-slave-xenial-1
-    command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-2 -labels xenial -master http://jenkins-master-service:8080
-
-  jenkins-slave-xenial-3:
-    extends: jenkins-slave-xenial-1
-    command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-3 -labels xenial -master http://jenkins-master-service:8080
