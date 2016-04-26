@@ -36,7 +36,8 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   python3-requests-oauthlib python3-requests-toolbelt \
   python3-ssoclient python3-testscenarios python3-testtools \
   python3-xdg python3-yaml \
-  snapcraft && rm -rf /var/lib/apt/lists/*
+  snapcraft && rm -rf /var/lib/apt/lists/* && \
+  update-ca-certificates -f
 
 # make jenkins-slave sudoer
 RUN echo "jenkins-slave ALL=NOPASSWD: ALL" >> /etc/sudoers
