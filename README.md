@@ -17,7 +17,7 @@ To point your docker client to the engine in a local provisioned server:
 
     eval $(docker-machine env snappy-jenkins-local)
 
-The cloud environment uses Docker Swarm as the container scheduler, the command for that case is:
+The cloud environment uses Docker Swarm as the container scheduler, the command it that case is:
 
     eval $(docker-machine env --swarm swarm-master-${OS_USERNAME}-${OS_REGION_NAME})
 
@@ -63,11 +63,11 @@ In this case you need to have OpenStack credentials loaded, for example by sourc
 
 Before executing the provision script you should have at least the ```$OS_USERNAME``` and ```$OS_REGION_NAME``` environment variables set. This credentials are used for creating the hosts where the CI environment itself is going to run, and may be different to the ones used later for the Ubuntu Core instances, more on this later. The scripts also assume that you have a valid private key at `~/.canonistack/${OS_USERNAME}_${OS_REGION_NAME}.key`, if that's not the case you can pass the path as the last argument.
 
-The cloud provision process consist of the creation of the swarm cluster and later provision of the images, for it to work we need first to have set up the secrets and key-value backend, which can be done with this command (more on this in the Secrets section below):
+The cloud provision process begins consist of the creation of the swarm cluster and later provision of the images, for it to work wee need firat to have set up the secrets and key-value backend, which can be done with this command (more on this in the Secrets section below):
 
     $ ./bin/secrets/cloud-provision.sh
 
-Then the swarm cluster can be created and the containers initially deployed with this single command:
+Then the swarm cluster can be created and the containers initially deployed with this is done with this single command:
 
     $ ./bin/jenkins/create-cluster.sh
 
@@ -103,7 +103,7 @@ The Jenkins master container has the [https://wiki.jenkins-ci.org/display/JENKIN
 
 With cloud provision, in order to spin up the jenkins host an image with a name of the form "wily-daily-amd64" should be accessible for the current user.
 
-With both kinds of provision, for the jobs to be able to run your openstack user should be able to access snappy images with a name of the form ```ubuntu-core/custom/ubuntu-16-snappy-core-amd64-edge*``` for the 16 series release tests and ```ubuntu-core/custom/ubuntu-1504-snappy-core-amd64-edge*``` for the 15.04 release tests. This kind of images can be created with the [https://github.com/ubuntu-core/snappy-cloud-image](snappy-cloud-image tool). The configuration can be changed with the release and channel switches in the respective jobs.
+With both kinds of provision, for the jobs to be able to run your openstack user should be able to access snappy images with a name of the form ```ubuntu-core/custom/ubuntu-rolling-snappy-core-amd64-edge*``` for the rolling release tests and ```ubuntu-core/custom/ubuntu-1504-snappy-core-amd64-edge*``` for the 15.04 release tests. This kind of images can be created with the [https://github.com/ubuntu-core/snappy-cloud-image](snappy-cloud-image tool). The configuration can be changed with the release and channel switches in the respective jobs.
 
 ## Data backup and restore
 

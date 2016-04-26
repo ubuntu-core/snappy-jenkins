@@ -1,0 +1,30 @@
+version: "2"
+
+networks:
+  riemann:
+    driver: overlay
+
+services:
+  riemannserver:
+    container_name: riemann-server
+    image: "nathanleclaire/riemann-server:article"
+    networks: [riemann]
+    ports:
+      - "5556:5556"
+    restart: always
+
+  riemannhealth:
+    image: "nathanleclaire/riemann-health:article"
+    networks: [riemann]
+    pid: host
+    environment:
+      - "affinity:container!=*riemannhealth*"
+    volumes:
+      - "/etc/hostname:/etc/hostname:ro"
+    restart: always
+
+  riemanndash:
+    image: "nathanleclaire/riemann-dash:article"
+    ports:
+      - "4567:4567"
+    restart: always
