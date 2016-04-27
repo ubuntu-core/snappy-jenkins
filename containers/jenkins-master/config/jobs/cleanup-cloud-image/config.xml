@@ -33,10 +33,10 @@
 for channel in alpha stable edge
 do
   echo &quot;cleanup for 1504 $channel&quot;
-	snappy-cloud-image -loglevel debug -release 1504 -channel $channel -action cleanup
+  snappy-cloud-image -loglevel debug -release 1504 -os-channel $channel -kernel-channel $channel -gadget-channel $channel -action cleanup
 done
 echo &quot;cleanup for rolling edge&quot;
-snappy-cloud-image -loglevel debug -release rolling -channel edge -action cleanup
+snappy-cloud-image -loglevel debug -release rolling -os-channel edge -kernel-channel edge -gadget-channel edge -action cleanup
       </command>
     </hudson.tasks.Shell>
   </builders>
