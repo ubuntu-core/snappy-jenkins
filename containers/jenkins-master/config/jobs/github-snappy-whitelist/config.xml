@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>2</daysToKeep>
+    <numToKeep>20</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.15.0">
+      <projectUrl>https://github.com/ubuntu-core/snappy/</projectUrl>
+      <displayName></displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
+        <url>https://github.com/snappy-m-o/snappy-jenkins</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>refs/heads/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+  </scm>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.29.8">
+      <spec>H/5 * * * *</spec>
+      <latestVersion>3</latestVersion>
+      <triggerPhrase>add to whitelist</triggerPhrase>
+      <configVersion>3</configVersion>
+      <adminlist>chipaca
+mvo5
+niemeyer
+      </adminlist>
+      <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
+      <orgslist>ubuntu-core</orgslist>
+      <cron>H/5 * * * *</cron>
+      <buildDescTemplate></buildDescTemplate>
+      <onlyTriggerPhrase>true</onlyTriggerPhrase>
+      <useGitHubHooks>true</useGitHubHooks>
+      <permitAll>false</permitAll>
+      <whitelist></whitelist>
+      <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
+      <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
+      <whiteListTargetBranches>
+        <org.jenkinsci.plugins.ghprb.GhprbBranch>
+          <branch></branch>
+        </org.jenkinsci.plugins.ghprb.GhprbBranch>
+      </whiteListTargetBranches>
+      <project>github-snappy-merge</project>
+      <__project class="project" reference="../../.."/>
+      <gitHubAuthId>73d060a3-d1dd-4445-9c98-f164d6d755bf</gitHubAuthId>
+      <extensions>
+        <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+          <commitStatusContext>merge</commitStatusContext>
+          <triggeredStatus>Triggered</triggeredStatus>
+          <startedStatus>Started</startedStatus>
+          <statusUrl></statusUrl>
+          <completedStatus>
+            <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+              <message>Success</message>
+              <result>SUCCESS</result>
+            </org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+          </completedStatus>
+        </org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+      </extensions>
+    </org.jenkinsci.plugins.ghprb.GhprbTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command><![CDATA[#!/bin/bash
+branch=add-${ghprbPullAuthorLogin}-to-whitelist
+
+git config --global user.email "snappy-m-o@ubuntu-core"
+git config --global user.name "snappy-m-o"
+git  config remote.origin.url "git@github.com:snappy-m-o/snappy-jenkins.git"
+
+ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+git branch -D ${branch}
+git checkout -b ${branch}
+
+for job in github-snappy-autopkgtest-cloud github-snappy-integration-tests-cloud github-snappy-merge
+do
+  sed -i "s#<whitelist>\(.*\)</whitelist>#<whitelist>\1 ${ghprbPullAuthorLogin}</whitelist>#" containers/jenkins-master/config/jobs/${job}/config.xml
+done
+
+git commit -am"add ${ghprbPullAuthorLogin} to whitelist"
+git push -f origin ${branch}
+
+cat <<EOF | tee ./payload
+{
+"title": "Add ${ghprbPullAuthorLogin} to whitelist",
+"body": "Add ${ghprbPullAuthorLogin} to whitelist",
+"head": "snappy-m-o:${branch}",
+"base": "master"
+}
+EOF
+
+curl -X POST -H "Accept: application/vnd.github.v3.full+json" --data @./payload -u $GHUSER:$GHPASS https://api.github.com/repos/ubuntu-core/snappy-jenkins/pulls
+      ]]>
+      </command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.7">
+      <bindings>
+        <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+          <credentialsId>bcb529d8-9e29-4592-bad0-8414dc815f68</credentialsId>
+          <usernameVariable>GHUSER</usernameVariable>
+          <passwordVariable>GHPASS</passwordVariable>
+        </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+      </bindings>
+    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+  </buildWrappers>
+</project>
