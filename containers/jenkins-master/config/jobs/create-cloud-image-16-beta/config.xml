@@ -25,7 +25,7 @@
       <spec>H/30 * * * *</spec>
       <entries>
         <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[http://snapversion:8000/ubuntu-core/edge/amd64]]></url>
+          <url><![CDATA[http://snapversion:8000/ubuntu-core/beta/amd64]]></url>
           <proxyActivated>false</proxyActivated>
           <checkStatus>false</checkStatus>
           <statusCode>200</statusCode>
@@ -38,7 +38,7 @@
           </contentTypes>
         </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
         <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[http://snapversion:8000/canonical-pc-linux/edge/amd64]]></url>
+          <url><![CDATA[http://snapversion:8000/canonical-pc-linux/beta/amd64]]></url>
           <proxyActivated>false</proxyActivated>
           <checkStatus>false</checkStatus>
           <statusCode>200</statusCode>
@@ -51,7 +51,7 @@
           </contentTypes>
         </org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
         <org.jenkinsci.plugins.urltrigger.URLTriggerEntry>
-          <url><![CDATA[http://snapversion:8000/canonical-pc/edge/all]]></url>
+          <url><![CDATA[http://snapversion:8000/canonical-pc/beta/all]]></url>
           <proxyActivated>false</proxyActivated>
           <checkStatus>false</checkStatus>
           <statusCode>200</statusCode>
@@ -74,8 +74,8 @@
         <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
           <configs>
             <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
-              <properties>release=rolling
-channel=edge</properties>
+              <properties>release=16
+channel=beta</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
           <projects>create-cloud-image-all-snaps</projects>
