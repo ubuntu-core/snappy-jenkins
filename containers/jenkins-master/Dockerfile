@@ -44,8 +44,12 @@ COPY config/jobs/github-snappy-daily-ppa/config.xml \
 COPY config/jobs/snappy-upload-ubuntu-core-amd64/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-upload-ubuntu-core-amd64.xml
 
-COPY config/jobs/github-snapcraft-autopkgtest-cloud/config.xml \
-  /usr/share/jenkins/ref/job-definitions/github-snapcraft-autopkgtest-cloud.xml
+COPY config/jobs/github-snapcraft-autopkgtest-cloud-xenial/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snapcraft-autopkgtest-cloud-xenial.xml
+
+COPY config/jobs/github-snapcraft-autopkgtest-cloud-yakkety/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snapcraft-autopkgtest-cloud-yakkety.xml
+
 COPY config/jobs/github-snapcraft-examples-tests-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snapcraft-examples-tests-cloud.xml
 
