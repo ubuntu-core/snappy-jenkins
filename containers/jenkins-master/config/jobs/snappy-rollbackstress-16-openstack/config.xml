@@ -71,7 +71,7 @@ go get launchpad.net/godeps
 export PATH=$PATH:$GOPATH/bin
 godeps -u dependencies.tsv
 
-snappy-cloud-client create -release rolling -channel $channel -version=-1 > instance.info
+snappy-cloud-client create -release 16 -channel $channel -version=-1 > instance.info
 id=$(head -n 1 instance.info | awk 'NF>1{print $NF}')
 ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 

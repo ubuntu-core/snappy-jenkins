@@ -21,6 +21,11 @@
           <description></description>
           <defaultValue>edge</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>type</name>
+          <description></description>
+          <defaultValue>daily</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -54,8 +59,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <hudson.triggers.TimerTrigger>
-      <spec>H H * * *
-</spec>
+      <spec>H H * * *</spec>
     </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>true</concurrentBuild>
@@ -71,16 +75,16 @@ go get launchpad.net/godeps
 export PATH=$PATH:$GOPATH/bin
 godeps -u dependencies.tsv
 
-snappy-cloud-client create -release rolling -channel $channel -version=-1 > instance.info
+snappy-cloud-client create -release 16 -channel $channel > instance.info
 id=$(head -n 1 instance.info | awk 'NF>1{print $NF}')
 ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 
 trap "snappy-cloud-client kill -instance-id $id" EXIT
 
-go run ./integration-tests/main.go -ip $ip -update -output-dir $WORKSPACE/$BUILD_TAG -http-proxy http://squid.internal:3128
+go run ./integration-tests/main.go -ip $ip -output-dir $WORKSPACE/$BUILD_TAG -http-proxy http://squid.internal:3128
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
-</command>
+      </command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

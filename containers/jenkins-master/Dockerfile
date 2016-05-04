@@ -17,13 +17,15 @@ RUN mkdir /usr/share/jenkins/ref/job-definitions
 
 COPY config/jobs/snappy-daily-1504-openstack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-daily-1504-openstack.xml
-COPY config/jobs/snappy-daily-rolling-openstack/config.xml \
-  /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-openstack.xml
-COPY config/jobs/snappy-daily-rolling-bbb/config.xml \
-  /usr/share/jenkins/ref/job-definitions/snappy-daily-rolling-bbb.xml
+COPY config/jobs/snappy-daily-16-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-16-openstack.xml
+COPY config/jobs/snappy-daily-16-bbb/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-16-bbb.xml
+COPY config/jobs/snappy-daily-16-update-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-daily-16-update-openstack.xml
 
-COPY config/jobs/snappy-rollbackstress-rolling-openstack/config.xml \
-  /usr/share/jenkins/ref/job-definitions/snappy-rollbackstress-rolling-openstack.xml
+COPY config/jobs/snappy-rollbackstress-16-openstack/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-rollbackstress-16-openstack.xml
 COPY config/jobs/snappy-rollbackstress-1504-openstack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-rollbackstress-1504-openstack.xml
 
