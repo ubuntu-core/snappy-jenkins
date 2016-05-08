@@ -73,6 +73,14 @@ COPY config/jobs/create-cloud-image-16-release-candidate/config.xml \
 COPY config/jobs/delete-cloud-image/config.xml \
   /usr/share/jenkins/ref/job-definitions/delete-cloud-image.xml
 
+COPY config/jobs/os-gate-beta-rc/config.xml \
+  /usr/share/jenkins/ref/job-definitions/os-gate-beta-rc.xml
+COPY config/jobs/os-gate-edge-beta/config.xml \
+  /usr/share/jenkins/ref/job-definitions/os-gate-edge-beta.xml
+COPY config/jobs/os-gate-rc-stable/config.xml \
+  /usr/share/jenkins/ref/job-definitions/os-gate-rc-stable.xml
+
+
 # ghprb plugin config
 COPY config/ghprb/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml \
   /usr/share/jenkins/ref/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml
