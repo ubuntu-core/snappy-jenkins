@@ -107,7 +107,7 @@ niemeyer
 if [ "$ghprbTargetBranch" = "15.04" ]; then
   release="1504"
 else
-  release="rolling"
+  release="16"
 fi
 
 export GOPATH=$WORKSPACE

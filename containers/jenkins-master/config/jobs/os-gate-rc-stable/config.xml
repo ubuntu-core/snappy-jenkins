@@ -21,8 +21,8 @@
   <buildWrappers/>
   <icon/>
   <dsl>parallel(
-	{ build("snappy-daily-rolling-openstack", channel: "candidate", type: "Promotion rc - stable") },
-    { build("snappy-rollbackstress-rolling-openstack", channel: "candidate", type: "Promotion rc - stable") }
+	{ build("snappy-daily-16-openstack", channel: "candidate", type: "Promotion rc - stable") },
+    { build("snappy-rollbackstress-16-openstack", channel: "candidate", type: "Promotion rc - stable") }
 )</dsl>
   <buildNeedsWorkspace>false</buildNeedsWorkspace>
 </com.cloudbees.plugins.flow.BuildFlow>

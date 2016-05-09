@@ -21,8 +21,8 @@
   <buildWrappers/>
   <icon/>
   <dsl>parallel(
-	{ build("snappy-daily-rolling-openstack", channel: "beta", type: "Promotion beta - rc") },
-    { build("snappy-rollbackstress-rolling-openstack", channel: "beta", type: "Promotion beta - rc") }
+	{ build("snappy-daily-16-openstack", channel: "beta", type: "Promotion beta - rc") },
+    { build("snappy-rollbackstress-16-openstack", channel: "beta", type: "Promotion beta - rc") }
 )
 // the upload job will probably be different for each gate
 build("github-snappy-daily-ppa")</dsl>

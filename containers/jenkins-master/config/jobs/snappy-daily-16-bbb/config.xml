@@ -30,7 +30,7 @@ sudo apt-get install -qy jq
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-curl http://spec-manager.spi.canonical.com/orgs/canonical/images -H "Content-Type: application/json" --data "{'image_name': 'snappy_rolling_daily', 'image_reference': {'udf-params': 'core rolling --channel edge --oem beagleblack --developer-mode'}, 'image_unique_id': ${BUILD_TAG}, 'upgrade_snaps': []}"</command>
+curl http://spec-manager.spi.canonical.com/orgs/canonical/images -H "Content-Type: application/json" --data "{'image_name': 'snappy_16_daily', 'image_reference': {'udf-params': 'core 16 --channel edge --oem beagleblack --developer-mode'}, 'image_unique_id': ${BUILD_TAG}, 'upgrade_snaps': []}"</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
