@@ -29,8 +29,8 @@ COPY config/jobs/snappy-rollbackstress-16-openstack/config.xml \
 COPY config/jobs/snappy-rollbackstress-1504-openstack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-rollbackstress-1504-openstack.xml
 
-COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
-  /usr/share/jenkins/ref/job-definitions/github-snappy-integration-tests-cloud.xml
+COPY config/jobs/github-snappy-acceptance-tests-cloud/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snappy-acceptance-tests-cloud.xml
 
 COPY config/jobs/github-snappy-autopkgtest-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-autopkgtest-cloud.xml

@@ -99,7 +99,7 @@ niemeyer
               <properties>sha1=origin/pr/${ghprbPullId}/merge</properties>
             </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
           </configs>
-          <projects>github-snappy-integration-tests-cloud,github-snappy-autopkgtest-cloud</projects>
+          <projects>github-snappy-acceptance-tests-cloud,github-snappy-autopkgtest-cloud</projects>
           <condition>ALWAYS</condition>
           <triggerWithNoParameters>false</triggerWithNoParameters>
           <block>

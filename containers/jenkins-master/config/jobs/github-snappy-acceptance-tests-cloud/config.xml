@@ -84,7 +84,7 @@ niemeyer
       <gitHubAuthId>c166a6ec-1866-48b3-b336-d9d40f218133</gitHubAuthId>
       <extensions>
         <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
-          <commitStatusContext>Integration tests</commitStatusContext>
+          <commitStatusContext>Automated acceptance tests</commitStatusContext>
           <triggeredStatus>Triggered</triggeredStatus>
           <startedStatus>Started</startedStatus>
           <statusUrl></statusUrl>
@@ -123,7 +123,7 @@ ip=$(tail -n 1 instance.info | awk 'NF>1{print $NF}')
 
 trap "snappy-cloud-client kill -instance-id $id" EXIT
 
-go run ./integration-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORKSPACE/$BUILD_TAG -http-proxy http://squid.internal:3128
+go run ./acceptance-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORKSPACE/$BUILD_TAG -http-proxy http://squid.internal:3128
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
 
