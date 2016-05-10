@@ -17,7 +17,7 @@
   <requestForTestingPhrase>Can one of the admins verify this patch?</requestForTestingPhrase>
   <jobs>
     <entry>
-      <string>github-snappy-integration-test</string>
+      <string>github-snappy-acceptance-test</string>
       <concurrent-hash-map>
       </concurrent-hash-map>
     </entry>
