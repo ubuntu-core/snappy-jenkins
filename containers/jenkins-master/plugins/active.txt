@@ -4,6 +4,7 @@ build-blocker-plugin:1.7.3:pinned
 build-flow-plugin:0.18:pinned
 cobertura:1.9.7:pinned
 credentials:1.24:pinned
+credentials-binding:1.7:pinned
 cvs:2.11:pinned
 external-monitor-job:1.4:pinned
 ghprb:1.31.3:pinned
