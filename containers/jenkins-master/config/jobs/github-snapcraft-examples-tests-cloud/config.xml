@@ -97,7 +97,7 @@ if [ "$ghprbTargetBranch" = "1.x" ]; then
   # 1.x needs a slave older than xenial.
   exit 0
 else
-  release="rolling"
+  release="16"
 fi
 
 snappy-cloud-client create -release $release -channel edge > instance.info
