@@ -82,7 +82,7 @@ echo "gpg --sign --batch --passphrase-file /home/jenkins-slave/.gnupg/snappy-m-o
 chmod +x sign.sh
 dpkg-buildpackage -S --force-sign -kDB810A52 -p./sign.sh
 
-dput ppa:snappy-dev/image ../*.changes
+dput ppa:snappy-dev/edge ../*.changes
       ]]></command>
     </hudson.tasks.Shell>
   </builders>
