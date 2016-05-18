@@ -107,6 +107,11 @@ niemeyer
 
 set -ex
 
+if [[ "$ghprbTargetBranch" = "15.04" ]]; then
+  echo "No autopkgtest for 15.04"
+  exit 0
+fi
+
 . $HOME/.openstack/novarc
 
 export GOPATH=$WORKSPACE
