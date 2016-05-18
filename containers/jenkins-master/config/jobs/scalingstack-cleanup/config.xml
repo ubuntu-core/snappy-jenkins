@@ -28,7 +28,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>. $HOME/.openstack/novarc
+      <command>. $HOME/.openstack/novarc-lcy01
 
 for instance in $(openstack server list -c Name -f value)
 do

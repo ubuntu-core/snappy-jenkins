@@ -29,7 +29,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.openstack/novarc
+. $HOME/.openstack/novarc-lcy01
 for channel in alpha stable edge
 do
   echo &quot;cleanup for 1504 $channel&quot;

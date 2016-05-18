@@ -112,7 +112,7 @@ if [[ "$ghprbTargetBranch" = "15.04" ]]; then
   exit 0
 fi
 
-. $HOME/.openstack/novarc
+. $HOME/.openstack/novarc-lcy01
 
 export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/ubuntu-core/snappy

@@ -45,7 +45,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.openstack/novarc
+. $HOME/.openstack/novarc-lcy01
 qcow2compat="1.1"
 if [[ "$OS_REGION_NAME" == "lcy0"* ]]; then
   qcow2compat="0.10"
