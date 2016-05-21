@@ -44,7 +44,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.openstack/novarc
+. $HOME/.openstack/novarc-lcy01
 
 openstack image delete ubuntu-core/custom/ubuntu-${release}-snappy-core-amd64-${channel}-${version}-disk1.img</command>
     </hudson.tasks.Shell>

@@ -91,7 +91,7 @@ sergiusens
     <hudson.tasks.Shell>
       <command><![CDATA[
       #!/bin/bash
-. $HOME/.openstack/novarc
+. $HOME/.openstack/novarc-lcy01
 
 if [ "$ghprbTargetBranch" = "1.x" ]; then
   # 1.x needs a slave older than xenial.

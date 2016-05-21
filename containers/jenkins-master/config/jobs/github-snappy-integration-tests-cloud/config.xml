@@ -102,7 +102,7 @@ niemeyer
   <builders>
     <hudson.tasks.Shell>
       <command><![CDATA[#!/bin/bash
-. $HOME/.openstack/novarc
+. $HOME/.openstack/novarc-lcy01
 
 if [ "$ghprbTargetBranch" = "15.04" ]; then
   release="1504"
