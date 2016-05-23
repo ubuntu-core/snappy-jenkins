@@ -69,7 +69,7 @@ sergiusens
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
       <useGitHubHooks>true</useGitHubHooks>
       <permitAll>false</permitAll>
-      <whitelist> dholbach</whitelist>
+      <whitelist>dholbach</whitelist>
       <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
       <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
       <whiteListTargetBranches>
@@ -77,12 +77,12 @@ sergiusens
           <branch></branch>
         </org.jenkinsci.plugins.ghprb.GhprbBranch>
       </whiteListTargetBranches>
-      <project>github-snapcraft-autopkgtest-cloud</project>
+      <project>github-snapcraft-autopkgtest-cloud-yakkety</project>
       <__project class="project" reference="../../.."/>
       <gitHubAuthId>73d060a3-d1dd-4445-9c98-f164d6d755bf</gitHubAuthId>
       <extensions>
         <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
-          <commitStatusContext>autopkgtest</commitStatusContext>
+          <commitStatusContext>autopkgtest-yakkety</commitStatusContext>
           <triggeredStatus>Triggered</triggeredStatus>
           <startedStatus>Started</startedStatus>
           <statusUrl></statusUrl>
@@ -103,13 +103,13 @@ sergiusens
 
 set -ex
 
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc
 
 openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD_TAG
 trap "openstack keypair delete $BUILD_TAG" EXIT
 
 rm -rf $WORKSPACE/adt-run-output
-adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-daily-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
+adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-yakkety-daily-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
 </command>
     </hudson.tasks.Shell>
   </builders>
