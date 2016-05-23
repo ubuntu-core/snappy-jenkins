@@ -127,14 +127,16 @@ go run ./integration-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORK
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
 
-go get github.com/axw/gocov/gocov
-go get github.com/AlekSi/gocov-xml
-BASE_COVERAGE_DIR=$WORKSPACE/$BUILD_TAG/output/artifacts/coverage
-gocov convert $BASE_COVERAGE_DIR/* > $BASE_COVERAGE_DIR/total.json
-cat $BASE_COVERAGE_DIR/total.json | gocov-xml > $BASE_COVERAGE_DIR/total.xml
+if [ "$ghprbTargetBranch" != "15.04" ]; then
+  go get github.com/axw/gocov/gocov
+  go get github.com/AlekSi/gocov-xml
+  BASE_COVERAGE_DIR=$WORKSPACE/$BUILD_TAG/output/artifacts/coverage
+  gocov convert $BASE_COVERAGE_DIR/* > $BASE_COVERAGE_DIR/total.json
+  cat $BASE_COVERAGE_DIR/total.json | gocov-xml > $BASE_COVERAGE_DIR/total.xml
 
-sed -i "s|<packages>|<sources><source>"$SRC_PATH"</source></sources><packages>|" $BASE_COVERAGE_DIR/total.xml
-sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
+  sed -i "s|<packages>|<sources><source>"$SRC_PATH"</source></sources><packages>|" $BASE_COVERAGE_DIR/total.xml
+  sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
+fi
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
@@ -151,13 +153,16 @@ sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
           <EscalateStatus>false</EscalateStatus>
           <RunIfJobSuccessful>false</RunIfJobSuccessful>
           <script><![CDATA[
+if [ "$ghprbTargetBranch" != "15.04" ]; then
     rm -rf ./qakit && bzr branch lp:~fgimenez/qakit/snappy qakit
     cp /home/jenkins-slave/.practitest/config.ini ./qakit/qakit/practitest
     cd ./qakit
     result=$(python3 -m qakit.practitest.report_subunit_results_to_practitest create "integration test suite :: GitHub PR $ghprbPullId :: amd64" "openstack-amd64" "Regression" "rolling" "$ghprbPullId" "$ghprbPullLink")
     # $result is of the form: "INFO:__main__:Created TestSet with display_id 24"
     display_id=$(echo $result | grep -P '\d+$' -o)
-    python3 -m qakit.practitest.report_subunit_results_to_practitest update --no_ask_confirm $display_id $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit]]></script>
+    python3 -m qakit.practitest.report_subunit_results_to_practitest update --no_ask_confirm $display_id $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit
+fi
+    ]]></script>
         </hudson.plugins.postbuildtask.TaskProperties>
       </tasks>
     </hudson.plugins.postbuildtask.PostbuildTask>
