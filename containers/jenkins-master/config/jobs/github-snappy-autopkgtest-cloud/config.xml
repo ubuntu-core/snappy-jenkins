@@ -11,7 +11,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.15.0">
-      <projectUrl>https://github.com/ubuntu-core/snappy/</projectUrl>
+      <projectUrl>https://github.com/snapcore/snapd/</projectUrl>
       <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
@@ -33,7 +33,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
-        <url>https://github.com/ubuntu-core/snappy</url>
+        <url>https://github.com/snapcore/snapd</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -46,7 +46,7 @@
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-        <relativeTargetDir>src/github.com/ubuntu-core/snappy</relativeTargetDir>
+        <relativeTargetDir>src/github.com/snapcore/snapd</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
     </extensions>
   </scm>
@@ -115,7 +115,7 @@ fi
 . $HOME/.openstack/novarc-lcy01
 
 export GOPATH=$WORKSPACE
-cd $GOPATH/src/github.com/ubuntu-core/snappy
+cd $GOPATH/src/github.com/snapcore/snapd
 
 openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD_TAG
 trap "openstack keypair delete $BUILD_TAG" EXIT
