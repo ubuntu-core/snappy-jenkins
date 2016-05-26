@@ -11,7 +11,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
-      <projectUrl>https://github.com/ubuntu-core/snappy/</projectUrl>
+      <projectUrl>https://github.com/snapcore/snapd/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -32,7 +32,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
-        <url>https://github.com/ubuntu-core/snappy</url>
+        <url>https://github.com/snapcore/snapd</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -45,7 +45,7 @@
     <extensions>
       <hudson.plugins.git.extensions.impl.CleanBeforeCheckout/>
       <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
-        <relativeTargetDir>src/github.com/ubuntu-core/snappy</relativeTargetDir>
+        <relativeTargetDir>src/github.com/snapcore/snapd</relativeTargetDir>
       </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
     </extensions>
   </scm>
@@ -111,7 +111,7 @@ else
 fi
 
 export GOPATH=$WORKSPACE
-cd $GOPATH/src/github.com/ubuntu-core/snappy
+cd $GOPATH/src/github.com/snapcore/snapd
 
 go get launchpad.net/godeps
 export PATH=$PATH:$GOPATH/bin
