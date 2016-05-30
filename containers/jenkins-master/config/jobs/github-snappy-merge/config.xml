@@ -62,7 +62,7 @@ niemeyer
       <onlyTriggerPhrase>true</onlyTriggerPhrase>
       <useGitHubHooks>true</useGitHubHooks>
       <permitAll>false</permitAll>
-      <whitelist>emgee pete-woods jdstrand plars stevenwilkin ssweeny</whitelist>
+      <whitelist>emgee pete-woods jdstrand plars stevenwilkin ssweeny arges alfonsosanchezbeato</whitelist>
       <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
       <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
       <whiteListTargetBranches>
