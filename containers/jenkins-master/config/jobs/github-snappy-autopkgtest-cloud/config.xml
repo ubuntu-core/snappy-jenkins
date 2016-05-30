@@ -10,6 +10,12 @@
   </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.15.0">
       <projectUrl>https://github.com/snapcore/snapd/</projectUrl>
       <displayName></displayName>
@@ -56,10 +62,9 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.29.8">
+    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.31.3">
       <spec>H/5 * * * *</spec>
       <latestVersion>3</latestVersion>
-      <triggerPhrase></triggerPhrase>
       <configVersion>3</configVersion>
       <adminlist>chipaca
 mvo5
@@ -72,7 +77,7 @@ niemeyer
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
       <useGitHubHooks>true</useGitHubHooks>
       <permitAll>false</permitAll>
-      <whitelist>emgee pete-woods jdstrand plars stevenwilkin ssweeny</whitelist>
+      <whitelist>emgee pete-woods jdstrand plars stevenwilkin ssweeny arges alfonsosanchezbeato</whitelist>
       <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
       <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
       <whiteListTargetBranches>
@@ -80,15 +85,15 @@ niemeyer
           <branch></branch>
         </org.jenkinsci.plugins.ghprb.GhprbBranch>
       </whiteListTargetBranches>
-      <project>github-snappy-autopkgtest-cloud</project>
-      <__project class="project" reference="../../.."/>
       <gitHubAuthId>73d060a3-d1dd-4445-9c98-f164d6d755bf</gitHubAuthId>
+      <triggerPhrase></triggerPhrase>
       <extensions>
         <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
           <commitStatusContext>autopkgtest</commitStatusContext>
           <triggeredStatus>Triggered</triggeredStatus>
           <startedStatus>Started</startedStatus>
           <statusUrl></statusUrl>
+          <addTestResults>false</addTestResults>
           <completedStatus>
             <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
               <message>Success</message>
@@ -112,7 +117,7 @@ if [[ "$ghprbTargetBranch" = "15.04" ]]; then
   exit 0
 fi
 
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc
 
 export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/snapcore/snapd
@@ -121,18 +126,19 @@ openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD
 trap "openstack keypair delete $BUILD_TAG" EXIT
 
 rm -rf $WORKSPACE/adt-run-output
-adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-16.04-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
+adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o=&apos;-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no&apos; -s nova -- -d --flavor autopkgtest --image &apos;ubuntu/ubuntu-xenial-16.04-amd64-server-*&apos; --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e &apos;http_proxy=http://squid.internal:3128&apos; -e &apos;https_proxy=http://squid.internal:3128&apos; -e &apos;no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net&apos;
+
+subunit2junitxml $WORKSPACE/adt-run-output/artifacts/results.subunit -o $WORKSPACE/adt-run-output/artifacts/results.xml
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.ArtifactArchiver>
-      <artifacts>adt-run-output/binaries/*.deb</artifacts>
-      <allowEmptyArchive>false</allowEmptyArchive>
-      <onlyIfSuccessful>true</onlyIfSuccessful>
-      <fingerprint>false</fingerprint>
-      <defaultExcludes>true</defaultExcludes>
-    </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.2-beta-4">
+      <testResults>adt-run-output/artifacts/results.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+      <healthScaleFactor>1.0</healthScaleFactor>
+    </hudson.tasks.junit.JUnitResultArchiver>
   </publishers>
   <buildWrappers/>
 </project>
