@@ -23,6 +23,8 @@ create_swarm_security_group(){
     openstack security group rule create --proto tcp --dst-port 2376 --src-ip 10.0.0.0/8 $SWARM_SECGROUP
     # 3376 is the default port used by swarm nodes
     openstack security group rule create --proto tcp --dst-port 3376 --src-ip 10.0.0.0/8 $SWARM_SECGROUP
+    # hubot port
+    openstack security group rule create --proto tcp --dst-port 9090 --src-ip 10.0.0.0/8 $SWARM_SECGROUP
 }
 
 create_options(){
