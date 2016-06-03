@@ -27,6 +27,11 @@
           <description></description>
           <defaultValue>amd64</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <defaultValue>lcy01</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -45,13 +50,34 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc-$region
 qcow2compat="1.1"
-if [[ "$OS_REGION_NAME" == "lcy0"* ]]; then
+if [[ "$OS_REGION_NAME" == "lcy0"* ]] || [[ "$OS_REGION_NAME" == "bos0"* ]]; then
   qcow2compat="0.10"
 fi
 
-snappy-cloud-image -loglevel debug -release $release -os-channel $channel -kernel-channel $channel -gadget-channel $channel -action create -qcow2compat $qcow2compat
+if [[ $region == "bos01" ]]; then
+  case $arch in
+    amd64)
+      properties="architecture='x86_64'"
+      ;;
+    i386)
+      properties="architecture='i686'"
+      ;;
+    arm64)
+      properties="architecture='aarch64'"
+      ;;
+    ppc64el)
+      properties="architecture='ppc64le'"
+      ;;
+    *)
+      properties=""
+      ;;
+  esac
+  properties="${properties},hypervisor_type='kvm'"
+fi
+
+snappy-cloud-image -loglevel debug -release $release -arch $arch -os-channel $channel -kernel-channel $channel -gadget-channel $channel -action create -qcow2compat $qcow2compat -properties $properties
       </command>
     </hudson.tasks.Shell>
   </builders>
