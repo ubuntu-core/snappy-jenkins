@@ -56,10 +56,9 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
-    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.29.8">
+    <org.jenkinsci.plugins.ghprb.GhprbTrigger plugin="ghprb@1.31.3">
       <spec>H/5 * * * *</spec>
       <latestVersion>3</latestVersion>
-      <triggerPhrase></triggerPhrase>
       <configVersion>3</configVersion>
       <adminlist>chipaca
 mvo5
@@ -80,15 +79,15 @@ niemeyer
           <branch></branch>
         </org.jenkinsci.plugins.ghprb.GhprbBranch>
       </whiteListTargetBranches>
-      <project>github-snappy-autopkgtest-cloud</project>
-      <__project class="project" reference="../../.."/>
       <gitHubAuthId>73d060a3-d1dd-4445-9c98-f164d6d755bf</gitHubAuthId>
+      <triggerPhrase></triggerPhrase>
       <extensions>
         <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
           <commitStatusContext>autopkgtest</commitStatusContext>
           <triggeredStatus>Triggered</triggeredStatus>
           <startedStatus>Started</startedStatus>
           <statusUrl></statusUrl>
+          <addTestResults>false</addTestResults>
           <completedStatus>
             <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
               <message>Success</message>
@@ -122,6 +121,8 @@ trap "openstack keypair delete $BUILD_TAG" EXIT
 
 rm -rf $WORKSPACE/adt-run-output
 adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-16.04-amd64-server-*' --keyname $BUILD_TAG --net-id=net_ues-snappy-integration --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net'
+
+subunit2junitxml $WORKSPACE/adt-run-output/artifacts/results.subunit -o $WORKSPACE/adt-run-output/artifacts/results.xml
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
@@ -133,6 +134,12 @@ adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh 
       <fingerprint>false</fingerprint>
       <defaultExcludes>true</defaultExcludes>
     </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.2-beta-4">
+      <testResults>adt-run-output/artifacts/results.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+      <healthScaleFactor>1.0</healthScaleFactor>
+    </hudson.tasks.junit.JUnitResultArchiver>
   </publishers>
   <buildWrappers/>
 </project>
