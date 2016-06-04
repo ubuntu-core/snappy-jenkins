@@ -13,6 +13,20 @@
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
       <projectUrl>https://github.com/ubuntu-core/snapcraft/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>sha1</name>
+          <description></description>
+          <defaultValue>master</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <defaultValue>bos01</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -91,7 +105,7 @@ sergiusens
     <hudson.tasks.Shell>
       <command><![CDATA[
       #!/bin/bash
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc-$region
 
 if [ "$ghprbTargetBranch" = "1.x" ]; then
   # 1.x needs a slave older than xenial.

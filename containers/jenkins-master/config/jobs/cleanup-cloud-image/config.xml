@@ -10,6 +10,15 @@
   </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <defaultValue>bos01</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -29,7 +38,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc-$region
 for channel in alpha stable edge
 do
   echo &quot;cleanup for 1504 $channel&quot;

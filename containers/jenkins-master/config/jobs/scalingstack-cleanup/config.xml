@@ -10,6 +10,15 @@
       <scanQueueFor>ALL</scanQueueFor>
       <blockingJobs>.*</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <defaultValue>bos01</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -28,7 +37,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>. $HOME/.openstack/novarc-lcy01
+      <command>. $HOME/.openstack/novarc-$region
 
 for instance in $(openstack server list -c Name -f value)
 do

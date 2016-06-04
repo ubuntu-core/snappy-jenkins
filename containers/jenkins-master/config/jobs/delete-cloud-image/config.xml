@@ -27,6 +27,11 @@
           <description></description>
           <defaultValue></defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <defaultValue>bos01</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -44,7 +49,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc-$region
 
 openstack image delete ubuntu-core/custom/ubuntu-${release}-snappy-core-amd64-${channel}-${version}-disk1.img</command>
     </hudson.tasks.Shell>
