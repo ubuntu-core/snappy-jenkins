@@ -20,6 +20,11 @@
           <description></description>
           <defaultValue>master</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>region</name>
+          <description></description>
+          <defaultValue>bos01</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -102,7 +107,7 @@ niemeyer
   <builders>
     <hudson.tasks.Shell>
       <command><![CDATA[#!/bin/bash
-. $HOME/.openstack/novarc-lcy01
+. $HOME/.openstack/novarc-$region
 
 if [ "$ghprbTargetBranch" = "15.04" ]; then
   release="1504"
