@@ -26,6 +26,11 @@
           <description></description>
           <defaultValue>bos01</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>arch</name>
+          <description></description>
+          <defaultValue>amd64</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -126,7 +131,7 @@ openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD
 trap "openstack keypair delete $BUILD_TAG" EXIT
 
 rm -rf $WORKSPACE/adt-run-output
-adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image 'ubuntu/ubuntu-xenial-16.04-amd64-server-*' --keyname $BUILD_TAG --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net' -e SNAP_REEXEC=0
+adt-run .// --setup-commands setup-testbed -o $WORKSPACE/adt-run-output --- ssh -d -l ubuntu -o='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -s nova -- -d --flavor autopkgtest --image "ubuntu/ubuntu-xenial-16.04-$arch-server-*" --keyname $BUILD_TAG --security-groups ssh -e 'http_proxy=http://squid.internal:3128' -e 'https_proxy=http://squid.internal:3128' -e 'no_proxy=127.0.0.1,127.0.1.1,localhost,localdomain,novalocal,internal,archive.ubuntu.com,security.ubuntu.com,ddebs.ubuntu.com,ppa.launchpad.net' -e SNAP_REEXEC=0
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
