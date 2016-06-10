@@ -73,6 +73,7 @@ dch --distribution xenial -m --local ~ppa$BUILD_NUMBER- Daily release to the PPA
 echo "gpg --sign --batch --passphrase-file /home/jenkins-slave/.gnupg/snappy-m-o-password \$@" > sign.sh
 chmod +x sign.sh
 dpkg-buildpackage -S --force-sign -kDB810A52 -p./sign.sh
+lintian
 
 dput ppa:snappy-dev/snapcraft-daily ../*.changes
       ]]></command>
