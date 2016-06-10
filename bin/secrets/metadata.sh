@@ -27,6 +27,8 @@ nodes_map["secret/jenkins/tests/openstack/"]="$slaves"
 paths_map["secret/jenkins/tests/openstack/novarc-lcy01"]="/home/jenkins-slave/.openstack/novarc-lcy01"
 # credentials for region bos01
 paths_map["secret/jenkins/tests/openstack/novarc-bos01"]="/home/jenkins-slave/.openstack/novarc-bos01"
+# credentials for region lgw01
+paths_map["secret/jenkins/tests/openstack/novarc-lgw01"]="/home/jenkins-slave/.openstack/novarc-lgw01"
 before_scripts_map["secret/jenkins/tests/openstack/"]="rm -rf /home/jenkins-slave/.openstack && mkdir -p /home/jenkins-slave/.openstack"
 after_scripts_map["secret/jenkins/tests/openstack/"]="chown -R jenkins-slave:jenkins-slave /home/jenkins-slave/.openstack"
 
