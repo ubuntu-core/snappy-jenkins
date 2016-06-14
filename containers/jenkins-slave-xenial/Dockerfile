@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   ca-certificates \
   dput \
   grub-common \
+  lintian \
   python-junitxml \
   sudo subunit \
   snappy-cloud-image \
