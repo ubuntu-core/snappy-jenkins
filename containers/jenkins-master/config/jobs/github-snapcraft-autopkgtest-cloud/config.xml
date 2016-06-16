@@ -113,7 +113,7 @@ sergiusens
 
 set -ex
 
-. $HOME/.openstack/novarc-$bos01
+. $HOME/.openstack/novarc-$region
 
 openstack keypair create --public-key /home/jenkins-slave/.ssh/id_rsa.pub $BUILD_TAG
 trap "openstack keypair delete $BUILD_TAG" EXIT
