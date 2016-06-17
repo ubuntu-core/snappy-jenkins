@@ -10,15 +10,6 @@
       <scanQueueFor>ALL</scanQueueFor>
       <blockingJobs>.*</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>region</name>
-          <description></description>
-          <defaultValue>bos01</defaultValue>
-        </hudson.model.StringParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -37,16 +28,25 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>. $HOME/.openstack/novarc-$region
+      <command>delete_servers() {
+  for instance in $(openstack server list -c Name -f value)
+  do
+    openstack server delete $instance
+  done
+}
 
-for instance in $(openstack server list -c Name -f value)
-do
-  openstack server delete $instance
-done
+delete_groups() {
+  for group in $(openstack security group list -c Name -f value | grep -v ssh | grep -v default)
+  do
+    openstack security group delete $group
+  done
+}
 
-for group in $(openstack security group list -c Name -f value | grep -v ssh | grep -v default)
+for region in lcy01 bos01 lgw01
 do
-  openstack security group delete $group
+  . $HOME/.openstack/novarc-$region
+  delete_servers
+  delete_groups
 done
       </command>
     </hudson.tasks.Shell>
