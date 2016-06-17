@@ -35,6 +35,12 @@ COPY config/jobs/github-snappy-integration-tests-cloud/config.xml \
 COPY config/jobs/github-snappy-autopkgtest-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-autopkgtest-cloud.xml
 
+COPY config/jobs/snappy-by-tag-integration-test/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-by-tag-integration-test.xml
+
+COPY config/jobs/snappy-by-tag-autopkgtest/config.xml \
+  /usr/share/jenkins/ref/job-definitions/snappy-by-tag-autopkgtest.xml
+
 COPY config/jobs/github-snappy-merge/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-merge.xml
 
