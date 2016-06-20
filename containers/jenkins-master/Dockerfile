@@ -15,6 +15,9 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/active.txt
 # copy job definitions
 RUN mkdir /usr/share/jenkins/ref/job-definitions
 
+COPY config/jobs/provision-cloud-server/config.xml \
+   /usr/share/jenkins/ref/job-definitions/provision-cloud-server.xml
+
 COPY config/jobs/snappy-daily-1504-openstack/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-daily-1504-openstack.xml
 COPY config/jobs/snappy-daily-16-openstack/config.xml \
