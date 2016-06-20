@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.7.3">
+      <useBuildBlocker>false</useBuildBlocker>
+      <blockLevel>GLOBAL</blockLevel>
+      <scanQueueFor>DISABLED</scanQueueFor>
+      <blockingJobs></blockingJobs>
+    </hudson.plugins.buildblocker.BuildBlockerProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>type</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>all-snaps</string>
+              <string>classic</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>arch</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>amd64</string>
+              <string>i386</string>
+              <string>arm64</string>
+              <string>ppc64el</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>series</name>
+          <description>Useful only for all-snaps images</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>16</string>
+              <string>15.04</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>channel</name>
+          <description>Useful only for all-snaps images</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>edge</string>
+              <string>beta</string>
+              <string>candidate</string>
+              <string>stable</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>distribution</name>
+          <description>Useful only for classic images</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>xenial</string>
+              <string>yakkety</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>server_name</name>
+          <description></description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>xenial</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command><![CDATA[
+#!/bin/bash
+
+set -ex
+
+case $arch in
+  amd64|i386)
+    regions=(lcy01 bos01 lgw01)
+    ;;
+  arm64|ppc64el)
+    regions=(bos01)
+    ;;
+  *)
+    echo "Unsupported architecture: $arch"
+    exit 1
+    ;;
+esac
+
+region=${regions[$((RANDOM % ${#regions[@]}))]}
+
+. $HOME/.openstack/novarc-$region
+
+case $type in
+  all-snaps)
+    search="^ubuntu-core/custom/ubuntu-$series-snappy-core-$arch-$channel"
+    visibility="--private"
+    flavor="m1.medium"
+    ;;
+  classic)
+    search="^ubuntu/ubuntu.*$distribution.*$arch"
+    visibility="--public"
+    flavor="autopkgtest"
+    ;;
+  *)
+    echo "Unsupported server type: $type"
+    exit 1
+    ;;
+esac
+
+image=$(openstack image list $visibility --limit 100 -f value -c Name --sort name:desc | grep $search | head -n 1)
+
+if [ -z $image ]; then
+  echo "No image found matching $search"
+  exit 1
+fi
+
+openstack keypair create --public-key $HOME/.ssh/id_rsa.pub $server_name
+openstack server create --security-group ssh --flavor $flavor --image $image --key-name $server_name --wait $server_name
+]]></command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
