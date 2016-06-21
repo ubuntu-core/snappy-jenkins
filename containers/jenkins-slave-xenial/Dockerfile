@@ -33,8 +33,8 @@ RUN apt-get update && apt-get install --no-install-recommends -qy \
   python3-apt python3-docopt python3-coverage \
   python3-fixtures python3-jsonschema python3-lxml \
   python3-magic python3-mccabe python3-pep8 python3-petname \
-  python3-pexpect python3-pip python3-progressbar python3-requests \
-  python3-requests-oauthlib python3-requests-toolbelt \
+  python3-pexpect python3-pip python3-progressbar python3-pymacaroons \
+  python3-requests python3-requests-oauthlib python3-requests-toolbelt \
   python3-ssoclient python3-testscenarios python3-testtools \
   python3-xdg python3-yaml \
   snapcraft && rm -rf /var/lib/apt/lists/*
