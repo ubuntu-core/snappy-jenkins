@@ -27,9 +27,9 @@ Once that's done you can use your local docker client as if you were in the remo
 
 With the client configured to connect to the remote host you can also use compose:
 
-    docker-compose -f ./config/compose/cluster.yml down
-    docker-compose -f ./config/compose/cluster.yml pull
-    docker-compose -f ./config/compose/cluster.yml up -d
+    docker-compose -f ./config/jenkins/cluster.yml down
+    docker-compose -f ./config/jenkins/cluster.yml pull
+    docker-compose -f ./config/jenkins/cluster.yml up -d
 
 More on [https://docs.docker.com/machine/](docker-machine), [https://docs.docker.com/compose/](docker-compose) and [https://docs.docker.com/swarm/](docker swarm) at their respective project pages.
 
