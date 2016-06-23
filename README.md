@@ -63,7 +63,7 @@ In this case you need to have OpenStack credentials loaded, for example by sourc
 
 Before executing the provision script you should have at least the ```$OS_USERNAME``` and ```$OS_REGION_NAME``` environment variables set. This credentials are used for creating the hosts where the CI environment itself is going to run, and may be different to the ones used later for the Ubuntu Core instances, more on this later. The scripts also assume that you have a valid private key at `~/.canonistack/${OS_USERNAME}_${OS_REGION_NAME}.key`, if that's not the case you can pass the path as the last argument.
 
-The cloud provision process begins consist of the creation of the swarm cluster and later provision of the images, for it to work wee need firat to have set up the secrets and key-value backend, which can be done with this command (more on this in the Secrets section below):
+The cloud provision process begins with the creation of the swarm cluster and later provision of the images, for it to work wee need firat to have set up the secrets and key-value backend, which can be done with this command (more on this in the Secrets section below):
 
     $ ./bin/secrets/cloud-provision.sh
 
