@@ -11,7 +11,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.18.1">
-      <projectUrl>https://github.com/ubuntu-core/snapcraft/</projectUrl>
+      <projectUrl>https://github.com/snapcore/snapcraft/</projectUrl>
       <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
@@ -33,7 +33,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/heads/master:refs/remotes/origin/master</refspec>
-        <url>https://github.com/ubuntu-core/snapcraft</url>
+        <url>https://github.com/snapcore/snapcraft</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -81,7 +81,7 @@ dput ppa:snappy-dev/snapcraft-daily ../*.changes
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>../*.deb,src/github.com/ubuntu-core/*.changes,../*.dsc,../*.tar.xz</artifacts>
+      <artifacts>../*.deb,src/github.com/snapcore/*.changes,../*.dsc,../*.tar.xz</artifacts>
       <allowEmptyArchive>true</allowEmptyArchive>
       <onlyIfSuccessful>true</onlyIfSuccessful>
       <fingerprint>false</fingerprint>

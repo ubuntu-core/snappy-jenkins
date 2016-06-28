@@ -1,7 +1,7 @@
 [![Build Status][travis-image]][travis-url]
 # Snappy Jenkins CI
 
-This repo helps setting up the CI and CD environment used for Snappy related projects, including [https://github.com/ubuntu-core/snappy](Snappy itself) and [https://github.com/ubuntu-core/snapcraft](Snapcraft). It contains Dockerfiles which define the required containers (Jenkins master and slaves and a Nginx proxy) and several shell scripts for bringing them to live both in a cloud provider (only OpenStack supported at the moment) and locally.
+This repo helps setting up the CI and CD environment used for Snappy related projects, including [https://github.com/snapcore/snapd](Snappy itself) and [https://github.com/snapcore/snapcraft](Snapcraft). It contains Dockerfiles which define the required containers (Jenkins master and slaves and a Nginx proxy) and several shell scripts for bringing them to live both in a cloud provider (only OpenStack supported at the moment) and locally.
 
 The testing jenkins jobs use the `snappy-cloud-client` binary from [https://launchpad.net/snappy-tests-job](this project) for launching the tests in cloud instances, it takes care of determining the most recent Snappy cloud image for a given channel and release (see below for the required name patterns), instantiating a cloud instance of that image and getting its ip. Then they execute the integration suite in the instance, shut it down when finished or in case of errors and generates reports about the tests executed, including a subunit version of the result sent to a practitest backend and calculations about integration tests coverage.
 
@@ -93,7 +93,7 @@ The Jenkins master container has the [https://wiki.jenkins-ci.org/display/JENKIN
 
 * First of all, you should assign a floating IP to your VM instance so that it can be reached from GitHub. The container infrastructure and security group assigned make it secure to expose it to the wild, as explained earlier.
 
-* The ```github-snappy-integration-tests-cloud``` job is configured to receive payloads from GitHub in response to events. It points to the ubuntu-core/snappy repository, you can change this to access one of your own repos to try the hook.
+* The ```github-snappy-integration-tests-cloud``` job is configured to receive payloads from GitHub in response to events. It points to the snapcore/snapd repository, you can change this to access one of your own repos to try the hook.
 
 * In the settings page of the repository configured in ```github-snappy-integration-tests-cloud``` you should setup the webhook to notify Jenkins of changes in the repository, the URL should be ```http://<floating_ip>:8081/ghprbhook/``` and the events to trigger the webhook "Pull Request" and "Issue Comment"
 
