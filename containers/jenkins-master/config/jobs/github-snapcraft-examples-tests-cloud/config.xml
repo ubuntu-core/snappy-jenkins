@@ -11,7 +11,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.14.0">
-      <projectUrl>https://github.com/ubuntu-core/snapcraft/</projectUrl>
+      <projectUrl>https://github.com/snapcore/snapcraft/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -37,7 +37,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
-        <url>https://github.com/ubuntu-core/snapcraft</url>
+        <url>https://github.com/snapcore/snapcraft</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -67,7 +67,7 @@ kyrofa
 sergiusens
       </adminlist>
       <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
-      <orgslist>ubuntu-core</orgslist>
+      <orgslist>snapcore</orgslist>
       <cron>H/5 * * * *</cron>
       <buildDescTemplate></buildDescTemplate>
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
