@@ -36,3 +36,15 @@ services:
     extends: jenkins-slave-vivid
     image: ubuntucore/snappy-jenkins-slave-xenial
     command: -username admin -password snappy -executors 2 -name jenkins-slave-xenial-1 -labels xenial -master http://jenkins-master-service:8080
+
+  hubot:
+    image: fgimenez/hubot
+    ports:
+      - 9090:9090
+    restart: always
+    environment:
+      - TELEGRAM_TOKEN
+      - HUBOT_LOG_LEVEL
+      - HUBOT_JENKINS_URL
+      - HUBOT_JENKINS_AUTH
+      - "constraint:public==yes"

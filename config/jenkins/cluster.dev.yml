@@ -11,3 +11,6 @@ services:
 
   jenkins-slave-xenial:
     build: ../../containers/jenkins-slave-xenial
+
+  hubot:
+    build: ../../containers/hubot
