@@ -76,7 +76,7 @@ mvo5
 niemeyer
       </adminlist>
       <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
-      <orgslist>ubuntu-core</orgslist>
+      <orgslist>snapcore</orgslist>
       <cron>H/5 * * * *</cron>
       <buildDescTemplate></buildDescTemplate>
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
