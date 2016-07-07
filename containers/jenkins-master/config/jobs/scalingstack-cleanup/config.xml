@@ -42,11 +42,18 @@ delete_groups() {
   done
 }
 
+delete_keypairs() {
+  for keypair in $(openstack keypair list -c Name -f value)
+  do
+    openstack keypair delete $keypair
+  done
+}
 for region in lcy01 bos01 lgw01
 do
   . $HOME/.openstack/novarc-$region
   delete_servers
   delete_groups
+  delete_keypairs
 done
       </command>
     </hudson.tasks.Shell>
