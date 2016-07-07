@@ -36,10 +36,17 @@
 }
 
 delete_groups() {
-  for group in $(openstack security group list -c Name -f value | grep -v ssh | grep -v default)
-  do
-    openstack security group delete $group
-  done
+  if [ "$region" = "lgw01" ]; then
+    for group in $(nova secgroup-list | grep snapcraft | cut --delimiter=\| -f 3)
+    do
+      nova secgroup-delete $group
+    done
+  else
+    for group in $(openstack security group list -c Name -f value | grep -v ssh | grep -v default)
+    do
+      openstack security group delete $group
+    done
+  fi
 }
 
 delete_keypairs() {
