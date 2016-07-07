@@ -23,7 +23,7 @@
         <hudson.model.StringParameterDefinition>
           <name>region</name>
           <description></description>
-          <defaultValue>bos01</defaultValue>
+          <defaultValue>lgw01</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
