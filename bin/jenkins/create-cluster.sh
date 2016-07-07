@@ -51,6 +51,7 @@ create_options(){
 
 create_swarm_master(){
     docker-machine rm -f $SWARM_MASTER
+    rm -rf "$HOME/.docker/machine/machines/$SWARM_MASTER"
     options=$(create_options "master" "cpu2-ram8-disk100-ephemeral20")
 
     docker-machine $options $SWARM_MASTER
@@ -61,6 +62,7 @@ create_swarm_node(){
     local node_name="${SWARM_NODE}-${index}"
 
     docker-machine rm -f $node_name
+    rm -rf "$HOME/.docker/machine/machines/$node_name"
     options=$(create_options "node" "cpu4-ram8-disk100-ephemeral20" "$index")
 
     docker-machine $options $node_name
