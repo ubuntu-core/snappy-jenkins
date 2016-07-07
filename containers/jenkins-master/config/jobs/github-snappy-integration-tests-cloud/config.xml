@@ -23,7 +23,7 @@
         <hudson.model.StringParameterDefinition>
           <name>region</name>
           <description></description>
-          <defaultValue>bos01</defaultValue>
+          <defaultValue>lgw01</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -70,7 +70,7 @@ mvo5
 niemeyer
       </adminlist>
       <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
-      <orgslist>snapacore</orgslist>
+      <orgslist>snapcore</orgslist>
       <cron>H/5 * * * *</cron>
       <buildDescTemplate></buildDescTemplate>
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
