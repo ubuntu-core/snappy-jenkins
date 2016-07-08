@@ -1,7 +1,11 @@
 #!/bin/bash
 
+get_slaves_ids(){
+    echo "$(docker ps -f name='slave' --format '{{.ID}}' | tr '\n' ' ')"
+}
+
 master="jenkins_jenkins-master-service_1"
-slaves="jenkins_jenkins-slave-vivid_1 jenkins_jenkins-slave-xenial_1 jenkins_jenkins-slave-xenial_2 jenkins_jenkins-slave-xenial_3 jenkins_jenkins-slave-xenial_4 jenkins_jenkins-slave-xenial_5"
+slaves=$(get_slaves_ids)
 all_nodes="$master $slaves"
 
 declare -A before_scripts_map after_scripts_map paths_map nodes_map
