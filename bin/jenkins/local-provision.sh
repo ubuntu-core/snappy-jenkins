@@ -1,9 +1,7 @@
 #!/bin/sh
 set -x
 
-. ./bin/jenkins/common.sh
-
-NAME_LOCAL="$NAME-local"
+NAME_LOCAL="snappy-jenkins-local"
 
 docker-machine rm -f "$NAME_LOCAL"
 docker-machine create -d kvm "$NAME_LOCAL"
