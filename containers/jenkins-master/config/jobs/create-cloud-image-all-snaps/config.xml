@@ -30,7 +30,7 @@
         <hudson.model.StringParameterDefinition>
           <name>region</name>
           <description></description>
-          <defaultValue>bos01</defaultValue>
+          <defaultValue>lgw01</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -52,11 +52,11 @@
       <command>#!/bin/bash
 . $HOME/.openstack/novarc-$region
 qcow2compat="1.1"
-if [[ "$OS_REGION_NAME" == "lcy0"* ]] || [[ "$OS_REGION_NAME" == "bos0"* ]]; then
+if [[ "$OS_REGION_NAME" == "lcy0"* ]] || [[ "$OS_REGION_NAME" == "bos0"* ]] || [[ "$OS_REGION_NAME" == "lgw0"* ]]; then
   qcow2compat="0.10"
 fi
 
-if [[ $region == "bos01" ]]; then
+if [[ $region == "bos01" ]] || [[ "$OS_REGION_NAME" == "lgw0"* ]]; then
   case $arch in
     amd64)
       properties="architecture='x86_64'"
