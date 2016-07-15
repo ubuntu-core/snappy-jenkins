@@ -52,7 +52,7 @@
       <command>#!/bin/bash
 . $HOME/.openstack/novarc-$region
 qcow2compat="1.1"
-if [[ "$OS_REGION_NAME" == "lcy0"* ]] or [[ "$OS_REGION_NAME" == "bos0"* ]]; then
+if [[ "$OS_REGION_NAME" == "lcy0"* ]] || [[ "$OS_REGION_NAME" == "bos0"* ]]; then
   qcow2compat="0.10"
 fi
 
