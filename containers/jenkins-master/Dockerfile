@@ -44,9 +44,6 @@ COPY config/jobs/snappy-by-tag-integration-test/config.xml \
 COPY config/jobs/snappy-by-tag-autopkgtest/config.xml \
   /usr/share/jenkins/ref/job-definitions/snappy-by-tag-autopkgtest.xml
 
-COPY config/jobs/github-snappy-merge/config.xml \
-  /usr/share/jenkins/ref/job-definitions/github-snappy-merge.xml
-
 COPY config/jobs/github-snappy-daily-ppa/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snappy-daily-ppa.xml
 
