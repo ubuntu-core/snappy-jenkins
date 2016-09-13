@@ -44,6 +44,8 @@ create_options(){
         output="$output --swarm-master "
     elif [ "$index" = "$SWARM_PUBLIC_INDEX" ]; then
         output="$output --engine-label public=yes "
+    else
+        output="$output --engine-label node=yes "
     fi
 
     echo "$output"
