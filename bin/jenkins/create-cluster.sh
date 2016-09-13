@@ -44,8 +44,6 @@ create_options(){
         output="$output --swarm-master "
     elif [ "$index" = "$SWARM_PUBLIC_INDEX" ]; then
         output="$output --engine-label public=yes "
-    else
-        output="$output --engine-label worker=yes "
     fi
 
     echo "$output"
@@ -67,7 +65,7 @@ create_swarm_node(){
     rm -rf "$HOME/.docker/machine/machines/$node_name"
     options=$(create_options "node" "cpu4-ram8-disk100-ephemeral20" "$index")
 
-    docker-machine $options $node_name
+    docker-machine $options --engine-label worker=yes $node_name
 }
 
 create_swarm_security_group
@@ -81,4 +79,4 @@ do
     create_swarm_node $index
 done
 
-#. ./bin/jenkins/cloud-redeploy.sh
+. ./bin/jenkins/cloud-redeploy.sh
