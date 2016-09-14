@@ -131,17 +131,6 @@ trap "snappy-cloud-client kill -instance-id $id" EXIT
 go run ./integration-tests/main.go -ip $ip -snappy-from-branch -output-dir $WORKSPACE/$BUILD_TAG -http-proxy http://squid.internal:3128
 
 subunit2junitxml $WORKSPACE/$BUILD_TAG/output/artifacts/results.subunit -o $WORKSPACE/$BUILD_TAG/output/artifacts/results.xml
-
-if [ "$ghprbTargetBranch" != "15.04" ]; then
-  go get github.com/axw/gocov/gocov
-  go get github.com/AlekSi/gocov-xml
-  BASE_COVERAGE_DIR=$WORKSPACE/$BUILD_TAG/output/artifacts/coverage
-  gocov convert $BASE_COVERAGE_DIR/* > $BASE_COVERAGE_DIR/total.json
-  cat $BASE_COVERAGE_DIR/total.json | gocov-xml > $BASE_COVERAGE_DIR/total.xml
-
-  sed -i "s|<packages>|<sources><source>"$SRC_PATH"</source></sources><packages>|" $BASE_COVERAGE_DIR/total.xml
-  sed -i "s|filename=\"$SRC_PATH/|filename=\"|g" $BASE_COVERAGE_DIR/total.xml
-fi
 ]]></command>
     </hudson.tasks.Shell>
   </builders>
