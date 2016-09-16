@@ -65,7 +65,7 @@ create_swarm_node(){
     rm -rf "$HOME/.docker/machine/machines/$node_name"
     options=$(create_options "node" "cpu4-ram8-disk100-ephemeral20" "$index")
 
-    docker-machine $options --engine-label node=yes $node_name
+    docker-machine $options --engine-label worker=yes $node_name
 }
 
 create_swarm_security_group
