@@ -71,6 +71,10 @@ set -ex
 export GOPATH=$WORKSPACE
 cd $GOPATH/src/github.com/snapcore/snapd
 
+# update govendor dependencies
+go get -u github.com/kardianos/govendor
+$GOPATH/bin/govendor sync
+
 sudo apt update
 sudo apt build-dep -y ./
 
@@ -89,7 +93,7 @@ dput ppa:snappy-dev/edge ../*.changes
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>src/github.com/ubuntu-core/*.deb,src/github.com/ubuntu-core/*.changes,src/github.com/ubuntu-core/*.dsc,src/github.com/ubuntu-core/*.tar.xz</artifacts>
+      <artifacts>src/github.com/ubuntu-core/*.changes,src/github.com/ubuntu-core/*.dsc,src/github.com/ubuntu-core/*.tar.xz</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>true</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
