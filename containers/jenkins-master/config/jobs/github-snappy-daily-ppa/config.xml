@@ -80,7 +80,7 @@ sudo apt build-dep -y ./
 
 rm -rf ../*.deb ../*.changes ../*.dsc ../*.tar.xz ../*.upload
 
-dch --distribution xenial -m --local +ppa$BUILD_NUMBER.$GIT_COMMIT- Daily release to the PPA
+dch --distribution xenial -m --local +ppa$BUILD_NUMBER.$(echo $GIT_COMMIT|cut -b1-8)- Daily release to the PPA
 
 echo "gpg --sign --batch --passphrase-file /home/jenkins-slave/.gnupg/snappy-m-o-password \$@" > sign.sh
 chmod +x sign.sh
