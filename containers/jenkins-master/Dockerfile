@@ -18,6 +18,9 @@ RUN mkdir /usr/share/jenkins/ref/job-definitions
 COPY config/jobs/provision-cloud-server/config.xml \
    /usr/share/jenkins/ref/job-definitions/provision-cloud-server.xml
 
+COPY config/jobs/github-snappy-daily-ppa/config.xml \
+  /usr/share/jenkins/ref/job-definitions/github-snappy-daily-ppa.xml
+
 COPY config/jobs/github-snapcraft-autopkgtest-cloud/config.xml \
   /usr/share/jenkins/ref/job-definitions/github-snapcraft-autopkgtest-cloud.xml
 COPY config/jobs/github-snapcraft-examples-tests-cloud/config.xml \
